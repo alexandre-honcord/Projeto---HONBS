@@ -1,0 +1,49 @@
+{% extends "logged.html" %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/stock.css' %}"/>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.rawgit.com/rendro/easy-pie-chart/master/dist/jquery.easypiechart.min.js"></script>
+
+<!-- Linha de texto com o total geral de bolsas -->
+<div class="total-bolsas">
+    Total Geral de Bolsas: <span>{{ total_geral_bolsas }}</span>
+</div>
+
+<div class="dash-circle">
+    {% if estoque %}
+        {% for fator_rh, dados in estoque.items %}
+        <div class="graph">
+            <div class="circle-graph" data-percent="{{ dados.porcentagem }}">
+                <p class="tipo_sang">{{ fator_rh }}</p>
+                <p class="percent_sang">{{ dados.porcentagem }}%</p>
+            </div>
+            <div class="qtd">{{ dados.soma_total }}/{{ dados.estoque_total }}</div>
+            <p class="blood-bag">Detalhes</p>
+            <ul class="blood-list" style="list-style: none;">
+                {% for bolsa in dados.bolsas %}
+                <li>{{ bolsa.tipo_bolsa }}: <b>{{ bolsa.qtd }}</b></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    {% else %}
+    <p>Nenhum dado disponível no estoque.</p>
+    {% endif %}
+</div>
+
+<script>
+    $(function() {
+        $('.circle-graph').easyPieChart({
+            scaleColor: false,
+            lineWidth: 25,
+            lineCap: 'butt',
+            barColor: '#b3232585',
+            trackColor: '#b5050532',
+            size: 150,
+            animate: 800
+        });
+    });
+</script>
+{% endblock %}

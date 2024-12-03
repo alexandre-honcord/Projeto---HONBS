@@ -1,0 +1,41 @@
+{% extends "logged.html" %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/fractionation.css' %}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="showSection('production-section')">
+        <i class="fas fa-hand-holding-medical"></i> Produção
+    </button>
+    <button class="tab-btn" onclick="showSection('batch-section')">
+        <i class="fas fa-vials"></i> Lote
+    </button>
+</div>
+
+<div class="production-section">
+    <h1>Produção</h1>
+</div>
+
+<div class="batch-section hidden">
+    <h1>Lote</h1>
+</div>
+
+<script>
+    function showSection(sectionClass) {
+        // Esconde todas as seções
+        const sections = document.querySelectorAll('.production-section, .batch-section');
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Remove a classe 'active' de todos os botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Mostra a seção clicada
+        document.querySelector(`.${sectionClass}`).classList.remove('hidden');
+
+        // Adiciona a classe 'active' ao botão clicado
+        document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
+    }
+</script>
+{% endblock %}

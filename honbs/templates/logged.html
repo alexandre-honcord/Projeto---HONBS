@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+    
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/logged.css' %}"/>
+
+        <nav id="moreNav">
+            <div class="logo">
+                <div class="logo_content">
+                    <img src="{% static 'logo.png' %}" alt="">
+                </div>
+            </div>
+            <ul>
+                <li>
+                    <a href="{% url 'home_view' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-house"></i>
+                        </div>
+                        <span class="hidde_menu__name">Início</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'resume' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-gauge"></i>
+                        </div>
+                        <span class="hidde_menu__name">Resumo Banco de Sangue</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'donations' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <span class="hidde_menu__name">Doação</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'fractionation' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-syringe"></i>
+                        </div>
+                        <span class="hidde_menu__name">Fracionamento</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'alerts' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                        <span class="hidde_menu__name">Alertas e Notificações</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'transfusion' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-truck-droplet"></i>
+                        </div>
+                        <span class="hidde_menu__name">Transfusão</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'stock' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                        <span class="hidde_menu__name">Estoque</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'capture' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-square-phone"></i>
+                        </div>
+                        <span class="hidde_menu__name">Captação</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'quality' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="hidde_menu__name">Qualidade</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'dash' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="hidde_menu__name">Dashboards</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="user_content">
+                <div class="user-img">
+                    <img src="{{ foto }}" alt="Foto do usuário">
+                </div>
+                
+                <a href="{% url 'logout' %}">Sair</a>
+            </div>
+        </nav>
+        <section class="section_content">
+            <p class="username">@{{ username }}</p>
+            {% block contents %}
+
+            {% endblock %}
+        </section>
+
+{% endblock %}

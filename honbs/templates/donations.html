@@ -1,0 +1,303 @@
+{% extends "logged.html" %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/donations.css' %}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="showSection('donations-section')">
+        <i class="fas fa-hand-holding-medical"></i> Doadores
+    </button>
+    <button class="tab-btn" onclick="showSection('trial-section')">
+        <i class="fas fa-vials"></i> Triagem
+    </button>
+    <button class="tab-btn" onclick="showSection('collect-section')">
+        <i class="fas fa-flask"></i> Coletas
+    </button>
+    <button class="tab-btn" onclick="showSection('alerts-section')">
+        <i class="fas fa-bell"></i> Alertas
+    </button>
+</div>
+
+<div class="donations-section">
+    <h1>Doadores</h1>
+    <div class="filter-container">
+        <span class="filter-label" onclick="toggleFilterOptions()">
+            <i class="fas fa-filter"></i> Filtro
+        </span>
+        <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
+        <div id="filter-options" class="filter-options hidden">
+            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
+            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
+            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
+            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+        </div>
+    </div>
+    <table id="donations-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome do Receptor</th>
+                <th>Nome da Mãe</th>
+                <th>ABO/Rh</th>
+                <th>Prontuário</th>
+                <th>Data Nasc.</th>
+                <th>Fenotipado</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-fenotipado="sim" data-abo="ab+">
+                <td>001</td>
+                <td>João da Silva</td>
+                <td>Maria da Silva</td>
+                <td>AB+</td>
+                <td>12345</td>
+                <td>12/03/1985</td>
+                <td>Sim</td>
+                <td>
+                    <a href="{% url 'donator' %}" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+            <tr data-fenotipado="nao" data-abo="a-">
+                <td>002</td>
+                <td>Ana Souza</td>
+                <td>Clara Souza</td>
+                <td>A-</td>
+                <td>67890</td>
+                <td>24/07/1990</td>
+                <td>Não</td>
+                <td>
+                    <a href="#" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="trial-section hidden">
+    <h1>Triagem</h1>
+    <div class="filter-container">
+        <span class="filter-label" onclick="toggleFilterOptions()">
+            <i class="fas fa-filter"></i> Filtro
+        </span>
+        <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
+        <div id="filter-options" class="filter-options hidden">
+            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
+            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
+            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
+            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+        </div>
+    </div>
+    <table id="trial-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome do Receptor</th>
+                <th>Nome da Mãe</th>
+                <th>ABO/Rh</th>
+                <th>Prontuário</th>
+                <th>Data Nasc.</th>
+                <th>Fenotipado</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-fenotipado="sim" data-abo="ab+">
+                <td>001</td>
+                <td>João da Silva</td>
+                <td>Maria da Silva</td>
+                <td>AB+</td>
+                <td>12345</td>
+                <td>12/03/1985</td>
+                <td>Sim</td>
+                <td>
+                    <a href="#" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+            <tr data-fenotipado="nao" data-abo="a-">
+                <td>002</td>
+                <td>Ana Souza</td>
+                <td>Clara Souza</td>
+                <td>A-</td>
+                <td>67890</td>
+                <td>24/07/1990</td>
+                <td>Não</td>
+                <td>
+                    <a href="#" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="collect-section hidden">
+    <h1>Coletas</h1>
+    <div class="filter-container">
+        <span class="filter-label" onclick="toggleFilterOptions()">
+            <i class="fas fa-filter"></i> Filtro
+        </span>
+        <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
+        <div id="filter-options" class="filter-options hidden">
+            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
+            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
+            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
+            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+        </div>
+    </div>
+    <table id="collect-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome do Receptor</th>
+                <th>Nome da Mãe</th>
+                <th>ABO/Rh</th>
+                <th>Prontuário</th>
+                <th>Data Nasc.</th>
+                <th>Fenotipado</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-fenotipado="sim" data-abo="ab+">
+                <td>001</td>
+                <td>João da Silva</td>
+                <td>Maria da Silva</td>
+                <td>AB+</td>
+                <td>12345</td>
+                <td>12/03/1985</td>
+                <td>Sim</td>
+                <td>
+                    <a href="#" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+            <tr data-fenotipado="nao" data-abo="a-">
+                <td>002</td>
+                <td>Ana Souza</td>
+                <td>Clara Souza</td>
+                <td>A-</td>
+                <td>67890</td>
+                <td>24/07/1990</td>
+                <td>Não</td>
+                <td>
+                    <a href="#" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="alerts-section hidden">
+    <h1>Alertas</h1>
+    <div class="filter-container">
+        <span class="filter-label" onclick="toggleFilterOptions()">
+            <i class="fas fa-filter"></i> Filtro
+        </span>
+        <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
+        <div id="filter-options" class="filter-options hidden">
+            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
+            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
+            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
+            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+        </div>
+    </div>
+    <table id="alerts-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome do Receptor</th>
+                <th>Nome da Mãe</th>
+                <th>ABO/Rh</th>
+                <th>Prontuário</th>
+                <th>Data Nasc.</th>
+                <th>Fenotipado</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-fenotipado="sim" data-abo="ab+">
+                <td>001</td>
+                <td>João da Silva</td>
+                <td>Maria da Silva</td>
+                <td>AB+</td>
+                <td>12345</td>
+                <td>12/03/1985</td>
+                <td>Sim</td>
+                <td>
+                    <a href="#" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+            <tr data-fenotipado="nao" data-abo="a-">
+                <td>002</td>
+                <td>Ana Souza</td>
+                <td>Clara Souza</td>
+                <td>A-</td>
+                <td>67890</td>
+                <td>24/07/1990</td>
+                <td>Não</td>
+                <td>
+                    <a href="#" class="action-btn">Detalhes</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function showSection(sectionClass) {
+        // Esconde todas as seções
+        const sections = document.querySelectorAll('.donations-section, .trial-section, .collect-section, .alerts-section');
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Remove a classe 'active' de todos os botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Mostra a seção clicada
+        document.querySelector(`.${sectionClass}`).classList.remove('hidden');
+
+        // Adiciona a classe 'active' ao botão clicado
+        document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
+    }
+
+    function toggleFilterOptions() {
+        const filterOptions = document.getElementById("filter-options");
+        filterOptions.classList.toggle("hidden");
+    }
+
+    function applyFilter(filter) {
+        const rows = document.querySelectorAll("#donations-table tbody tr");
+
+        rows.forEach(row => {
+            const fenotipado = row.getAttribute("data-fenotipado");
+            const abo = row.getAttribute("data-abo");
+
+            if (
+                (filter === "fenotipado-sim" && fenotipado !== "sim") ||
+                (filter === "fenotipado-nao" && fenotipado !== "nao") ||
+                (filter === "abo-o" && abo !== "o+") ||
+                (filter === "abo-a" && abo !== "a-")
+            ) {
+                row.style.display = "none";
+            } else {
+                row.style.display = "";
+            }
+        });
+
+        toggleFilterOptions();
+    }
+
+    function clearFilter() {
+        const rows = document.querySelectorAll("#donations-table tbody tr");
+        rows.forEach(row => {
+            row.style.display = "";
+        });
+
+        const filterOptions = document.getElementById("filter-options");
+        if (!filterOptions.classList.contains("hidden")) {
+            toggleFilterOptions();
+        }
+    }
+</script>
+
+{% endblock %}

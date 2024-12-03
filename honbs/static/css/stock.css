@@ -1,0 +1,135 @@
+nav ul li:nth-child(7) {
+    background-color: #fafafa;
+}
+
+nav ul li:nth-child(7) a i {
+    color: #235db3;
+}
+
+.dash-circle {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    height: 100%;
+    columns: 4;
+    gap: 25px;
+    padding: 16px;
+    overflow: hidden;
+}
+
+.circle-graph {
+    position: relative;
+    display: flex;
+    width: 150px;
+
+    
+}
+.graph {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 200px;
+    height: 250px;
+    box-shadow: 0 0 4px rgba(0,0,0,.2);
+    border-radius: 8px;
+}
+.tipo_sang {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #b32d23;
+    font-weight: 600;
+    font-size: 1.8rem;
+    letter-spacing: -1px;
+    transform: translate(-50%, -50%);
+} 
+.percent_sang {
+    position: absolute;
+    top: 68%;
+    left: 50%;
+    color: #b32d23;
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: -1px;
+    transform: translate(-50%, -50%);
+} 
+.qtd {
+    padding: 6px;
+    background-color: #b5050532;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color:#58120d;
+}
+
+.blood-bag {
+    color: #6b53d6;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.blood-list {
+    position: absolute;
+    top: 100%; /* Posiciona o balão abaixo do gráfico */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff; /* Fundo do balão */
+    border: 1px solid #ccc; /* Borda para destaque */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para efeito de elevação */
+    padding: 10px;
+    width: 220px; /* Largura fixa para o balão */
+    font-size: 0.85rem;
+    text-align: center;
+    color: #333;
+    z-index: 10; /* Garante que o balão esteja acima de outros elementos */
+    opacity: 0; /* Inicialmente escondido */
+    pointer-events: none; /* Desativa interações quando invisível */
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Animação suave */
+}
+
+.blood-list::before {
+    content: '';
+    position: absolute;
+    top: -10px; /* Posição da seta acima do balão */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #ccc transparent; /* Cor da seta */
+}
+
+.blood-list::after {
+    content: '';
+    position: absolute;
+    top: -9px; /* Posição da seta interna para sobrepor a borda */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent; /* Cor de fundo */
+}
+
+.graph:hover .blood-list {
+    opacity: 1; /* Exibe o balão no hover */
+    pointer-events: auto; /* Permite interações quando visível */
+}
+
+.total-bolsas {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 20px 0;
+    background-color: #fafafa;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

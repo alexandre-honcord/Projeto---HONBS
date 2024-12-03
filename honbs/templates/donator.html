@@ -1,0 +1,146 @@
+{% extends "logged.html" %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/donator.css' %}"/>
+
+<div class="section">
+    <div class="header">
+        <div class="header-left">
+            <h2>DOADOR</h2>
+            <p><strong>Nome:</strong> João da Silva</p>
+            <p><strong>Nome da Mãe:</strong> Maria da Silva</p>
+            <p><strong>Data de Nasc.:</strong> 12/03/1985</p>
+            <p><strong>Sexo:</strong> Masculino</p>
+        </div>
+        <div class="header-right">
+            <h2 class="blood-type">AB+</h2>
+        </div>
+    </div>
+
+    <!-- Aba Navigation -->
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="openTab(event, 'dados')">Dados</button>
+        <button class="tab-btn" onclick="openTab(event, 'contato')">Contato</button>
+        <button class="tab-btn" onclick="openTab(event, 'imuno-hemato')">Imuno/Hemato</button>
+        <button class="tab-btn" onclick="openTab(event, 'historico')">Histórico</button>
+    </div>
+
+    <div id="dados" class="tab-content" style="display: block;">
+        <h3 class="dados-doador">Dados do Doador</h3>
+        <div class="form-container">
+            <form class="donator-form">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" value="João da Silva" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="profissao">Profissão:</label>
+                    <input type="text" id="profissao" value="Engenheiro" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="nome_mae">Nome da Mãe:</label>
+                    <input type="text" id="nome_mae" value="Maria da Silva" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="nome_pai">Nome do Pai:</label>
+                    <input type="text" id="nome_pai" value="José da Silva" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="data_nascimento">Data de Nascimento:</label>
+                    <input type="date" id="data_nascimento" value="1985-03-12" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="nacionalidade">Nacionalidade:</label>
+                    <input type="text" id="nacionalidade" value="Brasileiro" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="sexo">Sexo:</label>
+                    <input type="text" id="sexo" value="Masculino" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="estado_civil">Estado Civil:</label>
+                    <input type="text" id="estado_civil" value="Solteiro" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="etnia">Etnia:</label>
+                    <input type="text" id="etnia" value="Pardo" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="cpf">CPF:</label>
+                    <input type="text" id="cpf" value="123.456.789-00" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="rg">RG:</label>
+                    <input type="text" id="rg" value="1234567" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="orgao_expedidor">Órgão Expedidor:</label>
+                    <input type="text" id="orgao_expedidor" value="SSP-GO" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="convenio">Convênio:</label>
+                    <input type="text" id="convenio" value="Unimed" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="observacao">Observação:</label>
+                    <textarea id="observacao" readonly>Paciente regular sem restrições.</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="doador_relacionado">Doador Relacionado:</label>
+                    <input type="text" id="doador_relacionado" value="Carlos da Silva" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="paciente_relacionado">Paciente Relacionado:</label>
+                    <input type="text" id="paciente_relacionado" value="Paulo Souza" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="usuario_cadastro">Usuário que fez o cadastro:</label>
+                    <input type="text" id="usuario_cadastro" value="Admin01" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="data_cadastro">Data do Cadastro:</label>
+                    <input type="datetime-local" id="data_cadastro" value="2023-11-30T15:30" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="ativo">Ativo:</label>
+                    <input type="checkbox" id="ativo" checked disabled>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="contato" class="tab-content">
+        <h3>Contato</h3>
+        <p>Informações de contato do doador.</p>
+    </div>
+
+    <div id="imuno-hemato" class="tab-content">
+        <h3>Imuno/Hemato</h3>
+        <p>Resultados de exames imunológicos e hematológicos.</p>
+    </div>
+
+    <div id="historico" class="tab-content">
+        <h3>Histórico</h3>
+        <p>Histórico de doações e registros médicos.</p>
+    </div>
+</div>
+
+<script>
+    function openTab(evt, tabId) {
+        // Esconde todos os conteúdos
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.style.display = 'none');
+
+        // Remove a classe 'active' de todos os botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Mostra o conteúdo da aba selecionada
+        document.getElementById(tabId).style.display = 'block';
+
+        // Adiciona a classe 'active' ao botão clicado
+        evt.currentTarget.classList.add('active');
+    }
+</script>
+
+{% endblock %}

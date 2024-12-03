@@ -1,0 +1,125 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}"/>
+  
+</head>
+<div class="login-content">
+    <aside>
+        <div class="video-background-cape">
+            <video autoplay muted loop id="myVideo-cape">
+                <source src="{% static 'bg-cape.mp4' %}" type="video/mp4">
+            </video>
+        </div>
+    </aside>
+    <section>
+        <div class="logo">
+            Honbs
+        </div>
+
+        <form id="loginForm" method="post" class="login-form" action="{% url 'ldap_login' %}">
+            {% csrf_token %}
+            <div class="inputs">
+                <h2>Login</h2>
+                <div class="input-content">
+                    <i class="fa-solid fa-user login-icon"></i>
+                    <input type="text" class="input username" name="user" id="user" autocomplete="off" required>
+                    <label class="login-placeholder">Usuário</label>
+                </div>
+                <div class="input-content">
+                    <i class="fa-solid fa-lock login-icon"></i>
+                    <input type="password" class="input password" name="pass" id="pass" autocomplete="off" required>
+                    <label class="login-placeholder">Senha</label>
+                    <a class="show-pass"><i class="fa-solid fa-eye"></i></a>
+                </div>
+            </div>
+            <p class="error" id="errorMessage" style="display: none;">
+                <i class="fa-solid fa-triangle-exclamation"></i> <!-- Ícone de erro -->
+            </p>
+
+            <div class="submit">
+                <button type="submit" id="submitBtn">Entrar</button>
+                <a href="#">Não consigo fazer o login.</a>
+            </div>
+        </form>
+
+        <a class="loader__btn" id="loaderBtn">
+            <div class="loader"></div>
+            Verificando...
+        </a>
+    </section>
+</div>
+
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+    const showPassButton = document.querySelector('.show-pass');
+    const passwordInput = document.getElementById('pass');
+    const icon = showPassButton.querySelector('i');
+    
+    // Mostrar/Esconder senha
+    showPassButton.addEventListener('mousedown', function() {
+        passwordInput.type = "text";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    });
+
+    showPassButton.addEventListener('mouseup', function() {
+        passwordInput.type = "password";
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    });
+
+    showPassButton.addEventListener('touchstart', function() {
+        passwordInput.type = "text";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    });
+
+    showPassButton.addEventListener('touchend', function() {
+        passwordInput.type = "password"; 
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    });
+
+    // Adiciona o evento de clique para o botão de login
+    document.getElementById('submitBtn').addEventListener('click', function(event) {
+        event.preventDefault();  // Evita o comportamento padrão de envio do formulário
+
+        // Exibe o loader e esconde o formulário
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('loaderBtn').style.display = 'flex';
+
+        // Envia o formulário via AJAX
+        const formData = new FormData(document.getElementById('loginForm'));
+        
+        fetch("{% url 'ldap_login' %}", {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())  // Espera a resposta JSON
+        .then(data => {
+            // Esconde o loader
+            document.getElementById('loaderBtn').style.display = 'none';
+            // Exibe novamente o formulário de login
+            document.getElementById('loginForm').style.display = 'flex';
+
+            // Se o login for bem-sucedido, redireciona para a página inicial
+            if (data.success) {
+                window.location.href = "{% url 'home' %}";  // Redireciona para a página inicial
+            } else {
+                // Exibe as mensagens de erro, se houver
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = data.message;
+                errorMessage.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            // Esconde o loader em caso de erro
+            document.getElementById('loaderBtn').style.display = 'none';
+            // Exibe o formulário de login novamente
+            document.getElementById('loginForm').style.display = 'flex';
+            console.error("Erro ao tentar autenticar:", error);
+        });
+    });
+});
+
+</script>
+</html>

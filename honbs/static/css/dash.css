@@ -1,0 +1,7 @@
+nav ul li:nth-child(10) {
+    background-color: #fafafa;
+}
+
+nav ul li:nth-child(10) a i {
+    color: #235db3;
+}

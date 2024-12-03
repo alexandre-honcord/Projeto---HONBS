@@ -70,8 +70,7 @@ def ldap_login(request):
                     if user_data.get('foto') and not user.foto:
                         foto_content = ContentFile(
                             base64.b64decode(user_data['foto']))
-                        user.foto.save(f"{username}.jpg",
-                                       foto_content, save=True)
+                        user.foto.save(f"{username}.jpg", foto_content, save=True)
                     user.save()
                 return JsonResponse({'success': True})
             except IntegrityError:

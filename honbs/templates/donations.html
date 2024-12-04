@@ -33,46 +33,52 @@
             <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
         </div>
     </div>
-    <table id="donations-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="{% url 'donator' %}" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table id="donations-table">
+            <thead>
+                <tr>
+                    <th>Bolsa</th>
+                    <th>Doador</th>
+                    <th>Data</th>
+                    <th>Tipo Doação</th>
+                    <th>Tipo Coleta</th>
+                    <th>Data Retorno</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Pulso</th>
+                    <th>Temperatura</th>
+                    <th>Lote</th>
+                    <th>N° Sangue</th>
+                    <th>Volume(ml)</th>
+                    <th>Sequencia</th>
+                    <th>Codigo de Barras</th>
+                    <th>Tipagem</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doacao in doacoes %}
+                <tr>
+                    <td>{{ doacao.bolsa }}</td>
+                    <td>{{ doacao.doador }}</td>
+                    <td>{{ doacao.data }}</td>
+                    <td>{{ doacao.tipo_doacao }}</td>
+                    <td>{{ doacao.tipo_coleta }}</td>
+                    <td>{{ doacao.data_retorno }}</td>
+                    <td>{{ doacao.altura }}</td>
+                    <td>{{ doacao.peso }}</td>
+                    <td>{{ doacao.pulso }}</td>
+                    <td>{{ doacao.temperatura }}º</td>
+                    <td>{{ doacao.lote }}</td>
+                    <td>{{ doacao.sangue }}</td>
+                    <td>{{ doacao.volume }}ml</td>
+                    <td>{{ doacao.sequencia }}</td>
+                    <td>{{ doacao.codigo_barras }}</td>
+                    <td>{{ doacao.tipo_sangue }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="trial-section hidden">

@@ -29,26 +29,26 @@
             </tr>
         </thead>
         <tbody>
-            {% for donation in donations %}
+            {% for stock in stocks %}
             <tr>
-                <td>{{ donation.NR_SANGUE }}</td>
-                <td>{{ donation.QTD }}</td>
-                <td>{{ donation.NR_SEQ_PRODUCAO }}</td>
-                <td>{{ donation.DT_VENCIMENTO }}</td>
-                <td>{{ donation.DS_VENCIMENTO }}</td>
-                <td>{{ donation.DS_DERIVADO }}</td>
-                <td>{{ donation.SANGUE }}</td>
-                <td>{{ donation.RESULTADO_EXAME_CDE }}</td>
-                <td>{{ donation.QT_VOLUME }}ml</td>
-                <td>{{ donation.IE_FILTRADO|safe }}</td>
-                <td>{{ donation.IE_IRRADIADO|safe }}</td>
-                <td>{{ donation.IE_LAVADO|safe }}</td>
-                <td>{{ donation.IE_ALIQUOTADO|safe }}</td>
-                <td>{{ donation.LOCAL }}</td>
-                <td>{{ donation.QT_ESTOQUE_MINIMO }}</td>
-                <td>{{ donation.QT_ESTOQUE_MAXIMO }}</td>
-                <td>{{ donation.NR_ATENDIMENTO|safe }}</td>
-                <td>{{ donation.NM_PESSOA_FISICA|safe }}</td>
+                <td>{{ stock.NR_SANGUE }}</td>
+                <td>{{ stock.QTD }}</td>
+                <td>{{ stock.NR_SEQ_PRODUCAO }}</td>
+                <td>{{ stock.DT_VENCIMENTO }}</td>
+                <td>{{ stock.DS_VENCIMENTO }}</td>
+                <td>{{ stock.DS_DERIVADO }}</td>
+                <td>{{ stock.SANGUE }}</td>
+                <td>{{ stock.RESULTADO_EXAME_CDE }}</td>
+                <td>{{ stock.QT_VOLUME }}ml</td>
+                <td>{{ stock.IE_FILTRADO|safe }}</td>
+                <td>{{ stock.IE_IRRADIADO|safe }}</td>
+                <td>{{ stock.IE_LAVADO|safe }}</td>
+                <td>{{ stock.IE_ALIQUOTADO|safe }}</td>
+                <td>{{ stock.LOCAL }}</td>
+                <td>{{ stock.QT_ESTOQUE_MINIMO }}</td>
+                <td>{{ stock.QT_ESTOQUE_MAXIMO }}</td>
+                <td>{{ stock.NR_ATENDIMENTO|safe }}</td>
+                <td>{{ stock.NM_PESSOA_FISICA|safe }}</td>
             </tr>
             {% endfor %}
         </tbody>

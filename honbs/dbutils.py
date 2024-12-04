@@ -163,7 +163,7 @@ def estoque(request):
 
     return None
 
-def lista_doacoes():
+def lista_estoque():
     connection = obter_conexao()
     if connection is None:
         print("Connection is None.")
@@ -323,6 +323,68 @@ def lista_doacoes():
             "DT_VENCIMENTO", "DS_VENCIMENTO", "DS_DERIVADO", "SANGUE", "RESULTADO_EXAME_CDE",
             "QT_VOLUME", "IE_FILTRADO", "IE_IRRADIADO", "IE_LAVADO", "IE_ALIQUOTADO",
             "LOCAL", "NR_ATENDIMENTO", "NM_PESSOA_FISICA"
+        ]
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def lista_doacoes():
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+        SELECT
+            a.nr_bolsa as bolsa,
+            TASY.obter_nome_social_pf(a.cd_pessoa_fisica) as doador,
+            a.dt_doacao as data,
+            TASY.obter_desc_tipo_doacao(a.nr_seq_tipo) as tipo_doacao,
+            TASY.obter_valor_dominio(1353, a.ie_tipo_coleta) as tipo_coleta,
+            TRUNC(a.dt_retorno) as data_retorno,
+            a.qt_altura as altura,
+            a.qt_peso as peso,
+            a.qt_bpm_pulso as pulso,
+            a.qt_temperatura as temperatura,
+            a.nr_lote_bolsa as lote,
+            a.nr_sangue as sangue,
+            a.qt_coletada as volume,
+            a.nr_sequencia as sequencia,
+            a.nr_seq_isbt as codigo_barras,
+            b.ie_tipo_sangue||b.ie_fator_rh as tipo_sangue
+        FROM TASY.san_doacao a,
+        TASY.pessoa_fisica b
+        WHERE TRUNC(a.dt_doacao) = TRUNC(SYSDATE)
+        AND b.cd_pessoa_fisica = a.cd_pessoa_fisica
+        """
+        cursor.execute(sql)
+        # Colunas correspondentes à consulta
+        keys = [
+            "bolsa",
+            "doador",
+            "data",
+            "tipo_doacao",
+            "tipo_coleta",
+            "data_retorno",
+            "altura",
+            "peso",
+            "pulso",
+            "temperatura",
+            "lote",
+            "sangue",
+            "volume",
+            "sequencia",
+            "codigo_barras",
+            "tipo_sangue"
         ]
         # Obter todas as linhas e mapear para dicionários
         raw_data = cursor.fetchall()

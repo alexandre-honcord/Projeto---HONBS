@@ -13,7 +13,8 @@ from django.http import JsonResponse
 import base64
 from django.core.files.base import ContentFile
 
-from honbs.dbutils import estoque
+from honbs.dbutils import estoque, lista_doacoes
+from honbs.utils import format_date
 from itertools import groupby
 from operator import itemgetter
 
@@ -117,6 +118,29 @@ def donations(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'donations.html', context)
+
+@login_required
+def stock_list(request):
+    user = request.user
+    donations_data = lista_doacoes()
+
+    # Processar e formatar os dados
+    for donation in donations_data:
+        donation["DT_VENCIMENTO"] = format_date(donation["DT_VENCIMENTO"])
+        for key in ["IE_FILTRADO", "IE_IRRADIADO", "IE_LAVADO", "IE_ALIQUOTADO", "NR_ATENDIMENTO", "NM_PESSOA_FISICA", "RESULTADO_EXAME_CDE"]:
+            if donation[key] == "N":
+                donation[key] = '<i class="fas fa-times-circle" style="color: red;"></i>'
+            elif donation[key] == "S":
+                donation[key] = '<i class="fas fa-check-circle" style="color: green;"></i>'
+            elif donation[key] is None:
+                donation[key] = "N/A"
+
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'donations': donations_data,
+    }
+    return render(request, 'stock_list.html', context)
 
 @login_required
 def fractionation(request):

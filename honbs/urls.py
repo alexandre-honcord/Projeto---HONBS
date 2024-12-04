@@ -17,6 +17,7 @@ urlpatterns = [
     path('qualidade/', views.qualidade, name='quality'),
     path('transfusao/', views.transfusion, name='transfusion'),
     path('estoque/', views.stock, name='stock'),
+    path('estoque-lista/', views.stock_list, name='stock_list'),
     path('captacao/', views.capture, name='capture'),
     path('dash/', views.dash, name='dash'),
 ]

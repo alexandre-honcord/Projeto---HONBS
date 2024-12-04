@@ -1,0 +1,45 @@
+nav ul li:nth-child(7) {
+    background-color: #fafafa;
+}
+
+nav ul li:nth-child(7) a i {
+    color: #235db3;
+}
+
+.table-container {
+    overflow-x: auto; /* Rolagem horizontal */
+    overflow-y: auto; /* Rolagem vertical */
+    max-height: 550px; /* Altura máxima maior para mais espaço vertical */
+    max-width: 85%; /* Largura máxima limitada para reduzir o espaço horizontal */
+    margin: 0 auto; /* Centraliza o contêiner horizontalmente */
+    border: 1px solid #ddd; /* Opcional: borda ao redor do contêiner */
+    padding: 10px;
+    background-color: #fff; /* Fundo branco para destaque */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para visual mais elegante */
+}
+
+table {
+    width: 100%; /* Ou remova para usar apenas largura baseada no conteúdo */
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap; /* Impede quebra de linha */
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}

@@ -1,0 +1,58 @@
+{% extends "logged.html" %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/stock_list.css' %}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+<div class="table-container">
+    <table id="donations-table">
+        <thead>
+            <tr>
+                <th>N° Sangue</th>
+                <th>Quantidade</th>
+                <th>N° Produção</th>
+                <th>Data Vencimento</th>
+                <th>Vencimento</th>
+                <th>Tipo</th>
+                <th>Tipagem</th>
+                <th>Resultado CDE</th>
+                <th>Volume(ml)</th>
+                <th>Filtrado</th>
+                <th>Irradiado</th>
+                <th>Lavado</th>
+                <th>Aliquotado</th>
+                <th>Local</th>
+                <th>Estoque Minimo</th>
+                <th>Estoque Máximo</th>
+                <th>Atendimento</th>
+                <th>Nome</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for donation in donations %}
+            <tr>
+                <td>{{ donation.NR_SANGUE }}</td>
+                <td>{{ donation.QTD }}</td>
+                <td>{{ donation.NR_SEQ_PRODUCAO }}</td>
+                <td>{{ donation.DT_VENCIMENTO }}</td>
+                <td>{{ donation.DS_VENCIMENTO }}</td>
+                <td>{{ donation.DS_DERIVADO }}</td>
+                <td>{{ donation.SANGUE }}</td>
+                <td>{{ donation.RESULTADO_EXAME_CDE }}</td>
+                <td>{{ donation.QT_VOLUME }}ml</td>
+                <td>{{ donation.IE_FILTRADO|safe }}</td>
+                <td>{{ donation.IE_IRRADIADO|safe }}</td>
+                <td>{{ donation.IE_LAVADO|safe }}</td>
+                <td>{{ donation.IE_ALIQUOTADO|safe }}</td>
+                <td>{{ donation.LOCAL }}</td>
+                <td>{{ donation.QT_ESTOQUE_MINIMO }}</td>
+                <td>{{ donation.QT_ESTOQUE_MAXIMO }}</td>
+                <td>{{ donation.NR_ATENDIMENTO|safe }}</td>
+                <td>{{ donation.NM_PESSOA_FISICA|safe }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

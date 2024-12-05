@@ -8,6 +8,9 @@
     <button class="tab-btn active" onclick="showSection('production-section')">
         <i class="fas fa-hand-holding-medical"></i> Produção
     </button>
+    <button class="tab-btn" onclick="showSection('soro-section')">
+        <i class="fa-solid fa-microscope"></i> Sorologia
+    </button>
     <button class="tab-btn" onclick="showSection('batch-section')">
         <i class="fas fa-vials"></i> Lote
     </button>
@@ -15,16 +18,160 @@
 
 <div class="production-section">
     <h1>Produção</h1>
+    <div class="table-container">
+        <table id="soro-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Iniciais do Receptor</th>
+                    <th>Nome da Mãe</th>
+                    <th>ABO/Rh</th>
+                    <th>Prontuário</th>
+                    <th>Data Nasc.</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>J.S.</td>
+                    <td>M.S</td>
+                    <td>O+</td>
+                    <td>12345</td>
+                    <td>12/03/1985</td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>A.S.</td>
+                    <td>C.S</td>
+                    <td>A-</td>
+                    <td>67890</td>
+                    <td>24/07/1990</td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>C.D.F</td>
+                    <td>R.D</td>
+                    <td>B+</td>
+                    <td>54321</td>
+                    <td>10/11/1978</td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="batch-section hidden">
     <h1>Lote</h1>
+    <div class="table-container">
+        <table id="soro-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Iniciais do Receptor</th>
+                    <th>Nome da Mãe</th>
+                    <th>ABO/Rh</th>
+                    <th>Prontuário</th>
+                    <th>Data Nasc.</th>
+                    <th>Lote</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>J.S.</td>
+                    <td>M.S</td>
+                    <td>O+</td>
+                    <td>12345</td>
+                    <td>12/03/1985</td>
+                    <td>71WH12AA00</td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>A.S.</td>
+                    <td>C.S</td>
+                    <td>A-</td>
+                    <td>67890</td>
+                    <td>24/07/1990</td>
+                    <td>71WH12AA00</td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>C.D.</td>
+                    <td>R.D</td>
+                    <td>B+</td>
+                    <td>54321</td>
+                    <td>10/11/1978</td>
+                    <td>71WH12AA00</td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="soro-section hidden">
+    <h1>Sorologia</h1>
+    <div class="table-container">
+        <table id="soro-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Iniciais do Receptor</th>
+                    <th>Nome da Mãe</th>
+                    <th>ABO/Rh</th>
+                    <th>Prontuário</th>
+                    <th>Data Nasc.</th>
+                    <th>Sorologia</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>J.S.</td>
+                    <td>M.S</td>
+                    <td>O+</td>
+                    <td>12345</td>
+                    <td>12/03/1985</td>
+                    <td><i class="fas fa-check-circle positive-icon"></i></td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>A.S.</td>
+                    <td>C.S</td>
+                    <td>A-</td>
+                    <td>67890</td>
+                    <td>24/07/1990</td>
+                    <td><i class="fas fa-times-circle negative-icon"></i></td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>C.D.</td>
+                    <td>R.D</td>
+                    <td>B+</td>
+                    <td>54321</td>
+                    <td>10/11/1978</td>
+                    <td><i class="fas fa-question-circle indeterminate-icon"></i></td>
+                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
     function showSection(sectionClass) {
         // Esconde todas as seções
-        const sections = document.querySelectorAll('.production-section, .batch-section');
+        const sections = document.querySelectorAll('.production-section, .batch-section, .soro-section');
         sections.forEach(section => section.classList.add('hidden'));
 
         // Remove a classe 'active' de todos os botões

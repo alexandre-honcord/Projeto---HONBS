@@ -3,5 +3,63 @@
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/transfusion.css' %}"/>
 
-Transfusão
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="showSection('receiver-section')">
+        <i class="fas fa-hand-holding-medical"></i> Receptor
+    </button>
+    <button class="tab-btn" onclick="showSection('features-section')">
+        <i class="fas fa-vials"></i></i> Caracteristicas
+    </button>
+    <button class="tab-btn" onclick="showSection('imuno-section')">
+        <i class="fa-solid fa-microscope"></i> Imuno/Hemato
+    </button>
+    <button class="tab-btn" onclick="showSection('transfusion-section')">
+        <i class="fas fa-vial"></i> Transfusões Anteriores
+    </button>
+    <button class="tab-btn" onclick="showSection('history-section')">
+        <i class="fa-solid fa-notes-medical"></i> Histórico de Saúde
+    </button>
+    <button class="tab-btn" onclick="showSection('alerts-section')">
+        <i class="fas fa-bell"></i> Alertas
+    </button>
+</div>
+
+<div class="receiver-section">
+    Receptor
+</div>
+<div class="features-section hidden">
+    Caracteristicas
+</div>
+<div class="imuno-section hidden">
+    Imuno/Hemato
+</div>
+<div class="transfusion-section hidden">
+    Transfusões Anteriores
+</div>
+<div class="history-section hidden">
+    Histórico de Saúde
+</div>
+<div class="alerts-section hidden">
+    Alertas
+</div>
+
+<script>
+    function showSection(sectionClass) {
+        // Esconde todas as seções
+        const sections = document.querySelectorAll('.receiver-section, .features-section, .imuno-section, .transfusion-section, .history-section, .alerts-section');
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Remove a classe 'active' de todos os botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Mostra a seção clicada
+        document.querySelector(`.${sectionClass}`).classList.remove('hidden');
+
+        // Adiciona a classe 'active' ao botão clicado
+        document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
+    }
+</script>
+
+
 {% endblock %}

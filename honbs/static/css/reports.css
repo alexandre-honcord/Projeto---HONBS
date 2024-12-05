@@ -1,7 +1,7 @@
-nav ul li:nth-child(2) {
+nav ul li:nth-child(9) {
     background-color: #fafafa;
 }
 
-nav ul li:nth-child(2) a i {
+nav ul li:nth-child(9) a i {
     color: #235db3;
 }

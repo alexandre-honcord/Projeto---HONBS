@@ -19,14 +19,14 @@
                         <span class="hidde_menu__name">Início</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{% url 'resume' %}">
+                <!-- <li>
+                    <a href="{% url 'reports' %}">
                         <div class="icon-holder">
                             <i class="fa-solid fa-gauge"></i>
                         </div>
                         <span class="hidde_menu__name">Resumo Banco de Sangue</span>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a href="{% url 'donations' %}">
                         <div class="icon-holder">
@@ -41,14 +41,6 @@
                             <i class="fa-solid fa-syringe"></i>
                         </div>
                         <span class="hidde_menu__name">Fracionamento</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'alerts' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-bell"></i>
-                        </div>
-                        <span class="hidde_menu__name">Alertas e Notificações</span>
                     </a>
                 </li>
                 <li>
@@ -89,6 +81,22 @@
                             <i class="fa-solid fa-chart-simple"></i>
                         </div>
                         <span class="hidde_menu__name">Dashboards</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'reports' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+                        <span class="hidde_menu__name">Relatórios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'alerts' %}">
+                        <div class="icon-holder">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+                        <span class="hidde_menu__name">Alertas e Notificações</span>
                     </a>
                 </li>
             </ul>

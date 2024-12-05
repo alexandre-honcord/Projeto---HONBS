@@ -93,13 +93,13 @@ def home(request):
 
 
 @login_required
-def resumo(request):
+def reports(request):
     user = request.user
     context = {
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'resume.html', context)
+    return render(request, 'reports.html', context)
 
 
 @login_required

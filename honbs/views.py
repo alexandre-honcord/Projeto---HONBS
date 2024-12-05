@@ -17,6 +17,7 @@ from honbs.dbutils import estoque, lista_estoque, lista_doacoes
 from honbs.utils import format_date
 from itertools import groupby
 from operator import itemgetter
+from datetime import date, datetime
 
 logger = logging.getLogger(__name__)
 
@@ -113,17 +114,44 @@ def donator(request):
 @login_required
 def donations(request):
     user = request.user
-    doacoes_data = lista_doacoes()# Processar e formatar os dados
+
+    # Obter filtros de data da requisição
+    data_inicial = request.GET.get('data_inicial')
+    data_final = request.GET.get('data_final')
+
+    # Validar e usar a data de hoje como padrão, se necessário
+    try:
+        if data_inicial:
+            data_inicial = datetime.strptime(data_inicial, '%Y-%m-%d').date()
+        else:
+            data_inicial = date.today()
+
+        if data_final:
+            data_final = datetime.strptime(data_final, '%Y-%m-%d').date()
+        else:
+            data_final = date.today()
+    except ValueError as e:
+        print(f"Erro ao converter datas: {e}")
+        data_inicial = date.today()
+        data_final = date.today()
+
+    # Chamar a função com os parâmetros de data
+    doacoes_data = lista_doacoes(data_inicial=data_inicial.isoformat(), data_final=data_final.isoformat())
+
+    # Processar e formatar os dados
     for doacao in doacoes_data:
         doacao["data"] = format_date(doacao["data"])
         doacao["data_retorno"] = format_date(doacao["data_retorno"])
-        for key in ["lote", "tipo_sangue"]:
+        for key in ["lote", "tipo_sangue", "altura", "peso", "temperatura"]:
             if doacao[key] is None:
                 doacao[key] = "N/A"
+
     context = {
         'username': user.username,
         'foto': user.foto.url if user.foto else None,
         'doacoes': doacoes_data,
+        'data_inicial': data_inicial.isoformat(),
+        'data_final': data_final.isoformat(),
     }
     return render(request, 'donations.html', context)
 

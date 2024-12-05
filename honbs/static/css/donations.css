@@ -16,60 +16,73 @@ nav ul li:nth-child(3) a i {
     font-family: Arial, sans-serif;
 }
 
-.filter-container {
+.filter-options {
+    position: absolute;
+    top: 50px; /* Ajustado para alinhar melhor */
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra para destacar o filtro */
+    padding: 15px;
+    border-radius: 8px; /* Bordas arredondadas */
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 50px; /* Aumenta o espaço entre o filtro e a tabela */
+    flex-direction: column;
+    gap: 10px; /* Espaço maior entre os elementos */
+    z-index: 1000;
+    width: 250px; /* Largura consistente */
 }
 
-.filter-label {
+.filter-options label {
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.filter-options input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%; /* Ocupa a largura disponível */
+}
+
+.filter-options .apply-filter-btn {
+    padding: 10px 15px;
+    background-color: #28a745; /* Verde vibrante */
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-options .apply-filter-btn:hover {
+    background-color: #218838; /* Tom mais escuro ao passar o mouse */
 }
 
 .clear-filter-btn {
-    padding: 8px 12px;
-    background-color: #f44336;
+    padding: 10px 15px;
+    background-color: #ff9800; /* Cor laranja */
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px; /* Bordas arredondadas */
+    font-weight: bold;
+    font-size: 14px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .clear-filter-btn:hover {
-    background-color: #d32f2f;
+    background-color: #f57c00; /* Laranja mais escuro ao passar o mouse */
+    transform: scale(1.05); /* Leve aumento no tamanho ao passar o mouse */
 }
 
-.filter-options {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    z-index: 1000;
-}
-
-.filter-options button {
-    padding: 8px 12px;
-    background-color: #f9f9f9;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: left;
-}
-
-.filter-options button:hover {
-    background-color: #eaeaea;
+.filter-options .clear-filter-btn {
+    background-color: #e74c3c;
+    font-size: 14px;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
 }
 
 .hidden {
@@ -115,18 +128,21 @@ table tr:hover {
 }
 
 .action-btn {
-    padding: 6px 12px;
+    padding: 8px 16px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
-    text-decoration: none; /* Remove o sublinhado padrão do link */
-    display: inline-block; /* Garante que o link se comporte como um botão */
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .action-btn:hover {
     background-color: #0056b3;
+    transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
 }
 
 .tabs-container {

@@ -335,7 +335,7 @@ def lista_estoque():
         cursor.close()
         connection.close()
 
-def lista_doacoes():
+def lista_doacoes(data_inicial=None, data_final=None):
     connection = obter_conexao()
     if connection is None:
         print("Connection is None.")
@@ -363,10 +363,23 @@ def lista_doacoes():
             b.ie_tipo_sangue||b.ie_fator_rh as tipo_sangue
         FROM TASY.san_doacao a,
         TASY.pessoa_fisica b
-        WHERE TRUNC(a.dt_doacao) = TRUNC(SYSDATE)
-        AND b.cd_pessoa_fisica = a.cd_pessoa_fisica
+        WHERE b.cd_pessoa_fisica = a.cd_pessoa_fisica
         """
-        cursor.execute(sql)
+
+        # Aplicar os filtros de data
+        if data_inicial:
+            sql += " AND TRUNC(a.dt_doacao) >= TO_DATE(:data_inicial, 'YYYY-MM-DD')"
+        if data_final:
+            sql += " AND TRUNC(a.dt_doacao) <= TO_DATE(:data_final, 'YYYY-MM-DD')"
+
+        # Executar consulta com os parâmetros
+        params = {
+            'data_inicial': data_inicial,
+            'data_final': data_final
+        }
+
+        cursor.execute(sql, params)
+        
         # Colunas correspondentes à consulta
         keys = [
             "bolsa",

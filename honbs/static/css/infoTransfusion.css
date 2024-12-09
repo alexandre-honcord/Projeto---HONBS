@@ -13,48 +13,9 @@ nav ul li:nth-child(4) a i {
 .alerts-section {
     width: 100%;
     height: 100%;
-    padding: 20px;
+    padding: 10px;
+    overflow-y: auto;
     font-family: Arial, sans-serif;
-}
-
-.tabs-container {
-    margin-top: 40px; /* Aumente para 40px para mais espaço */
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.tab-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 30px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.tab-btn i {
-    font-size: 20px;
-}
-
-.tab-btn.active {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.tab-btn:hover {
-    background-color: #0056b3;
-    color: #fff;
-}
-
-.hidden {
-    display: none;
 }
 
 .back-button-container {
@@ -62,8 +23,9 @@ nav ul li:nth-child(4) a i {
 }
 
 .back-button {
-    display: inline-flex;
-    align-items: center;
+    display: inline-flex; /* Certifica que o conteúdo interno é flexível */
+    align-items: center; /* Alinha o ícone e o texto verticalmente */
+    gap: 0.5rem; /* Espaço entre o ícone e o texto */
     padding: 0.5rem 1rem;
     background-color: #f0f0f0;
     border: 1px solid #ddd;
@@ -74,7 +36,7 @@ nav ul li:nth-child(4) a i {
 }
 
 .back-button i {
-    margin-right: 0.5rem;
+    font-size: 1.2rem; /* Ajusta o tamanho do ícone, se necessário */
 }
 
 .back-button:hover {
@@ -82,72 +44,44 @@ nav ul li:nth-child(4) a i {
     border-color: #ccc;
 }
 
-.header {
+.tab-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 2px solid #ccc;
     background-color: #f9f9f9;
-    padding: 1.5rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin: 0 auto 2rem; /* Centraliza e adiciona margem inferior de 2rem */
-    width: 90%;
-    max-width: 1200px;
+    position: sticky;
+    top: 120px; /* Posição abaixo do cabeçalho */
+    z-index: 999; /* Garantir que as abas fiquem acima de outros elementos */
+    padding: 10px 0;
 }
 
-.header-left {
-    max-width: 70%;
+.tab-btn {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border: none;
+    border-right: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
 }
 
-.header-left h2 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-    color: #333;
+.tab-btn:hover {
+    background-color: #eaeaea;
 }
 
-.header-left p {
-    font-size: 1rem;
-    margin: 0.3rem 0;
-    color: #555;
-}
-
-.header-left strong {
-    color: #333;
-}
-
-.header-right {
-    text-align: center;
-    padding: 1rem;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    position: relative;
-    min-width: 100px;
+.tab-btn.active {
     background-color: #fff;
-}
-
-.header-right::before {
-    content: "ABO/Rh"; /* Texto indicador */
-    position: absolute;
-    top: -12px;
-    left: 10px;
-    background-color: #fff; /* Fundo branco para sobrescrever bordas */
-    padding: 0 5px;
-    font-size: 0.8rem;
-    color: #666;
-}
-
-.blood-type {
-    font-size: 2.5rem;
-    color: #d9534f; /* Vermelho de destaque */
-    margin: 0;
+    border-bottom: 2px solid #007bff;
+    color: #007bff;
     font-weight: bold;
 }
 
-.features-section h2 {
+.tab-content {
+    display: none;
     text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    color: #333;
+    padding: 20px;
+    border-top: none;
+    background-color: #fff;
 }
 
 .checkbox-grid {

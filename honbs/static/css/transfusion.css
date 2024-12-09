@@ -15,7 +15,7 @@ nav ul li:nth-child(4) a i {
 
 .table-container {
     overflow-x: auto; /* Adiciona rolagem horizontal se necessário */
-    max-width: 85%;
+    width: 100%;
     margin: 0 auto;
     background-color: #fff; /* Fundo branco para destaque */
     border: 1px solid #ddd; /* Borda para separar a tabela */

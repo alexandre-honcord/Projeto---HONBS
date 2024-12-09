@@ -14,8 +14,8 @@ import base64
 from django.core.files.base import ContentFile
 
 from honbs.dbutils import estoque, lista_estoque, lista_doacoes
-from honbs.utils import format_date
-from itertools import groupby
+from honbs.utils import format_datetime
+from itertools import groupby 
 from operator import itemgetter
 from datetime import date, datetime
 
@@ -135,17 +135,22 @@ def donations(request):
         data_inicial = date.today()
         data_final = date.today()
 
-    # Chamar a função com os parâmetros de data
+    # Chamar a função para buscar as doações
     doacoes_data = lista_doacoes(data_inicial=data_inicial.isoformat(), data_final=data_final.isoformat())
 
     # Processar e formatar os dados
     for doacao in doacoes_data:
-        doacao["data"] = format_date(doacao["data"])
-        doacao["data_retorno"] = format_date(doacao["data_retorno"])
+        if "data" in doacao:
+            # Formatar `data` com horas e minutos
+            doacao["data"] = format_datetime(doacao["data"], include_time=True)
+        if "data_retorno" in doacao:
+            # Formatar `data_retorno` apenas com a data
+            doacao["data_retorno"] = format_datetime(doacao["data_retorno"])
         for key in ["lote", "tipo_sangue", "altura", "peso", "temperatura", "pulso"]:
-            if doacao[key] is None:
+            if key in doacao and doacao[key] is None:
                 doacao[key] = "N/A"
 
+    # Contexto para o template
     context = {
         'username': user.username,
         'foto': user.foto.url if user.foto else None,
@@ -162,7 +167,7 @@ def stock_list(request):
 
     # Processar e formatar os dados
     for stock in stock_data:
-        stock["DT_VENCIMENTO"] = format_date(stock["DT_VENCIMENTO"])
+        stock["DT_VENCIMENTO"] = format_datetime(stock["DT_VENCIMENTO"])
         for key in ["IE_FILTRADO", "IE_IRRADIADO", "IE_LAVADO", "IE_ALIQUOTADO", "NR_ATENDIMENTO", "NM_PESSOA_FISICA", "RESULTADO_EXAME_CDE"]:
             if stock[key] == "N":
                 stock[key] = '<i class="fas fa-times-circle" style="color: red;"></i>'

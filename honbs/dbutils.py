@@ -1,6 +1,7 @@
 # db_utils.py
 import cx_Oracle
 from django.conf import settings
+from datetime import datetime, timedelta
 
 
 def obter_conexao():
@@ -343,6 +344,12 @@ def lista_doacoes(data_inicial=None, data_final=None):
 
     cursor = connection.cursor()
     try:
+        # Se as datas não forem fornecidas, use o intervalo padrão (últimos 30 dias)
+        if not data_inicial:
+            data_inicial = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        if not data_final:
+            data_final = datetime.now().strftime('%Y-%m-%d')
+
         sql = """
         SELECT
             a.nr_bolsa as bolsa,
@@ -360,26 +367,23 @@ def lista_doacoes(data_inicial=None, data_final=None):
             a.qt_coletada as volume,
             a.nr_sequencia as sequencia,
             a.nr_seq_isbt as codigo_barras,
-            b.ie_tipo_sangue||b.ie_fator_rh as tipo_sangue
-        FROM TASY.san_doacao a,
-        TASY.pessoa_fisica b
-        WHERE b.cd_pessoa_fisica = a.cd_pessoa_fisica
+            b.ie_tipo_sangue || b.ie_fator_rh as tipo_sangue
+        FROM TASY.san_doacao a
+        JOIN TASY.pessoa_fisica b ON b.cd_pessoa_fisica = a.cd_pessoa_fisica
+        WHERE TRUNC(a.dt_doacao) >= TO_DATE(:data_inicial, 'YYYY-MM-DD')
+        AND TRUNC(a.dt_doacao) <= TO_DATE(:data_final, 'YYYY-MM-DD')
+        ORDER BY a.dt_doacao DESC
         """
 
-        # Aplicar os filtros de data
-        if data_inicial:
-            sql += " AND TRUNC(a.dt_doacao) >= TO_DATE(:data_inicial, 'YYYY-MM-DD')"
-        if data_final:
-            sql += " AND TRUNC(a.dt_doacao) <= TO_DATE(:data_final, 'YYYY-MM-DD')"
-
-        # Executar consulta com os parâmetros
+        # Parâmetros para consulta
         params = {
             'data_inicial': data_inicial,
             'data_final': data_final
         }
 
+        # Executar consulta com os parâmetros
         cursor.execute(sql, params)
-        
+
         # Colunas correspondentes à consulta
         keys = [
             "bolsa",
@@ -399,6 +403,7 @@ def lista_doacoes(data_inicial=None, data_final=None):
             "codigo_barras",
             "tipo_sangue"
         ]
+
         # Obter todas as linhas e mapear para dicionários
         raw_data = cursor.fetchall()
         results = [dict(zip(keys, row)) for row in raw_data]

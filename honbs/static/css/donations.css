@@ -184,3 +184,11 @@ table tr:hover {
     display: none;
 }
 
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clickable-row:hover {
+    background-color: #c9c9c9; /* Destaque suave */
+}

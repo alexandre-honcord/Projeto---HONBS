@@ -26,6 +26,7 @@
         <button class="tab-btn" onclick="openTab(event, 'contato')">Contato</button>
         <button class="tab-btn" onclick="openTab(event, 'imuno-hemato')">Imuno/Hemato</button>
         <button class="tab-btn" onclick="openTab(event, 'historico')">Histórico</button>
+        <button class="tab-btn" onclick="openTab(event, 'alerta')">Alertas</button>
     </div>
 
     <div id="dados" class="tab-content" style="display: block;">
@@ -268,6 +269,37 @@
     <div id="historico" class="tab-content">
         <h3>Histórico</h3>
         <p>Histórico de doações e registros médicos.</p>
+    </div>
+
+    <div id="alerta" class="tab-content">
+        <h3>Alertas Transfusionais</h3>
+        <br>
+        <div class="alert-container">
+            <div class="alert transfusional">
+                <h4>Alto Risco de Reação Transfusional</h4>
+                <p>Histórico de reações graves a transfusões anteriores.</p>
+            </div>
+            <div class="alert transfusional">
+                <h4>Anticorpos Detectados</h4>
+                <p>Presença de anticorpos irregulares que exigem compatibilidade específica.</p>
+            </div>
+            <div class="alert blood-related">
+                <h4>Fenótipo Raro</h4>
+                <p>Fenótipo sanguíneo raro identificado: CcD.eeK-.</p>
+            </div>
+            <!-- <div class="alert blood-related">
+                <h4>Incompatibilidade ABO</h4>
+                <p>Atenção: Tipo sanguíneo do receptor incompatível com o doador.</p>
+            </div>
+            <div class="alert transfusional">
+                <h4>Imunização por Transfusões Repetidas</h4>
+                <p>Risco elevado devido à imunização após transfusões múltiplas.</p>
+            </div>
+            <div class="alert blood-related">
+                <h4>Anemia Grave</h4>
+                <p>Recomenda-se suporte transfusional imediato.</p>
+            </div> -->
+        </div>
     </div>
 </div>
 

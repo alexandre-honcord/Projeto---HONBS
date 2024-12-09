@@ -17,9 +17,6 @@
     <button class="tab-btn" onclick="showSection('collect-section')">
         <i class="fas fa-flask"></i> Coletas
     </button>
-    <button class="tab-btn" onclick="showSection('alerts-section')">
-        <i class="fas fa-bell"></i> Alertas
-    </button>
 </div>
 
 <div class="donations-section">
@@ -65,7 +62,7 @@
             </thead>
             <tbody>
                 {% for doacao in doacoes %}
-                <tr data-date="{{ doacao.data }}">
+                <tr data-url="{% url 'donator' %}" onclick="redirectTo(this)"class="clickable-row">
                     <td>{{ doacao.bolsa }}</td>
                     <td>{{ doacao.doador }}</td>
                     <td>{{ doacao.data }}</td>
@@ -201,62 +198,6 @@
     </table>
 </div>
 
-<div class="alerts-section hidden">
-    <h1>Alertas</h1>
-    <div class="filter-container">
-        <span class="filter-label" onclick="toggleFilterOptions()">
-            <i class="fas fa-filter"></i> Filtro
-        </span>
-        <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
-        <div id="filter-options" class="filter-options hidden">
-            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
-            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
-            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
-            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
-        </div>
-    </div>
-    <table id="alerts-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
 <script>
     // Fecha o filtro ao clicar fora
     document.addEventListener('click', function (event) {
@@ -288,7 +229,7 @@
 
     // Alterna entre as seções (tabs)
     function showSection(sectionClass) {
-        const sections = document.querySelectorAll('.donations-section, .trial-section, .collect-section, .alerts-section');
+        const sections = document.querySelectorAll('.donations-section, .trial-section, .collect-section');
         sections.forEach(section => section.classList.add('hidden'));
 
         const buttons = document.querySelectorAll('.tab-btn');
@@ -336,6 +277,14 @@
         params.delete('data_inicial');
         params.delete('data_final');
         window.location.search = params.toString();
+    }
+</script>
+<script>
+    function redirectTo(row) {
+        const url = row.getAttribute('data-url');
+        if (url) {
+            window.location.href = url;
+        }
     }
 </script>
 

@@ -209,3 +209,36 @@ input[readonly], textarea[readonly] {
 .form-section input[type="radio"] {
     margin-right: 0.5rem;
 }
+
+.alert-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.alert h4 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.alert.transfusional {
+    background-color: #fff3cd; /* Amarelo claro */
+    border-color: #ffeeba;
+    color: #856404;
+}
+
+.alert.blood-related {
+    background-color: #f8d7da; /* Vermelho claro */
+    border-color: #f5c6cb;
+    color: #721c24;
+}

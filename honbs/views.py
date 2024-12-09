@@ -142,7 +142,7 @@ def donations(request):
     for doacao in doacoes_data:
         doacao["data"] = format_date(doacao["data"])
         doacao["data_retorno"] = format_date(doacao["data_retorno"])
-        for key in ["lote", "tipo_sangue", "altura", "peso", "temperatura"]:
+        for key in ["lote", "tipo_sangue", "altura", "peso", "temperatura", "pulso"]:
             if doacao[key] is None:
                 doacao[key] = "N/A"
 
@@ -216,7 +216,6 @@ def capture(request):
     }
     return render(request, 'capture.html', context)
 
-
 @login_required
 def transfusion(request):
     user = request.user
@@ -225,6 +224,15 @@ def transfusion(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'transfusion.html', context)
+
+@login_required
+def infoTransfusion(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'infoTransfusion.html', context)
 
 @login_required
 def stock(request):

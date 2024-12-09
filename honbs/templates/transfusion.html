@@ -3,63 +3,109 @@
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/transfusion.css' %}"/>
 
-<div class="tabs-container">
-    <button class="tab-btn active" onclick="showSection('receiver-section')">
-        <i class="fas fa-hand-holding-medical"></i> Receptor
-    </button>
-    <button class="tab-btn" onclick="showSection('features-section')">
-        <i class="fas fa-vials"></i></i> Caracteristicas
-    </button>
-    <button class="tab-btn" onclick="showSection('imuno-section')">
-        <i class="fa-solid fa-microscope"></i> Imuno/Hemato
-    </button>
-    <button class="tab-btn" onclick="showSection('transfusion-section')">
-        <i class="fas fa-vial"></i> Transfusões Anteriores
-    </button>
-    <button class="tab-btn" onclick="showSection('history-section')">
-        <i class="fa-solid fa-notes-medical"></i> Histórico de Saúde
-    </button>
-    <button class="tab-btn" onclick="showSection('alerts-section')">
-        <i class="fas fa-bell"></i> Alertas
-    </button>
-</div>
-
 <div class="receiver-section">
-    Receptor
+    <h1>Receptores</h1>
+    <div class="table-container">
+        <table id="soro-table">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Urgência</th>
+                    <th>Atendimento</th>
+                    <th>Receptor</th>
+                    <th>ABO/Rh</th>
+                    <th>Fenótipo</th>
+                    <th>Data Nasc.</th>
+                    <th>Reação?</th>
+                    <th>Idade</th>
+                    <th>Convênio</th>
+                    <th>Pendências</th>
+                    <th>Data Transfusão</th>
+                    <th>Médico</th>
+                    <th>Hospital</th>
+                    <th>Reserva</th>
+                    <th>Realizado por</th>
+                    <th>Observação</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-url="{% url 'infoTransfusion' %}">
+                    <td><i class="fas fa-check-circle positive-icon"></i></td>
+                    <td>Alta</td>
+                    <td>001234</td>
+                    <td>João Silva</td>
+                    <td>O+</td>
+                    <td>CcD.eeK+</td>
+                    <td>12/03/1985</td>
+                    <td><i class="fas fa-times-circle negative-icon"></td>
+                    <td>38</td>
+                    <td>Unimed</td>
+                    <td>Nenhuma</td>
+                    <td>04/12/2024</td>
+                    <td>Dr. Roberto Lima</td>
+                    <td>Hospital Santa Cruz</td>
+                    <td>2 unidades</td>
+                    <td>Ana Souza</td>
+                    <td>Sem observações</td>
+                    <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr data-url="{% url 'infoTransfusion' %}">
+                    <td><i class="fas fa-times-circle negative-icon"></i></td>
+                    <td>Média</td>
+                    <td>002567</td>
+                    <td>Maria Costa</td>
+                    <td>A-</td>
+                    <td>CcD.EEK-</td>
+                    <td>08/07/1990</td>
+                    <td><i class="fas fa-check-circle positive-icon"></i></td>
+                    <td>33</td>
+                    <td>Amil</td>
+                    <td>Exame pendente</td>
+                    <td>05/12/2024</td>
+                    <td>Dr. Pedro Carvalho</td>
+                    <td>Hospital Vida</td>
+                    <td>1 unidade</td>
+                    <td>Carlos Dias</td>
+                    <td>Aguardando laudo</td>
+                    <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
+                </tr>
+                <tr data-url="{% url 'infoTransfusion' %}">
+                    <td><i class="fas fa-exclamation-circle indeterminate-icon"></i></td>
+                    <td>Baixa</td>
+                    <td>003890</td>
+                    <td>Pedro Almeida</td>
+                    <td>AB+</td>
+                    <td>ccdd.eeK+</td>
+                    <td>22/05/1975</td>
+                    <td><i class="fas fa-times-circle negative-icon"></td>
+                    <td>49</td>
+                    <td>Particular</td>
+                    <td>Pagamento pendente</td>
+                    <td>06/12/2024</td>
+                    <td>Dr. Marina Silva</td>
+                    <td>Hospital São José</td>
+                    <td>3 unidades</td>
+                    <td>Laura Fernandes</td>
+                    <td>Contato da família realizado</td>
+                    <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-<div class="features-section hidden">
-    Caracteristicas
-</div>
-<div class="imuno-section hidden">
-    Imuno/Hemato
-</div>
-<div class="transfusion-section hidden">
-    Transfusões Anteriores
-</div>
-<div class="history-section hidden">
-    Histórico de Saúde
-</div>
-<div class="alerts-section hidden">
-    Alertas
-</div>
-
 <script>
-    function showSection(sectionClass) {
-        // Esconde todas as seções
-        const sections = document.querySelectorAll('.receiver-section, .features-section, .imuno-section, .transfusion-section, .history-section, .alerts-section');
-        sections.forEach(section => section.classList.add('hidden'));
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('#soro-table tbody tr');
 
-        // Remove a classe 'active' de todos os botões
-        const buttons = document.querySelectorAll('.tab-btn');
-        buttons.forEach(button => button.classList.remove('active'));
-
-        // Mostra a seção clicada
-        document.querySelector(`.${sectionClass}`).classList.remove('hidden');
-
-        // Adiciona a classe 'active' ao botão clicado
-        document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
-    }
+        rows.forEach(row => {
+            row.addEventListener('click', function () {
+                const url = row.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    });
 </script>
-
-
 {% endblock %}

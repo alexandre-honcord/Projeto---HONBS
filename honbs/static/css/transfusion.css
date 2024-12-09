@@ -48,7 +48,7 @@ table tr:nth-child(even) {
 }
 
 table tr:hover {
-    background-color: #f1f1f1; /* Destaque ao passar o mouse */
+    background-color: #c9c9c9; /* Destaque ao passar o mouse */
 }
 
 .action-btn {
@@ -83,4 +83,8 @@ table tr:hover {
 .indeterminate-icon {
     color: #ffc107; /* Amarelo para resultados indeterminados */
     font-size: 18px;
+}
+
+#soro-table tbody tr {
+    cursor: pointer;
 }

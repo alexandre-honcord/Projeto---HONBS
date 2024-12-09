@@ -150,3 +150,62 @@ input[readonly], textarea[readonly] {
     background-color: #eaeaea;
     cursor: not-allowed;
 }
+
+.form-scrollable {
+    max-height: 400px; /* Altura máxima do contêiner */
+    overflow-y: auto; /* Adiciona a barra de rolagem vertical */
+    padding-right: 10px; /* Espaço para evitar sobreposição com a barra de rolagem */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    padding: 10px;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.form-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-grid.two-columns {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-grid label {
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    color: #555;
+}
+
+.form-grid input {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-grid input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.form-section label {
+    font-size: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.form-section input[type="radio"] {
+    margin-right: 0.5rem;
+}

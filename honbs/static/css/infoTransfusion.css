@@ -18,6 +18,7 @@ nav ul li:nth-child(4) a i {
 }
 
 .tabs-container {
+    margin-top: 40px; /* Aumente para 40px para mais espaço */
     display: flex;
     gap: 10px;
     justify-content: center;
@@ -56,12 +57,8 @@ nav ul li:nth-child(4) a i {
     display: none;
 }
 
-#soro-table tbody tr {
-    cursor: pointer;
-}
-
 .back-button-container {
-    margin-bottom: 1rem;
+    margin-bottom: 20px;
 }
 
 .back-button {
@@ -83,6 +80,67 @@ nav ul li:nth-child(4) a i {
 .back-button:hover {
     background-color: #e0e0e0;
     border-color: #ccc;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 0 auto 2rem; /* Centraliza e adiciona margem inferior de 2rem */
+    width: 90%;
+    max-width: 1200px;
+}
+
+.header-left {
+    max-width: 70%;
+}
+
+.header-left h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.header-left p {
+    font-size: 1rem;
+    margin: 0.3rem 0;
+    color: #555;
+}
+
+.header-left strong {
+    color: #333;
+}
+
+.header-right {
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    position: relative;
+    min-width: 100px;
+    background-color: #fff;
+}
+
+.header-right::before {
+    content: "ABO/Rh"; /* Texto indicador */
+    position: absolute;
+    top: -12px;
+    left: 10px;
+    background-color: #fff; /* Fundo branco para sobrescrever bordas */
+    padding: 0 5px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.blood-type {
+    font-size: 2.5rem;
+    color: #d9534f; /* Vermelho de destaque */
+    margin: 0;
+    font-weight: bold;
 }
 
 .features-section h2 {

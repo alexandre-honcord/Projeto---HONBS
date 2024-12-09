@@ -11,7 +11,20 @@
         <i class="fas fa-arrow-left"></i> Voltar
     </a>
 </div>
-
+<br>
+<div class="header">
+    <div class="header-left">
+        <h2>DOADOR</h2>
+        <p><strong>Nome:</strong> João da Silva</p>
+        <p><strong>Nome da Mãe:</strong> Maria da Silva</p>
+        <p><strong>Data de Nasc.:</strong> 12/03/1985</p>
+        <p><strong>Sexo:</strong> Masculino</p>
+    </div>
+    <div class="header-right">
+        <h2 class="blood-type">AB+</h2>
+    </div>
+</div>
+<br>
 <div class="tabs-container">
     <button class="tab-btn" onclick="showSection('features-section')">
         <i class="fas fa-vials"></i></i> Caracteristicas
@@ -76,6 +89,18 @@
 </div>
 
 <script>
+    // Define a seção padrão ativa ao carregar a página
+    document.addEventListener("DOMContentLoaded", function () {
+        const firstButton = document.querySelector(".tab-btn");
+        const firstSection = document.querySelector(".features-section");
+
+        // Ativar o primeiro botão
+        firstButton.classList.add("active");
+
+        // Mostrar a primeira seção
+        firstSection.classList.remove("hidden");
+    });
+
     function showSection(sectionClass) {
         // Esconde todas as seções
         const sections = document.querySelectorAll('.features-section, .imuno-section, .transfusion-section, .history-section, .alerts-section');

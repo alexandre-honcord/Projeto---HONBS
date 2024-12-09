@@ -4,7 +4,7 @@
 {% endblock %}
 {% load static %}
 {% block contents %}
-<link rel="stylesheet" href="{% static 'css/transfusion.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/infoTransfusion.css' %}"/>
 
 <div class="back-button-container">
     <a href="{% url 'transfusion' %}" class="back-button">
@@ -31,8 +31,37 @@
 </div>
 
 <div class="features-section">
-    Caracteristicas
+    <h2>Características e Informações Complementares</h2>
+    <br>
+    <div class="checkbox-grid">
+        <!-- Primeira Coluna -->
+        <div class="checkbox-column">
+            <label><input type="checkbox" name="feature1"> Recebe Hemocomponente Irradiado</label>
+            <label><input type="checkbox" name="feature2"> Recebe Pré Medicação</label>
+            <label><input type="checkbox" name="feature3"> Recebe alerta por SMS</label>
+            <label><input type="checkbox" name="feature4"> Refratariedade Plaquetas</label>
+        </div>
+        <!-- Segunda Coluna -->
+        <div class="checkbox-column">
+            <label><input type="checkbox" name="feature5"> Recebe Hemocomponente Filtrado</label>
+            <label><input type="checkbox" name="feature6"> Insuficiência Renal Crônica (IRC)</label>
+            <label><input type="checkbox" name="feature7"> Recebe alerta por Email</label>
+            <label><input type="checkbox" name="feature8"> Possui outra caracteristica</label>
+        </div>
+        <!-- Terceira Coluna -->
+        <div class="checkbox-column">
+            <label><input type="checkbox" name="feature9"> Recebe Hemocomponente Lavado</label>
+            <label><input type="checkbox" name="feature10"> Recém Nascido</label>
+            <label><input type="checkbox" name="feature11"> TMO Não Isogrupo</label>
+            <label><input type="checkbox" name="feature12"> Incidente Transfusional</label>
+        </div>
+        <!-- Quarta Coluna -->
+        <div class="checkbox-column">
+            <label><input type="checkbox" name="feature13"> Fenotipado</label>
+        </div>
+    </div>
 </div>
+
 <div class="imuno-section hidden">
     Imuno/Hemato
 </div>

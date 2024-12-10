@@ -23,7 +23,7 @@
                 <p class="percent_sang">{{ dados.porcentagem }}%</p>
             </div>
             <div class="qtd">{{ dados.soma_total }}/{{ dados.estoque_total }}</div>
-            <p class="blood-bag">Detalhes</p>
+            <p class="blood-bag" onclick="redirectToStockList('{{ fator_rh }}')">Detalhes</p>
             <ul class="blood-list" style="list-style: none;">
                 {% for bolsa in dados.bolsas %}
                 <li>{{ bolsa.tipo_bolsa }}: <b>{{ bolsa.qtd }}</b></li>
@@ -48,5 +48,10 @@
             animate: 800
         });
     });
+    function redirectToStockList(fatorRh) {
+        // Adiciona o filtro como query parameter na URL
+        const url = `{% url 'stock_list' %}?fator_rh=${encodeURIComponent(fatorRh)}`;
+        window.location.href = url;
+    }
 </script>
 {% endblock %}

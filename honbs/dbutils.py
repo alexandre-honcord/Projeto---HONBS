@@ -164,7 +164,7 @@ def estoque(request):
 
     return None
 
-def lista_estoque():
+def lista_estoque(fator_rh=None):
     connection = obter_conexao()
     if connection is None:
         print("Connection is None.")
@@ -305,7 +305,6 @@ def lista_estoque():
             AND	x.dt_liberacao is null)
             AND	a.ie_pai_reproduzido <> 'S'  ) a
         WHERE 1 = 1
-            --AND	san_obter_producao_prod(a.nr_sequencia) = 'N'
             AND	 NOT EXISTS (
         SELECT 1
         FROM TASY.san_envio_derivado_val g,
@@ -315,9 +314,20 @@ def lista_estoque():
             AND	 g.dt_recebimento is NULL)
             and a.nr_seq_derivado not in (12,7)
         AND TRUNC(a.dt_vencimento) >= TRUNC(SYSDATE)
-        ORDER BY 4
         """
-        cursor.execute(sql)
+        
+        # Adicionar o filtro para `fator_rh`
+        params = {}
+        if fator_rh:
+            sql += " AND a.ie_tipo_sangue || a.ie_fator_rh = :fator_rh"
+            params['fator_rh'] = fator_rh
+        else:
+            print("Sem filtro para fator RH")
+            sql += " ORDER BY a.dt_vencimento"
+
+        # Executar consulta com os parâmetros
+        cursor.execute(sql, params)
+
         # Colunas correspondentes à consulta
         keys = [
             "NR_SANGUE", "QTD", "QT_ESTOQUE_MINIMO", "QT_ESTOQUE_MAXIMO", "NR_SEQ_PRODUCAO",
@@ -325,6 +335,7 @@ def lista_estoque():
             "QT_VOLUME", "IE_FILTRADO", "IE_IRRADIADO", "IE_LAVADO", "IE_ALIQUOTADO",
             "LOCAL", "NR_ATENDIMENTO", "NM_PESSOA_FISICA"
         ]
+
         # Obter todas as linhas e mapear para dicionários
         raw_data = cursor.fetchall()
         results = [dict(zip(keys, row)) for row in raw_data]

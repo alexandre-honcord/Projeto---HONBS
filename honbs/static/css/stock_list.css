@@ -6,11 +6,52 @@ nav ul li:nth-child(5) a i {
     color: #235db3;
 }
 
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 0 auto 2rem; /* Centraliza e adiciona margem inferior de 2rem */
+    width: 70%;
+    max-width: 1000px;
+}
+
+.header-blood {
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    position: relative;
+    min-width: 100px;
+    background-color: #fff;
+}
+
+.header-blood::before {
+    content: "ABO/Rh"; /* Texto indicador */
+    position: absolute;
+    top: -12px;
+    left: 10px;
+    background-color: #fff; /* Fundo branco para sobrescrever bordas */
+    padding: 0 5px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.blood-type {
+    font-size: 48px;
+    color: #d9534f; /* Cor de destaque para a tipagem sanguínea */
+    margin: 0;
+}
+
+
 .table-container {
     overflow-x: auto; /* Rolagem horizontal */
     overflow-y: auto; /* Rolagem vertical */
-    max-height: 550px; /* Altura máxima maior para mais espaço vertical */
-    max-width: 85%; /* Largura máxima limitada para reduzir o espaço horizontal */
+    height: 100%; /* Altura máxima maior para mais espaço vertical */
+    width: 100%; /* Largura máxima limitada para reduzir o espaço horizontal */
     margin: 0 auto; /* Centraliza o contêiner horizontalmente */
     border: 1px solid #ddd; /* Opcional: borda ao redor do contêiner */
     padding: 10px;
@@ -32,8 +73,34 @@ table th, table td {
 }
 
 table th {
+    text-align: center;
     background-color: #f2f2f2;
     font-weight: bold;
+    padding: 10px 30px; /* Aumenta o preenchimento horizontal */
+}
+
+th.sortable {
+    cursor: pointer;
+    position: relative;
+}
+
+th.sortable:after {
+    content: "⇅";
+    font-size: 1rem;
+    position: absolute;
+    right: 10px;
+    color: #B32325;
+    transition: color 0.3s;
+}
+
+th.sortable.asc:after {
+    content: "↑";
+    color: #007bff;
+}
+
+th.sortable.desc:after {
+    content: "↓";
+    color: #007bff;
 }
 
 table tr:nth-child(even) {

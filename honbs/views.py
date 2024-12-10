@@ -163,7 +163,9 @@ def donations(request):
 @login_required
 def stock_list(request):
     user = request.user
-    stock_data = lista_estoque()
+    fator_rh = request.GET.get('fator_rh')  # Obtém o parâmetro do filtro
+
+    stock_data = lista_estoque(fator_rh=fator_rh)  # Passa o filtro para a função SQL
 
     # Processar e formatar os dados
     for stock in stock_data:
@@ -180,6 +182,7 @@ def stock_list(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,
         'stocks': stock_data,
+        'fator_rh': fator_rh,  # Passa o tipo de sangue filtrado
     }
     return render(request, 'stock_list.html', context)
 

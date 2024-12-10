@@ -16,7 +16,7 @@
 <br>
 <div class="header">
     <div class="header-left">
-        <h2>DOADOR</h2>
+        <h3>RECEPTOR</h3>
         <div class="header-left-grid">
             <div>
                 <p><strong>Nome:</strong> João da Silva</p>
@@ -330,6 +330,36 @@
     <br>
     <hr>
     <br>
+    <!-- Pendências -->
+    <div class="pending-table">
+        <h3>Pendências</h3>
+        <br>
+        <table id="pending-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Pendências Transfusionais</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PEND001</td>
+                    <td>Aguardando resultado de compatibilidade ABO/Rh.</td>
+                </tr>
+                <tr>
+                    <td>PEND002</td>
+                    <td>Exame de PAI não realizado.</td>
+                </tr>
+                <tr>
+                    <td>PEND003</td>
+                    <td>Relatório médico pendente para liberação de transfusão.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr>
+    <br>
     <!-- Bolsas Incompatíveis -->
     <div class="bloodbag-table">
         <h3>Bolsas Incompatíveis</h3>
@@ -390,8 +420,46 @@
 </div>
 
 <div class="history-section tab-content" id="history-section" style="display: none;">
-    Histórico de Saúde
+    <div class="health-history-table">
+        <h3>Histórico de Saúde</h3>
+        <br>
+        <table id="health-history-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo de Evento</th>
+                    <th>Detalhes</th>
+                    <th>Responsável</th>
+                    <th>Laudo</th> <!-- Adicionar ícone <i class="fa-solid fa-file-medical"></i> em cada linha -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2023-12-01</td>
+                    <td>Reação Transfusional</td>
+                    <td>Febre alta e calafrios durante transfusão.</td>
+                    <td>Dr. Silva</td>
+                    <td><i class="fa-solid fa-file-medical" onclick="viewReport('2023-12-01')"></i></td>
+                </tr>
+                <tr>
+                    <td>2023-11-15</td>
+                    <td>Análise Imunológica</td>
+                    <td>PAI positivo com presença de anticorpos IgG.</td>
+                    <td>Dra. Costa</td>
+                    <td><i class="fa-solid fa-file-medical" onclick="viewReport('2023-11-15')"></i></td>
+                </tr>
+                <tr>
+                    <td>2023-10-20</td>
+                    <td>Transfusão de Hemocomponentes</td>
+                    <td>Transfusão de 2 unidades de plaquetas irradiadas.</td>
+                    <td>Dr. Lima</td>
+                    <td><i class="fa-solid fa-file-medical" onclick="viewReport('2023-10-20')"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <div class="alerts-section tab-content" id="alerts-section" style="display: none;">
     <h3>Alertas Transfusionais</h3>
     <br>
@@ -430,6 +498,11 @@
 
         // Adiciona a classe 'active' ao botão clicado
         evt.currentTarget.classList.add('active');
+    }
+    // Função para visualizar o laudo
+    function viewReport(date) {
+        alert(`Exibindo laudo referente ao evento de saúde em ${date}`);
+        // Substituir este alert por lógica real para exibir ou baixar o laudo
     }
 </script>
 <script>

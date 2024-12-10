@@ -178,7 +178,9 @@ table tbody tr:hover {
 .antigen-table,
 .resume-table,
 .bloodbag-table,
-.obsTransf-table {
+.obsTransf-table,
+.health-history-table,
+.pending-table {
     max-height: 300px;
     overflow-y: auto;
 }
@@ -189,8 +191,21 @@ table tbody tr:hover {
 .antigen-table table,
 .resume-table table,
 .bloodbag-table table,
-.obsTransf-table table {
+.obsTransf-table table,
+.health-history-table table,
+.pending-table table {
     width: 100%;
+}
+
+/* Ícones com Cursor */
+.health-history-table i {
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.health-history-table i:hover {
+    color: #007bff; /* Cor de destaque ao passar o mouse */
 }
 
 /* Botão Detalhes */

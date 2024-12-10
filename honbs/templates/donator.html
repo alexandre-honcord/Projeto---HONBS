@@ -316,8 +316,53 @@
 </div>
 
 <div id="historico" class="history-section tab-content" style="display: none;">
-    <h3>Histórico</h3>
-    <p>Histórico de doações e registros médicos.</p>
+    <!-- Histórico de Doações -->
+    <div class="history-table">
+        <h3>Histórico de Doações</h3>
+        <br>
+        <table id="history-table">
+            <thead>
+                <tr>
+                    <th>Cód. Doação</th>
+                    <th>Tipo Doação</th>
+                    <th>Data/Hora Recepção</th>
+                    <th>Condição</th>
+                    <th>Conduta</th>
+                    <th>Detalhes</th>
+                    <th>Imprimir</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>D12345</td>
+                    <td>Voluntária</td>
+                    <td>2023-12-01 14:30</td>
+                    <td>Aprovado</td>
+                    <td>Processamento</td>
+                    <td><i class="fa-regular fa-clipboard" onclick="viewDetails('D12345')"></i></td>
+                    <td><i class="fa-solid fa-print" onclick="printDonation('D12345')"></i></td>
+                </tr>
+                <tr>
+                    <td>D67890</td>
+                    <td>Reposição</td>
+                    <td>2023-12-02 10:15</td>
+                    <td>Reprovado</td>
+                    <td>Descarte</td>
+                    <td><i class="fa-regular fa-clipboard" onclick="viewDetails('D67890')"></i></td>
+                    <td><i class="fa-solid fa-print" onclick="printDonation('D67890')"></i></td>
+                </tr>
+                <tr>
+                    <td>D11223</td>
+                    <td>Autóloga</td>
+                    <td>2023-12-03 08:45</td>
+                    <td>Aprovado</td>
+                    <td>Transfusão</td>
+                    <td><i class="fa-regular fa-clipboard" onclick="viewDetails('D11223')"></i></td>
+                    <td><i class="fa-solid fa-print" onclick="printDonation('D11223')"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div id="alerta" class="alerts-section tab-content" style="display: none;">
@@ -354,6 +399,17 @@
 
         // Adiciona a classe 'active' ao botão clicado
         evt.currentTarget.classList.add('active');
+    }
+    // Função para visualizar detalhes da doação
+    function viewDetails(donationCode) {
+        alert(`Exibindo detalhes da doação: ${donationCode}`);
+        // Substituir este alert por lógica real para exibir detalhes
+    }
+
+    // Função para imprimir detalhes da doação
+    function printDonation(donationCode) {
+        alert(`Imprimindo informações da doação: ${donationCode}`);
+        // Substituir este alert por lógica real de impressão
     }
 </script>
 

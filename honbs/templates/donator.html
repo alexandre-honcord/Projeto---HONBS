@@ -267,194 +267,51 @@
 </div>
 
 <div id="imuno-hemato" class="imuno-section tab-content" style="display: none;">
-    <!-- Amostras -->
-    <div class="sample-table">
-        <table id="sample-table">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Soroteca</th>
-                    <th>Data/Hora Coleta</th>
-                    <th>Validade Amostra</th>
-                    <th>Responsável Coleta</th>
-                    <th>Usuário Lançamento Amostra</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>12345</td>
-                    <td>Incluso</td>
-                    <td>2023-12-01 14:30</td>
-                    <td>2023-12-15</td>
-                    <td>Dr. Silva</td>
-                    <td>Ana Sousa</td>
-                </tr>
-                <tr>
-                    <td>67890</td>
-                    <td>Não Incluso</td>
-                    <td>2023-12-02 10:15</td>
-                    <td>2023-12-16</td>
-                    <td>Dr. Lima</td>
-                    <td>João Mendes</td>
-                </tr>
-                <tr>
-                    <td>11223</td>
-                    <td>Incluso</td>
-                    <td>2023-12-03 08:45</td>
-                    <td>2023-12-17</td>
-                    <td>Dra. Costa</td>
-                    <td>Maria Oliveira</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <h3>Imuno/Hemato</h3>
     <br>
-    <hr>
-    <br>
-    <!-- Imunologias -->
-    <div class="imuno-table">
-        <table id="sample-table">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Data Lanç. Imuno</th>
-                    <th>ABO/Rh</th>
-                    <th>P.A.I</th>
-                    <th>Código Amostra</th>
-                    <th>Data/Hora Coleta</th>
-                    <th>Validade Amostra</th>
-                    <th>Est. Detalhado</th>
-                    <th>Laudo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>ABC123</td>
-                    <td>2023-12-01</td>
-                    <td>O+</td>
-                    <td>Negativo</td>
-                    <td>12345</td>
-                    <td>2023-12-01 14:30</td>
-                    <td>2023-12-15</td>
-                    <td>Sim</td>
-                    <td>Sim</td>
-                </tr>
-                <tr>
-                    <td>DEF456</td>
-                    <td>2023-12-02</td>
-                    <td>A-</td>
-                    <td>Positivo</td>
-                    <td>67890</td>
-                    <td>2023-12-02 10:15</td>
-                    <td>2023-12-16</td>
-                    <td>Não</td>
-                    <td>Não</td>
-                </tr>
-                <tr>
-                    <td>GHI789</td>
-                    <td>2023-12-03</td>
-                    <td>AB+</td>
-                    <td>Negativo</td>
-                    <td>11223</td>
-                    <td>2023-12-03 08:45</td>
-                    <td>2023-12-17</td>
-                    <td>Sim</td>
-                    <td>Sim</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <br>
-    <hr>
-    <br>
-    <!-- Titulação Anticorpos Irregulares -->
-    <div class="tai-table">
-        <table id="sample-table">
-            <thead>
-                <tr>
-                    <th>Titulação</th>
-                    <th>I.A.I</th>
-                    <th>Tipo</th>
-                    <th>Fase</th>
-                    <th>Cód. Amostra</th>
-                    <th>Data/Hora Cadastro</th>
-                    <th>Excluir</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1:64</td>
-                    <td>Positivo</td>
-                    <td>IgG</td>
-                    <td>37ºC</td>
-                    <td>12345</td>
-                    <td>2023-12-01 15:00</td>
-                    <td><i class="fas fa-times"></i></td>
-                </tr>
-                <tr>
-                    <td>1:32</td>
-                    <td>Negativo</td>
-                    <td>IgM</td>
-                    <td>RT</td>
-                    <td>67890</td>
-                    <td>2023-12-02 11:00</td>
-                    <td><i class="fas fa-times"></i></td>
-                </tr>
-                <tr>
-                    <td>1:128</td>
-                    <td>Positivo</td>
-                    <td>IgG</td>
-                    <td>37ºC</td>
-                    <td>11223</td>
-                    <td>2023-12-03 09:30</td>
-                    <td><i class="fas fa-times"></i></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <br>
-    <hr>
-    <br>
-    <!-- Antígenos -->
-    <div class="antigen-table">
-        <table id="sample-table">
-            <thead>
-                <tr>
-                    <th>Identificação</th>
-                    <th>Resultado</th>
-                    <th>Cód. Amostra</th>
-                    <th>Cód. Lote Mãe/RN</th>
-                    <th>Data Cadastro</th>
-                    <th>Usuário Cadastro</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Ag001</td>
-                    <td>Positivo</td>
-                    <td>12345</td>
-                    <td>LM123</td>
-                    <td>2023-12-01</td>
-                    <td>Ana Sousa</td>
-                </tr>
-                <tr>
-                    <td>Ag002</td>
-                    <td>Negativo</td>
-                    <td>67890</td>
-                    <td>LM456</td>
-                    <td>2023-12-02</td>
-                    <td>João Mendes</td>
-                </tr>
-                <tr>
-                    <td>Ag003</td>
-                    <td>Positivo</td>
-                    <td>11223</td>
-                    <td>LM789</td>
-                    <td>2023-12-03</td>
-                    <td>Maria Oliveira</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="form-container">
+        <form class="donator-form">
+            <div class="form-group">
+                <label for="tipo_sanguineo">Tipo Sanguíneo:</label>
+                <input type="text" id="tipo_sanguineo" value="AB" readonly>
+            </div>
+            <div class="form-group">
+                <label for="fator_rh">Fator RH:</label>
+                <input type="text" id="fator_rh" value="Positivo" readonly>
+            </div>
+            <div class="form-group">
+                <label for="fenotipo">Fenótipo:</label>
+                <input type="text" id="fenotipo" value="CcD.eeK-" readonly>
+            </div>
+            <div class="form-group">
+                <label for="cde">CDE:</label>
+                <input type="text" id="cde" value="+" readonly>
+            </div>
+            <div class="form-group">
+                <label for="hemoglobina">Hemoglobina:</label>
+                <input type="text" id="hemoglobina" value="Ausente" readonly>
+            </div>
+            <div class="form-group">
+                <label for="dfraco">D Fraco:</label>
+                <input type="text" id="dfraco" value="Ausente" readonly>
+            </div>
+            <div class="form-group">
+                <label for="faalcizacao">Teste Falcização:</label>
+                <input type="text" id="faalcizacao" value="Ausente" readonly>
+            </div>
+            <div class="form-group">
+                <label for="pai">P.A.I:</label>
+                <input type="text" id="pai" value="Negativo" readonly>
+            </div>
+            <div class="form-group">
+                <label for="especial">Doador Especial:</label>
+                <input type="checkbox" id="ativo" checked>
+            </div>
+            <div class="form-group">
+                <label for="neo">Doador Neo/Pediatra:</label>
+                <input type="checkbox" id="ativo" checked>
+            </div>
+        </form>
     </div>
 </div>
 

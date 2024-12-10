@@ -85,7 +85,7 @@ nav ul li:nth-child(2) a i {
 }
 
 .form-container {
-    max-height: 300px; /* Define a altura máxima do contêiner */
+    height: 100%; /* Define a altura máxima do contêiner */
     border: 1px solid #ccc; /* Opcional: borda para destacar o contêiner */
     padding: 10px;
     margin-bottom: 10px;

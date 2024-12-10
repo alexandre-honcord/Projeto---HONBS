@@ -78,6 +78,7 @@ table {
 table th, table td {
     padding: 10px;
     border: 1px solid #ddd; /* Linha divisória entre células */
+    white-space: nowrap;
 }
 
 table th {
@@ -90,8 +91,13 @@ table tr:nth-child(even) {
     background-color: #f9f9f9; /* Fundo alternado para linhas pares */
 }
 
-table tr:hover {
-    background-color: #f1f1f1; /* Destaque ao passar o mouse */
+tbody tr {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+tbody tr:hover {
+    background-color: #f0f0f0;
 }
 
 .action-btn {

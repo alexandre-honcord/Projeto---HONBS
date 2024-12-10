@@ -1,0 +1,43 @@
+nav ul li:nth-child(3) {
+    background-color: #fafafa;
+}
+
+nav ul li:nth-child(3) a i {
+    color: #235db3;
+}
+
+.prodHemo-section {
+    display: block; /* Alinha as tabelas verticalmente */
+    width: 100%; /* Garante que o contêiner ocupe toda a largura */
+    box-sizing: border-box; /* Inclui padding no cálculo do tamanho */
+    overflow-x: auto; /* Rolagem horizontal */
+    overflow-y: auto; /* Rolagem vertical */
+}
+
+.hemocomponents-section, .sorology-section {
+    width: 100%; /* Cada tabela ocupa toda a largura disponível */
+    margin-bottom: 20px; /* Adiciona espaço entre as tabelas */
+    padding: 10px; /* Adiciona espaçamento interno */
+    box-sizing: border-box; /* Inclui padding no cálculo do tamanho */
+}
+
+.hemocomponents-table table, .sorology-table table {
+    width: 100%; /* Garante que as tabelas ocupem toda a largura */
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table thead th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #f9f9f9;
+}

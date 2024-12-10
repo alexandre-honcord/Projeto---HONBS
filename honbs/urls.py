@@ -13,6 +13,7 @@ urlpatterns = [
     path('doador/', views.donator, name='donator'),
     path('doacoes/', views.donations, name='donations'),
     path('fracionamento/', views.fractionation, name='fractionation'),
+    path('hemocomponentes/', views.prodHemocomponente, name='prodHemo'),
     path('alertas/', views.alertas, name='alerts'),
     path('qualidade/', views.qualidade, name='quality'),
     path('transfusao/', views.transfusion, name='transfusion'),

@@ -84,11 +84,311 @@
 </div>
 
 <div class="imuno-section tab-content" id="imuno-section" style="display: none;">
-    Imuno/Hemato
+    <!-- Amostras -->
+    <div class="sample-table">
+        <h3>Amostras</h3>
+        <br>
+        <table id="sample-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Soroteca</th>
+                    <th>Data/Hora Coleta</th>
+                    <th>Validade Amostra</th>
+                    <th>Responsável Coleta</th>
+                    <th>Usuário Lançamento Amostra</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>12345</td>
+                    <td>Incluso</td>
+                    <td>2023-12-01 14:30</td>
+                    <td>2023-12-15</td>
+                    <td>Dr. Silva</td>
+                    <td>Ana Sousa</td>
+                </tr>
+                <tr>
+                    <td>67890</td>
+                    <td>Não Incluso</td>
+                    <td>2023-12-02 10:15</td>
+                    <td>2023-12-16</td>
+                    <td>Dr. Lima</td>
+                    <td>João Mendes</td>
+                </tr>
+                <tr>
+                    <td>11223</td>
+                    <td>Incluso</td>
+                    <td>2023-12-03 08:45</td>
+                    <td>2023-12-17</td>
+                    <td>Dra. Costa</td>
+                    <td>Maria Oliveira</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <!-- Imunologias -->
+    <div class="imuno-table">
+        <h3>Imunologias</h3>
+        <br>
+        <table id="sample-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Data Lanç. Imuno</th>
+                    <th>ABO/Rh</th>
+                    <th>P.A.I</th>
+                    <th>Código Amostra</th>
+                    <th>Data/Hora Coleta</th>
+                    <th>Validade Amostra</th>
+                    <th>Est. Detalhado</th>
+                    <th>Laudo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ABC123</td>
+                    <td>2023-12-01</td>
+                    <td>O+</td>
+                    <td>Negativo</td>
+                    <td>12345</td>
+                    <td>2023-12-01 14:30</td>
+                    <td>2023-12-15</td>
+                    <td>Sim</td>
+                    <td>Sim</td>
+                </tr>
+                <tr>
+                    <td>DEF456</td>
+                    <td>2023-12-02</td>
+                    <td>A-</td>
+                    <td>Positivo</td>
+                    <td>67890</td>
+                    <td>2023-12-02 10:15</td>
+                    <td>2023-12-16</td>
+                    <td>Não</td>
+                    <td>Não</td>
+                </tr>
+                <tr>
+                    <td>GHI789</td>
+                    <td>2023-12-03</td>
+                    <td>AB+</td>
+                    <td>Negativo</td>
+                    <td>11223</td>
+                    <td>2023-12-03 08:45</td>
+                    <td>2023-12-17</td>
+                    <td>Sim</td>
+                    <td>Sim</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <!-- Titulação Anticorpos Irregulares -->
+    <div class="tai-table">
+        <h3>Titulação Anticorpos Irregulares</h3>
+        <br>
+        <table id="sample-table">
+            <thead>
+                <tr>
+                    <th>Titulação</th>
+                    <th>I.A.I</th>
+                    <th>Tipo</th>
+                    <th>Fase</th>
+                    <th>Cód. Amostra</th>
+                    <th>Data/Hora Cadastro</th>
+                    <th>Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1:64</td>
+                    <td>Positivo</td>
+                    <td>IgG</td>
+                    <td>37ºC</td>
+                    <td>12345</td>
+                    <td>2023-12-01 15:00</td>
+                    <td><i class="fas fa-times" style="color: red; cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                    <td>1:32</td>
+                    <td>Negativo</td>
+                    <td>IgM</td>
+                    <td>RT</td>
+                    <td>67890</td>
+                    <td>2023-12-02 11:00</td>
+                    <td><i class="fas fa-times" style="color: red; cursor: pointer;"></i></td>
+                </tr>
+                <tr>
+                    <td>1:128</td>
+                    <td>Positivo</td>
+                    <td>IgG</td>
+                    <td>37ºC</td>
+                    <td>11223</td>
+                    <td>2023-12-03 09:30</td>
+                    <td><i class="fas fa-times" style="color: red; cursor: pointer;"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <!-- Antígenos -->
+    <div class="antigen-table">
+        <h3>Antígenos</h3>
+        <br>
+        <table id="sample-table">
+            <thead>
+                <tr>
+                    <th>Identificação</th>
+                    <th>Resultado</th>
+                    <th>Cód. Amostra</th>
+                    <th>Cód. Lote Mãe/RN</th>
+                    <th>Data Cadastro</th>
+                    <th>Usuário Cadastro</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ag001</td>
+                    <td>Positivo</td>
+                    <td>12345</td>
+                    <td>LM123</td>
+                    <td>2023-12-01</td>
+                    <td>Ana Sousa</td>
+                </tr>
+                <tr>
+                    <td>Ag002</td>
+                    <td>Negativo</td>
+                    <td>67890</td>
+                    <td>LM456</td>
+                    <td>2023-12-02</td>
+                    <td>João Mendes</td>
+                </tr>
+                <tr>
+                    <td>Ag003</td>
+                    <td>Positivo</td>
+                    <td>11223</td>
+                    <td>LM789</td>
+                    <td>2023-12-03</td>
+                    <td>Maria Oliveira</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <div class="transfusion-section tab-content" id="transfusion-section" style="display: none;">
-    Transfusões Anteriores
+    <!-- Resumo Transfusões -->
+    <div class="resume-table">
+        <h3>Resumo Transfusões</h3>
+        <br>
+        <table id="resume-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Instituição</th>
+                    <th>Data Cadastro Transf</th>
+                    <th>Convênio</th>
+                    <th>Qtd. Bolsas</th>
+                    <th>Detalhes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>TRF123</td>
+                    <td>Hospital A</td>
+                    <td>2023-12-01</td>
+                    <td>Unimed</td>
+                    <td>2</td>
+                    <td><button class="details" onclick="showDetails(event)">Detalhes</button></td>
+                </tr>
+                <tr>
+                    <td>TRF456</td>
+                    <td>Hospital B</td>
+                    <td>2023-12-02</td>
+                    <td>Amil</td>
+                    <td>1</td>
+                    <td><button class="details" onclick="showDetails(event)">Detalhes</button></td>
+                </tr>
+                <tr>
+                    <td>TRF789</td>
+                    <td>Hospital C</td>
+                    <td>2023-12-03</td>
+                    <td>Particular</td>
+                    <td>3</td>
+                    <td><button class="details" onclick="showDetails(event)">Detalhes</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <!-- Bolsas Incompatíveis -->
+    <div class="bloodbag-table">
+        <h3>Bolsas Incompatíveis</h3>
+        <br>
+        <table id="bloodbag-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Bolsa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>INC001</td>
+                    <td>Bolsa 001</td>
+                </tr>
+                <tr>
+                    <td>INC002</td>
+                    <td>Bolsa 002</td>
+                </tr>
+                <tr>
+                    <td>INC003</td>
+                    <td>Bolsa 003</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <!-- Observações de Transfusão -->
+    <div class="obsTransf-table">
+        <h3>Observações de Transfusão</h3>
+        <br>
+        <table id="obsTransf-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Observação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>OBS123</td>
+                    <td>Paciente apresentou febre após transfusão.</td>
+                </tr>
+                <tr>
+                    <td>OBS456</td>
+                    <td>Reação alérgica leve.</td>
+                </tr>
+                <tr>
+                    <td>OBS789</td>
+                    <td>Nenhuma reação adversa registrada.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+
 <div class="history-section tab-content" id="history-section" style="display: none;">
     Histórico de Saúde
 </div>
@@ -130,6 +430,45 @@
 
         // Adiciona a classe 'active' ao botão clicado
         evt.currentTarget.classList.add('active');
+    }
+</script>
+<script>
+    function showDetails(event) {
+        // Remove dropdowns existentes
+        document.querySelectorAll('.details-dropdown').forEach(dropdown => dropdown.remove());
+
+        // Cria o dropdown
+        const dropdown = document.createElement('div');
+        dropdown.classList.add('details-dropdown');
+
+        // Adiciona as opções
+        const options = [
+            { text: "Visualizar", href: "#" },
+            { text: "Imunologia", href: "#" },
+            { text: "Evolução Transfusional", href: "#" }
+        ];
+
+        options.forEach(option => {
+            const link = document.createElement('a');
+            link.textContent = option.text;
+            link.href = option.href;
+            dropdown.appendChild(link);
+        });
+
+        // Posiciona o dropdown próximo ao botão
+        const button = event.target;
+        const rect = button.getBoundingClientRect();
+        dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+        dropdown.style.left = `${rect.left + window.scrollX}px`;
+        dropdown.style.position = "absolute";
+        document.body.appendChild(dropdown);
+
+        // Remove o dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && e.target !== button) {
+                dropdown.remove();
+            }
+        }, { once: true });
     }
 </script>
 {% endblock %}

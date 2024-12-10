@@ -144,3 +144,87 @@ nav ul li:nth-child(4) a i {
     border-color: #f5c6cb;
     color: #721c24;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+table thead {
+    background-color: #f0f0f0;
+}
+
+table th,
+table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    font-weight: bold;
+}
+
+table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Scroll */
+.sample-table,
+.imuno-table,
+.tai-table,
+.antigen-table,
+.resume-table,
+.bloodbag-table,
+.obsTransf-table {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.sample-table table,
+.imuno-table table,
+.tai-table table,
+.antigen-table table,
+.resume-table table,
+.bloodbag-table table,
+.obsTransf-table table {
+    width: 100%;
+}
+
+/* Botão Detalhes */
+.details {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.details:hover {
+    background-color: #0056b3;
+}
+
+.details-dropdown {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.details-dropdown a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.details-dropdown a:hover {
+    background-color: #f0f0f0;
+}

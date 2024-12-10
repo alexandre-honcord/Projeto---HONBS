@@ -194,7 +194,7 @@ table tbody tr:hover {
 }
 
 /* Botão Detalhes */
-.details {
+.details-btn {
     padding: 5px 10px;
     background-color: #007bff;
     color: white;
@@ -204,7 +204,7 @@ table tbody tr:hover {
     transition: background-color 0.3s;
 }
 
-.details:hover {
+.details-btn:hover {
     background-color: #0056b3;
 }
 
@@ -213,8 +213,10 @@ table tbody tr:hover {
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 4px;
-    display: none;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Para garantir que fique acima de outros elementos */
+    width: 150px; /* Largura padrão */
+    overflow: hidden; /* Remove bordas extras nos cantos arredondados */
 }
 
 .details-dropdown a {
@@ -223,6 +225,8 @@ table tbody tr:hover {
     text-decoration: none;
     color: #333;
     font-size: 0.9rem;
+    white-space: nowrap;
+    transition: background-color 0.3s;
 }
 
 .details-dropdown a:hover {

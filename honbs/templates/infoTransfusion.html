@@ -306,7 +306,7 @@
                     <td>2023-12-01</td>
                     <td>Unimed</td>
                     <td>2</td>
-                    <td><button class="details" onclick="showDetails(event)">Detalhes</button></td>
+                    <td><button class="details-btn">Detalhes</button></td>
                 </tr>
                 <tr>
                     <td>TRF456</td>
@@ -314,7 +314,7 @@
                     <td>2023-12-02</td>
                     <td>Amil</td>
                     <td>1</td>
-                    <td><button class="details" onclick="showDetails(event)">Detalhes</button></td>
+                    <td><button class="details-btn">Detalhes</button></td>
                 </tr>
                 <tr>
                     <td>TRF789</td>
@@ -322,7 +322,7 @@
                     <td>2023-12-03</td>
                     <td>Particular</td>
                     <td>3</td>
-                    <td><button class="details" onclick="showDetails(event)">Detalhes</button></td>
+                    <td><button class="details-btn">Detalhes</button></td>
                 </tr>
             </tbody>
         </table>
@@ -433,42 +433,56 @@
     }
 </script>
 <script>
-    function showDetails(event) {
-        // Remove dropdowns existentes
-        document.querySelectorAll('.details-dropdown').forEach(dropdown => dropdown.remove());
+    document.addEventListener("DOMContentLoaded", () => {
+        const buttons = document.querySelectorAll(".details-btn");
 
-        // Cria o dropdown
-        const dropdown = document.createElement('div');
-        dropdown.classList.add('details-dropdown');
+        buttons.forEach((button) => {
+            button.addEventListener("click", (event) => {
+                // Remove dropdowns existentes
+                document.querySelectorAll(".details-dropdown").forEach((dropdown) => dropdown.remove());
 
-        // Adiciona as opções
-        const options = [
-            { text: "Visualizar", href: "#" },
-            { text: "Imunologia", href: "#" },
-            { text: "Evolução Transfusional", href: "#" }
-        ];
+                // Cria o dropdown
+                const dropdown = document.createElement("div");
+                dropdown.classList.add("details-dropdown");
 
-        options.forEach(option => {
-            const link = document.createElement('a');
-            link.textContent = option.text;
-            link.href = option.href;
-            dropdown.appendChild(link);
+                // Adiciona as opções ao dropdown
+                const options = [
+                    { text: "Visualizar", href: "#" },
+                    { text: "Imunologia", href: "#" },
+                    { text: "Evolução Transfusional", href: "#" },
+                ];
+
+                options.forEach((option, index) => {
+                    const link = document.createElement("a");
+                    link.textContent = option.text;
+                    link.href = option.href;
+
+                    // Adiciona borda entre botões, exceto no último
+                    if (index !== options.length - 1) {
+                        link.style.borderBottom = "1px solid #ddd";
+                    }
+
+                    dropdown.appendChild(link);
+                });
+
+                // Posiciona o dropdown próximo ao botão clicado
+                const rect = button.getBoundingClientRect();
+                dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+                dropdown.style.left = `${rect.left + window.scrollX}px`;
+                dropdown.style.position = "absolute";
+                document.body.appendChild(dropdown);
+
+                // Fecha o dropdown ao clicar fora
+                const closeDropdown = (e) => {
+                    if (!dropdown.contains(e.target) && e.target !== button) {
+                        dropdown.remove();
+                        document.removeEventListener("click", closeDropdown);
+                    }
+                };
+
+                document.addEventListener("click", closeDropdown);
+            });
         });
-
-        // Posiciona o dropdown próximo ao botão
-        const button = event.target;
-        const rect = button.getBoundingClientRect();
-        dropdown.style.top = `${rect.bottom + window.scrollY}px`;
-        dropdown.style.left = `${rect.left + window.scrollX}px`;
-        dropdown.style.position = "absolute";
-        document.body.appendChild(dropdown);
-
-        // Remove o dropdown ao clicar fora
-        document.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target) && e.target !== button) {
-                dropdown.remove();
-            }
-        }, { once: true });
-    }
+    });
 </script>
 {% endblock %}

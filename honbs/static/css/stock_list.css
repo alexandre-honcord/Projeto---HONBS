@@ -79,34 +79,23 @@ table th {
     padding: 10px 30px; /* Aumenta o preenchimento horizontal */
 }
 
-th.sortable {
-    cursor: pointer;
-    position: relative;
+/* Estilo das linhas baseado nos prazos de vencimento */
+tr.danger {
+    background-color: #ff4c4c;
+    color: #fff;
 }
 
-th.sortable:after {
-    content: "⇅";
-    font-size: 1rem;
-    position: absolute;
-    right: 10px;
-    color: #B32325;
-    transition: color 0.3s;
+tr.light-red {
+    background-color: #f9e2e2; /* Vermelho Claro */
+    color: #914343;
 }
 
-th.sortable.asc:after {
-    content: "↑";
-    color: #007bff;
+tr.light-yellow {
+    background-color: #fff3cd; /* Amarelo Claro */
+    color: #856404;
 }
 
-th.sortable.desc:after {
-    content: "↓";
-    color: #007bff;
-}
-
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-table tr:hover {
-    background-color: #f1f1f1;
+tr.light-green {
+    background-color: #d4edda; /* Verde Claro */
+    color: #155724;
 }

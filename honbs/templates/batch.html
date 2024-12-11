@@ -10,7 +10,7 @@
 
 <br>
 <div class="back-button-container">
-    <a href="{% url 'fractionation' %}" class="back-button">
+    <a href="javascript:history.back()" class="back-button">
         <i class="fas fa-arrow-left"></i> Voltar
     </a>
 </div>
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr onclick="redirectToprodHemo()">
                     <td>001</td>
                     <td>1000000</td>
                     <td>DOA001</td>
@@ -45,7 +45,7 @@
                     <td>O+</td>
                     <td>Negativo</td>
                 </tr>
-                <tr>
+                <tr onclick="redirectToprodHemo()">
                     <td>002</td>
                     <td>1100000</td>
                     <td>DOA002</td>
@@ -56,7 +56,7 @@
                     <td>A-</td>
                     <td>Descritivo</td>
                 </tr>
-                <tr>
+                <tr onclick="redirectToprodHemo()">
                     <td>003</td>
                     <td>1200000</td>
                     <td>DOA003</td>
@@ -67,7 +67,7 @@
                     <td>AB+</td>
                     <td>Positivo</td>
                 </tr>
-                <tr>
+                <tr onclick="redirectToprodHemo()">
                     <td>004</td>
                     <td>1300000</td>
                     <td>DOA004</td>
@@ -78,7 +78,7 @@
                     <td>B+</td>
                     <td>Indeterminado</td>
                 </tr>
-                <tr>
+                <tr onclick="redirectToprodHemo()">
                     <td>005</td>
                     <td>1400000</td>
                     <td>DOA005</td>
@@ -93,5 +93,9 @@
         </table>
     </div>
 </div>
-
+<script>
+    function redirectToprodHemo() {
+        window.location.href = "{% url 'prodHemo' %}";
+    }
+</script>
 {% endblock %}

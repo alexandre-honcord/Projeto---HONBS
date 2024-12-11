@@ -321,9 +321,9 @@ def lista_estoque(fator_rh=None):
         if fator_rh:
             sql += " AND a.ie_tipo_sangue || a.ie_fator_rh = :fator_rh"
             params['fator_rh'] = fator_rh
-        else:
-            print("Sem filtro para fator RH")
-            sql += " ORDER BY a.dt_vencimento"
+
+        # Ordenação pelo vencimento
+        sql += " ORDER BY a.dt_vencimento ASC"
 
         # Executar consulta com os parâmetros
         cursor.execute(sql, params)

@@ -224,12 +224,38 @@ def stock(request):
 @login_required
 def stock_list(request):
     user = request.user
-    fator_rh = request.GET.get('fator_rh')  # Obtém o parâmetro do filtro
+    fator_rh = request.GET.get('fator_rh')
 
-    stock_data = lista_estoque(fator_rh=fator_rh)  # Passa o filtro para a função SQL
+    stock_data = lista_estoque(fator_rh=fator_rh)
 
     # Processar e formatar os dados
     for stock in stock_data:
+        # Garantir que today seja um objeto date
+        today = datetime.now().date()
+
+        # Garantir que vencimento seja um objeto date
+        if isinstance(stock["DT_VENCIMENTO"], datetime):
+            vencimento = stock["DT_VENCIMENTO"].date()
+        else:
+            vencimento = datetime.strptime(stock["DT_VENCIMENTO"], "%Y-%m-%d").date()
+
+        # Calcular os dias para o vencimento
+        days_to_expiry = (vencimento - today).days
+
+        # Determinar o texto e a classe da linha com base nos dias para o vencimento
+        if days_to_expiry < 7:
+            stock["row_class"] = "danger"
+            stock["EXPIRY_TEXT"] = "Menos que 7 dias"
+        elif days_to_expiry < 30:
+            stock["row_class"] = "light-red"
+            stock["EXPIRY_TEXT"] = "Menos que 30 dias"
+        elif days_to_expiry < 90:
+            stock["row_class"] = "light-yellow"
+            stock["EXPIRY_TEXT"] = "Menos que 90 dias"
+        else:
+            stock["row_class"] = "light-green"
+            stock["EXPIRY_TEXT"] = "Mais que 90 dias"
+
         stock["DT_VENCIMENTO"] = format_datetime(stock["DT_VENCIMENTO"])
         for key in ["IE_FILTRADO", "IE_IRRADIADO", "IE_LAVADO", "IE_ALIQUOTADO", "NR_ATENDIMENTO", "NM_PESSOA_FISICA", "RESULTADO_EXAME_CDE"]:
             if stock[key] == "N":
@@ -243,7 +269,7 @@ def stock_list(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,
         'stocks': stock_data,
-        'fator_rh': fator_rh,  # Passa o tipo de sangue filtrado
+        'fator_rh': fator_rh,
     }
     return render(request, 'stock_list.html', context)
 

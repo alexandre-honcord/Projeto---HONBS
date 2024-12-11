@@ -8,6 +8,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
 
 <br>
+<div class="back-button-container">
+    <a href="{% url 'stock' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+<br>
 <div class="header">
     <div class="header-blood">
         <h2 class="blood-type">{{ fator_rh }}</h2>
@@ -19,34 +25,34 @@
     <table id="donations-table">
         <thead>
             <tr>
-                <th class="sortable">N° Sangue</th>
+                <th>N° Sangue</th>
                 <th>Quantidade</th>
-                <th class="sortable">N° Produção</th>
-                <th class="sortable">Data Vencimento</th>
+                <th>N° Produção</th>
+                <th>Data Vencimento</th>
                 <th>Vencimento</th>
-                <th class="sortable">Tipo</th>
-                <th class="sortable">Tipagem</th>
-                <th class="sortable">Resultado CDE</th>
-                <th class="sortable">Volume(ml)</th>
-                <th class="sortable">Filtrado</th>
-                <th class="sortable">Irradiado</th>
-                <th class="sortable">Lavado</th>
-                <th class="sortable">Aliquotado</th>
-                <th class="sortable">Local</th>
-                <th class="sortable">Estoque Minimo</th>
-                <th class="sortable">Estoque Máximo</th>
-                <th class="sortable">Atendimento</th>
-                <th class="sortable">Nome</th>
+                <th>Tipo</th>
+                <th>Tipagem</th>
+                <th>Resultado CDE</th>
+                <th>Volume(ml)</th>
+                <th>Filtrado</th>
+                <th>Irradiado</th>
+                <th>Lavado</th>
+                <th>Aliquotado</th>
+                <th>Local</th>
+                <th>Estoque Minimo</th>
+                <th>Estoque Máximo</th>
+                <th>Atendimento</th>
+                <th>Nome</th>
             </tr>
         </thead>
         <tbody>
             {% for stock in stocks %}
-            <tr>
+            <tr class="{{ stock.row_class }}">
                 <td>{{ stock.NR_SANGUE }}</td>
                 <td>{{ stock.QTD }}</td>
                 <td>{{ stock.NR_SEQ_PRODUCAO }}</td>
                 <td>{{ stock.DT_VENCIMENTO }}</td>
-                <td>{{ stock.DS_VENCIMENTO }}</td>
+                <td>{{ stock.EXPIRY_TEXT }}</td>
                 <td>{{ stock.DS_DERIVADO }}</td>
                 <td>{{ stock.SANGUE }}</td>
                 <td>{{ stock.RESULTADO_EXAME_CDE }}</td>
@@ -65,39 +71,4 @@
         </tbody>
     </table>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const table = document.getElementById("donations-table");
-        const headers = table.querySelectorAll("th.sortable");
-        const tbody = table.querySelector("tbody");
-        
-        headers.forEach((header, index) => {
-            header.addEventListener("click", function () {
-                const rows = Array.from(tbody.querySelectorAll("tr"));
-                const isAscending = header.classList.contains("asc");
-                
-                // Remove classes de ordenação de todos os cabeçalhos
-                headers.forEach(h => h.classList.remove("asc", "desc"));
-
-                // Ordena as linhas
-                const sortedRows = rows.sort((rowA, rowB) => {
-                    const cellA = rowA.cells[index].textContent.trim();
-                    const cellB = rowB.cells[index].textContent.trim();
-
-                    return isAscending
-                        ? cellA.localeCompare(cellB, undefined, { numeric: true })
-                        : cellB.localeCompare(cellA, undefined, { numeric: true });
-                });
-
-                // Atualiza a tabela com as linhas ordenadas
-                tbody.innerHTML = "";
-                sortedRows.forEach(row => tbody.appendChild(row));
-
-                // Adiciona a classe de ordenação ao cabeçalho clicado
-                header.classList.toggle("asc", !isAscending);
-                header.classList.toggle("desc", isAscending);
-            });
-        });
-    });
-</script>
 {% endblock %}

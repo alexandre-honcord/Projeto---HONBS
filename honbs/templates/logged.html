@@ -4,107 +4,137 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/logged.css' %}"/>
 
-        <nav id="moreNav">
-            <div class="logo">
-                <div class="logo_content">
-                    <img src="{% static 'logo.png' %}" alt="">
-                </div>
-            </div>
-            <ul>
-                <li>
-                    <a href="{% url 'home_view' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-house"></i>
-                        </div>
-                        <span class="hidde_menu__name">Início</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'donations' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-droplet"></i>
-                        </div>
-                        <span class="hidde_menu__name">Doação</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'fractionation' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-syringe"></i>
-                        </div>
-                        <span class="hidde_menu__name">Fracionamento</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'transfusion' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-truck-droplet"></i>
-                        </div>
-                        <span class="hidde_menu__name">Transfusão</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'stock' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-boxes-stacked"></i>
-                        </div>
-                        <span class="hidde_menu__name">Estoque</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'capture' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-square-phone"></i>
-                        </div>
-                        <span class="hidde_menu__name">Captação</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'quality' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <span class="hidde_menu__name">Qualidade</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'dash' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-chart-simple"></i>
-                        </div>
-                        <span class="hidde_menu__name">Dashboards</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'reports' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-book"></i>
-                        </div>
-                        <span class="hidde_menu__name">Relatórios</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'alerts' %}">
-                        <div class="icon-holder">
-                            <i class="fa-solid fa-bell"></i>
-                        </div>
-                        <span class="hidde_menu__name">Alertas e Notificações</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="user_content">
-                <div class="user-img">
-                    <img src="{{ foto }}" alt="Foto do usuário">
-                </div>
-                
-                <a href="{% url 'logout' %}">Sair</a>
-            </div>
-        </nav>
-        <section class="section_content">
-            <p class="username">@{{ username }}</p>
-            {% block contents %}
+<!-- Tela de Loading -->
+<div id="loading-screen" style="display: none;">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <br>
+        <p>Carregando, por favor aguarde...</p>
+    </div>
+</div>
 
-            {% endblock %}
-        </section>
+<!-- Navbar -->
+<nav id="moreNav">
+    <div class="logo">
+        <div class="logo_content">
+            <img src="{% static 'logo.png' %}" alt="Logo">
+        </div>
+    </div>
+    <ul>
+        <li>
+            <a href="{% url 'home_view' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+                <span class="hidde_menu__name">Início</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'donations' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-droplet"></i>
+                </div>
+                <span class="hidde_menu__name">Doação</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'fractionation' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-syringe"></i>
+                </div>
+                <span class="hidde_menu__name">Fracionamento</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'transfusion' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-truck-droplet"></i>
+                </div>
+                <span class="hidde_menu__name">Transfusão</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'stock' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <span class="hidde_menu__name">Estoque</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'capture' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-square-phone"></i>
+                </div>
+                <span class="hidde_menu__name">Captação</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'quality' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <span class="hidde_menu__name">Qualidade</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'dash' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-chart-simple"></i>
+                </div>
+                <span class="hidde_menu__name">Dashboards</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'reports' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+                <span class="hidde_menu__name">Relatórios</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'alerts' %}">
+                <div class="icon-holder">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <span class="hidde_menu__name">Alertas e Notificações</span>
+            </a>
+        </li>
+    </ul>
+    <div class="user_content">
+        <div class="user-img">
+            <img src="{{ foto }}" alt="Foto do usuário">
+        </div>
+        <a href="{% url 'logout' %}">Sair</a>
+    </div>
+</nav>
+
+<!-- Conteúdo Principal -->
+<section class="section_content">
+    <p class="username">@{{ username }}</p>
+    {% block contents %}
+    {% endblock %}
+</section>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loadingScreen = document.getElementById("loading-screen");
+
+        // Exibir a tela de loading ao carregar a página
+        window.onload = function () {
+            loadingScreen.style.display = "none"; // Ocultar quando a página estiver carregada
+        };
+
+        // Adicionar evento de clique nos links da navbar
+        const navbarLinks = document.querySelectorAll("#moreNav a");
+        navbarLinks.forEach(link => {
+            link.addEventListener("click", function (event) {
+                loadingScreen.style.display = "flex"; // Exibe a tela de loading
+            });
+        });
+    });
+</script>
 
 {% endblock %}

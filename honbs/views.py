@@ -161,6 +161,69 @@ def donations(request):
     return render(request, 'donations.html', context)
 
 @login_required
+def stock(request):
+    user = request.user
+    consulta_estoque = []
+    consulta_agrupada = {}
+    total_geral_bolsas = 0
+
+    # Estoque total personalizado para cada fator RH
+    estoque_total_por_fator = {
+        'A+': 500,
+        'A-': 100,
+        'B+': 200,
+        'B-': 50,
+        'AB+': 100,
+        'AB-': 30,
+        'O+': 600,
+        'O-': 100,
+    }
+
+    # Ordem desejada dos fatores RH
+    ordem_fator_rh = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-']
+
+    # Executa a consulta
+    consulta_estoque = estoque(request)  # Chama a função estoque
+
+    if consulta_estoque:
+        # Transformar em lista de dicionários
+        consulta_estoque = [
+            {'qtd': row[0], 'tipo_bolsa': row[1], 'fator_rh': row[2]}
+            for row in consulta_estoque
+        ]
+
+        # Agrupar por fator RH
+        for fator_rh, items in groupby(sorted(consulta_estoque, key=itemgetter('fator_rh')), key=itemgetter('fator_rh')):
+            bolsas = list(items)
+            soma_total = sum(bolsa['qtd'] for bolsa in bolsas)  # Soma total por fator RH
+            total_geral_bolsas += soma_total  # Adiciona ao total geral
+            total_fator_rh = estoque_total_por_fator.get(fator_rh, 500)  # Pega o total ou usa 500 como padrão
+            porcentagem = round((soma_total / total_fator_rh) * 100, 2)  # Calcula a porcentagem
+            consulta_agrupada[fator_rh] = {
+                'bolsas': bolsas,
+                'soma_total': soma_total,
+                'estoque_total': total_fator_rh,
+                'porcentagem': porcentagem
+            }
+
+    # Reorganizar os dados agrupados de acordo com a ordem desejada
+    consulta_agrupada_ordenada = {
+        fator_rh: consulta_agrupada[fator_rh]
+        for fator_rh in ordem_fator_rh
+        if fator_rh in consulta_agrupada
+    }
+
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'estoque': consulta_agrupada_ordenada,  # Dados agrupados ordenados
+        'total_geral_bolsas': total_geral_bolsas,  # Total geral de bolsas
+    }
+
+    return render(request, 'stock.html', context)
+
+
+@login_required
 def stock_list(request):
     user = request.user
     fator_rh = request.GET.get('fator_rh')  # Obtém o parâmetro do filtro
@@ -259,68 +322,6 @@ def infoTransfusion(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'infoTransfusion.html', context)
-
-@login_required
-def stock(request):
-    user = request.user
-    consulta_estoque = []
-    consulta_agrupada = {}
-    total_geral_bolsas = 0
-
-    # Estoque total personalizado para cada fator RH
-    estoque_total_por_fator = {
-        'A+': 500,
-        'A-': 100,
-        'B+': 200,
-        'B-': 50,
-        'AB+': 100,
-        'AB-': 30,
-        'O+': 600,
-        'O-': 100,
-    }
-
-    # Ordem desejada dos fatores RH
-    ordem_fator_rh = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-']
-
-    # Executa a consulta
-    consulta_estoque = estoque(request)  # Chama a função estoque
-
-    if consulta_estoque:
-        # Transformar em lista de dicionários
-        consulta_estoque = [
-            {'qtd': row[0], 'tipo_bolsa': row[1], 'fator_rh': row[2]}
-            for row in consulta_estoque
-        ]
-
-        # Agrupar por fator RH
-        for fator_rh, items in groupby(sorted(consulta_estoque, key=itemgetter('fator_rh')), key=itemgetter('fator_rh')):
-            bolsas = list(items)
-            soma_total = sum(bolsa['qtd'] for bolsa in bolsas)  # Soma total por fator RH
-            total_geral_bolsas += soma_total  # Adiciona ao total geral
-            total_fator_rh = estoque_total_por_fator.get(fator_rh, 500)  # Pega o total ou usa 500 como padrão
-            porcentagem = round((soma_total / total_fator_rh) * 100, 2)  # Calcula a porcentagem
-            consulta_agrupada[fator_rh] = {
-                'bolsas': bolsas,
-                'soma_total': soma_total,
-                'estoque_total': total_fator_rh,
-                'porcentagem': porcentagem
-            }
-
-    # Reorganizar os dados agrupados de acordo com a ordem desejada
-    consulta_agrupada_ordenada = {
-        fator_rh: consulta_agrupada[fator_rh]
-        for fator_rh in ordem_fator_rh
-        if fator_rh in consulta_agrupada
-    }
-
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,
-        'estoque': consulta_agrupada_ordenada,  # Dados agrupados ordenados
-        'total_geral_bolsas': total_geral_bolsas,  # Total geral de bolsas
-    }
-
-    return render(request, 'stock.html', context)
 
 @login_required
 def dash(request):

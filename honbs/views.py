@@ -21,7 +21,6 @@ from datetime import date, datetime
 
 logger = logging.getLogger(__name__)
 
-
 @csrf_protect
 def base_view(request):
     logout_view(request)
@@ -222,7 +221,6 @@ def stock(request):
 
     return render(request, 'stock.html', context)
 
-
 @login_required
 def stock_list(request):
     user = request.user
@@ -284,7 +282,6 @@ def alertas(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'alerts.html', context)
-
 
 @login_required
 def qualidade(request):

@@ -1,0 +1,97 @@
+{% extends "logged.html" %}
+{% block title %}
+    Exames do Lote
+{% endblock %}
+{% load static %}
+{% block contents %}
+
+<link rel="stylesheet" href="{% static 'css/batch.css' %}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+<br>
+<div class="back-button-container">
+    <a href="{% url 'fractionation' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+<br>
+<div class="exam-section">
+    <h1>Exames do lote</h1>
+    <br>
+    <div class="table-container">
+        <table id="exam-table">
+            <thead>
+                <tr>
+                    <th>Sequência</th>
+                    <th>Exame Lote</th>
+                    <th>Doação</th>
+                    <th>N° do Sangue</th>
+                    <th>Data da Doação</th>
+                    <th>Doador</th>
+                    <th>Tipo de Doação</th>
+                    <th>Tipagem</th>
+                    <th>Tipo Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>1000000</td>
+                    <td>DOA001</td>
+                    <td>12345</td>
+                    <td>2023-12-01</td>
+                    <td>J.S</td>
+                    <td>Voluntária</td>
+                    <td>O+</td>
+                    <td>Negativo</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>1100000</td>
+                    <td>DOA002</td>
+                    <td>54321</td>
+                    <td>2023-12-02</td>
+                    <td>M.A</td>
+                    <td>Reposição</td>
+                    <td>A-</td>
+                    <td>Descritivo</td>
+                </tr>
+                <tr>
+                    <td>003</td>
+                    <td>1200000</td>
+                    <td>DOA003</td>
+                    <td>67890</td>
+                    <td>2023-12-03</td>
+                    <td>R.T</td>
+                    <td>Doação OVG</td>
+                    <td>AB+</td>
+                    <td>Positivo</td>
+                </tr>
+                <tr>
+                    <td>004</td>
+                    <td>1300000</td>
+                    <td>DOA004</td>
+                    <td>11223</td>
+                    <td>2023-12-04</td>
+                    <td>L.C</td>
+                    <td>Voluntária</td>
+                    <td>B+</td>
+                    <td>Indeterminado</td>
+                </tr>
+                <tr>
+                    <td>005</td>
+                    <td>1400000</td>
+                    <td>DOA005</td>
+                    <td>33445</td>
+                    <td>2023-12-05</td>
+                    <td>A.S</td>
+                    <td>Reposição</td>
+                    <td>O-</td>
+                    <td>Negativo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

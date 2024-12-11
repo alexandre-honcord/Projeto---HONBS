@@ -205,6 +205,15 @@ def prodHemocomponente(request):
     return render(request, 'prodHemocomponente.html', context)
 
 @login_required
+def batch(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'batch.html', context)
+
+@login_required
 def alertas(request):
     user = request.user
     context = {

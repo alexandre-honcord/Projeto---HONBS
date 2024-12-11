@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/fractionation.css' %}"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
 
+<br>
 <div class="tabs-container">
     <button class="tab-btn active" onclick="showSection('production-section')">
         <i class="fas fa-hand-holding-medical"></i> Produção
@@ -18,6 +19,7 @@
 
 <div class="production-section">
     <h1>Produção</h1>
+    <br>
     <div class="table-container">
         <table id="soro-table">
             <thead>
@@ -117,51 +119,72 @@
 </div>
 
 <div class="batch-section hidden">
-    <h1>Lote</h1>
+    <h1>Lote da Hemoterapia</h1>
+    <br>
     <div class="table-container">
-        <table id="soro-table">
+        <table id="batch-table">
             <thead>
                 <tr>
-                    <th>Código</th>
-                    <th>Iniciais do Receptor</th>
-                    <th>Nome da Mãe</th>
-                    <th>ABO/Rh</th>
-                    <th>Prontuário</th>
-                    <th>Data Nasc.</th>
-                    <th>Lote</th>
-                    <th>Ação</th>
+                    <th>Sequência</th>
+                    <th>Data Inicial</th>
+                    <th>Data Final</th>
+                    <th>Data Geração</th>
+                    <th>Data Saída</th>
+                    <th>Temperatura Saída</th>
+                    <th>Responsável Saída</th>
+                    <th>Data Chegada</th>
+                    <th>Temperatura Chegada</th>
+                    <th>Responsável Chegada</th>
+                    <th>Responsável Transporte</th>
+                    <th>Quantidade de Amostras</th>
+                    <th>Classificação</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr onclick="redirectTolote()">
                     <td>001</td>
-                    <td>J.S.</td>
-                    <td>M.S</td>
-                    <td>O+</td>
-                    <td>12345</td>
-                    <td>12/03/1985</td>
-                    <td>71WH12AA00</td>
-                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                    <td>2023-12-01</td>
+                    <td>2023-12-05</td>
+                    <td>2023-12-06</td>
+                    <td>2023-12-06</td>
+                    <td>-5°C</td>
+                    <td>Dr. João Silva</td>
+                    <td>2023-12-07</td>
+                    <td>-4°C</td>
+                    <td>Dra. Maria Costa</td>
+                    <td>Logística Hemovida</td>
+                    <td>50</td>
+                    <td>Sorologia/Imunohemato (Imunolab)</td>
                 </tr>
-                <tr>
+                <tr onclick="redirectTolote()">
                     <td>002</td>
-                    <td>A.S.</td>
-                    <td>C.S</td>
-                    <td>A-</td>
-                    <td>67890</td>
-                    <td>24/07/1990</td>
-                    <td>71WH12AA00</td>
-                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                    <td>2023-11-28</td>
+                    <td>2023-12-02</td>
+                    <td>2023-12-03</td>
+                    <td>2023-12-03</td>
+                    <td>2°C</td>
+                    <td>Enf. Carlos Lima</td>
+                    <td>2023-12-04</td>
+                    <td>3°C</td>
+                    <td>Enf. Ana Sousa</td>
+                    <td>Transporte Seguro Ltda</td>
+                    <td>40</td>
+                    <td>Sorologia/Imunohemato (Imunolab)</td>
                 </tr>
-                <tr>
+                <tr onclick="redirectTolote()">
                     <td>003</td>
-                    <td>C.D.</td>
-                    <td>R.D</td>
-                    <td>B+</td>
-                    <td>54321</td>
-                    <td>10/11/1978</td>
-                    <td>71WH12AA00</td>
-                    <td><a href="#" class="action-btn">Detalhes</a></td>
+                    <td>2023-12-01</td>
+                    <td>2023-12-05</td>
+                    <td>2023-12-06</td>
+                    <td>2023-12-06</td>
+                    <td>-30°C</td>
+                    <td>Dr. Pedro Albuquerque</td>
+                    <td>2023-12-07</td>
+                    <td>-28°C</td>
+                    <td>Dr. Renata Vieira</td>
+                    <td>TransHemovida</td>
+                    <td>60</td>
+                    <td>Sorologia/Imunohemato (Imunolab)</td>
                 </tr>
             </tbody>
         </table>
@@ -186,6 +209,9 @@
     }
     function redirectToprodHemo() {
         window.location.href = "{% url 'prodHemo' %}";
+    }
+    function redirectTolote() {
+        window.location.href = "{% url 'batch' %}";
     }
 </script>
 {% endblock %}

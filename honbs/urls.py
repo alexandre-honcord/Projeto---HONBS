@@ -23,5 +23,9 @@ urlpatterns = [
     path('detalhe-estoque/', views.stock_list, name='stock_list'),
     path('captacao/', views.capture, name='capture'),
     path('dash/', views.dash, name='dash'),
+
+    path('cadastros/', views.registrations, name='registrations'),
+    path('edit-stock/<int:hemocomponente_id>/', views.edit_stock, name='edit_stock'),
+    path('delete-stock/<int:hemocomponente_id>/', views.delete_stock, name='delete_stock'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

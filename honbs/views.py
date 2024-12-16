@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -12,6 +12,8 @@ import logging
 from django.http import JsonResponse
 import base64
 from django.core.files.base import ContentFile
+from .models import Fridge, HemocomponentStock
+from collections import defaultdict
 
 from honbs.dbutils import estoque, lista_estoque, lista_doacoes
 from honbs.utils import format_datetime
@@ -354,3 +356,99 @@ def dash(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'dash.html', context)
+
+@login_required
+def registrations(request):
+    user = request.user
+
+    if request.method == "POST":
+        try:
+            if 'add_fridge' in request.POST:
+                nome = request.POST.get('nome')
+                quantidade_prateleiras = int(request.POST.get('quantidade_prateleiras', 0))
+                numero = request.POST.get('numero')
+                if not nome or quantidade_prateleiras <= 0 or not numero:
+                    messages.error(request, "Todos os campos da geladeira são obrigatórios.")
+                else:
+                    Fridge.objects.create(
+                        nome=nome,
+                        quantidade_prateleiras=quantidade_prateleiras,
+                        numero=numero
+                    )
+                    messages.success(request, "Geladeira cadastrada com sucesso.")
+                    return redirect('registrations')
+
+            elif 'add_stock' in request.POST:
+                fridge_id = request.POST.get('fridge_id')
+                prateleira_id = int(request.POST.get('prateleira_id', 0))
+                hemocomponente_id = request.POST.get('hemocomponente_id')
+                quantidade = int(request.POST.get('quantidade', 0))
+
+                fridge = Fridge.objects.filter(id=fridge_id).first()
+                if not fridge:
+                    messages.error(request, "Geladeira selecionada não existe.")
+                elif prateleira_id <= 0 or not hemocomponente_id:
+                    messages.error(request, "Todos os campos de estoque são obrigatórios.")
+                else:
+                    HemocomponentStock.objects.create(
+                        fridge=fridge,
+                        prateleira_id=prateleira_id,
+                        hemocomponente_id=hemocomponente_id,
+                        quantidade=quantidade  
+                    )
+                    messages.success(request, "Estoque de hemocomponente cadastrado com sucesso.")
+                    return redirect('registrations')
+        except ValueError as e:
+            messages.error(request, f"Erro ao processar o formulário: {e}")
+
+    # Agrupar o estoque por geladeira
+    stock_data = defaultdict(list)
+    for stock in HemocomponentStock.objects.select_related('fridge').all():
+        stock_data[stock.fridge].append({
+            'prateleira_id': stock.prateleira_id,
+            'hemocomponente_id': stock.hemocomponente_id,
+            'quantidade': stock.quantidade,
+        })
+
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'geladeiras': Fridge.objects.all(),
+        'hemocomponentes': HemocomponentStock.objects.all(),
+        'stock_data': dict(stock_data),  # Passa os dados agrupados
+    }
+
+    return render(request, 'registrations.html', context)
+
+@login_required
+def edit_stock(request, hemocomponente_id):
+    stock = get_object_or_404(HemocomponentStock, hemocomponente_id=hemocomponente_id)
+
+    if request.method == "POST":
+        fridge_id = request.POST.get("fridge_id")
+        prateleira_id = request.POST.get("prateleira_id")        
+        stock.fridge_id = fridge_id
+        stock.prateleira_id = prateleira_id
+        stock.save()
+        messages.success(request, "Estoque atualizado com sucesso!")
+        return redirect("registrations")
+
+    geladeiras = Fridge.objects.all()  # Para preencher o dropdown
+    context = {
+        "stock": stock,
+        "geladeiras": geladeiras,
+    }
+    return render(request, "edit_stock.html", context)
+
+@login_required
+def delete_stock(request, hemocomponente_id):
+    stocks = HemocomponentStock.objects.filter(hemocomponente_id=hemocomponente_id)
+
+    if request.method == "POST":
+        count = stocks.count()  # Conta quantos registros serão apagados
+        stocks.delete()
+        messages.success(request, f"{count} registro(s) de estoque apagado(s) com sucesso!")
+        return redirect("registrations")
+
+    context = {"stocks": stocks}
+    return render(request, "delete_stock.html", context)

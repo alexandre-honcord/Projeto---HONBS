@@ -1,0 +1,132 @@
+{% extends "logged.html" %}
+{% block title %}
+    Cadastros
+{% endblock %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/registrations.css' %}"/>
+
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="showSection('stock-section')">
+        <i class="fa-solid fa-dolly"></i> Estoque
+    </button>   
+    <button class="tab-btn" onclick="showSection('fridge-section')">
+        <i class="fa-solid fa-snowflake"></i> Geladeiras
+    </button>
+    <button class="tab-btn" onclick="showSection('hemo-section')">
+        <i class="fas fa-vials"></i> Hemocomponentes
+    </button>
+</div>
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="stock-section">
+    <h2>Estoque Total por Geladeira</h2>
+    <br>
+    <div class="stock-container">
+        {% if stock_data %}
+            {% for fridge, items in stock_data.items %}
+            <div class="fridge-stock">
+                <h3>{{ fridge.nome }}</h3>
+                <p><strong>Quantidade de Prateleiras:</strong> {{ fridge.quantidade_prateleiras }}</p>
+                <br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Prateleira</th>
+                            <th>Hemocomponente</th>
+                            <th>Quantidade</th>
+                            <th>Editar</th>
+                            <th>Apagar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stock in items %}
+                        <tr>
+                            <td>{{ stock.prateleira_id }}</td>
+                            <td>{{ stock.hemocomponente_id }}</td>
+                            <td>{{ stock.quantidade }}</td>
+                            <td>
+                                <a href="{% url 'edit_stock' stock.hemocomponente_id %}">
+                                    <i class="fas fa-edit" style="color: #007bff; cursor: pointer;"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'delete_stock' stock.hemocomponente_id %}">
+                                    <i class="fas fa-trash" style="color: #dc3545; cursor: pointer;"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            {% endfor %}
+        {% else %}
+        <p>Nenhum dado disponível no estoque.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="fridge-section hidden">
+    <h2>Cadastro de Geladeiras</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="add_fridge">
+        <label>Nome:</label>
+        <input type="text" name="nome" required>
+        <label>Número da Geladeira:</label>
+        <input type="text" name="numero" required>
+        <label>Quantidade de Prateleiras:</label>
+        <input type="number" name="quantidade_prateleiras" required>
+        <button type="submit">Adicionar Geladeira</button>
+    </form>
+</div>
+
+<div class="hemo-section hidden">
+    <h2>Cadastro de Hemocomponentes</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="add_stock">
+        <label>Geladeira:</label>
+        <select name="fridge_id" required>
+            {% for geladeira in geladeiras %}
+            <option value="{{ geladeira.id }}">{{ geladeira.nome }}</option>
+            {% endfor %}
+        </select>
+        <label>Prateleira:</label>
+        <input type="number" name="prateleira_id" required>
+        <label>Hemocomponente:</label>
+        <input type="number" name="hemocomponente_id" required>
+        <label>Quantidade:</label>
+        <input type="number" name="quantidade" required>
+        <button type="submit">Adicionar Estoque</button>
+    </form>
+</div>
+
+<script>
+    function showSection(sectionClass) {
+        // Esconde todas as seções
+        const sections = document.querySelectorAll('.fridge-section, .hemo-section, .stock-section');
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Remove a classe 'active' de todos os botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Mostra a seção clicada
+        document.querySelector(`.${sectionClass}`).classList.remove('hidden');
+
+        // Adiciona a classe 'active' ao botão clicado
+        document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
+    }
+</script>
+
+{% endblock %}

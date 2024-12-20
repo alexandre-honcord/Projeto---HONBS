@@ -27,9 +27,8 @@ class User(AbstractUser):
         return self.username
     
 class Fridge(models.Model):
-    nome = models.CharField(max_length=255, verbose_name="Nome da Geladeira")
+    nome = models.CharField(max_length=255, verbose_name="Nome da Geladeira") 
     quantidade_prateleiras = models.IntegerField(verbose_name="Quantidade de Prateleiras")
-    numero = models.CharField(max_length=50, verbose_name="Número da Geladeira")
 
     def __str__(self):
         return self.nome

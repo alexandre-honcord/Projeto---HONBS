@@ -35,6 +35,7 @@
             <div class="fridge-stock">
                 <h3>{{ fridge.nome }}</h3>
                 <p><strong>Quantidade de Prateleiras:</strong> {{ fridge.quantidade_prateleiras }}</p>
+                <p style="text-align: right;">-3°C</p>
                 <br>
                 <table>
                     <thead>
@@ -82,8 +83,6 @@
         <input type="hidden" name="add_fridge">
         <label>Nome:</label>
         <input type="text" name="nome" required>
-        <label>Número da Geladeira:</label>
-        <input type="text" name="numero" required>
         <label>Quantidade de Prateleiras:</label>
         <input type="number" name="quantidade_prateleiras" required>
         <button type="submit">Adicionar Geladeira</button>
@@ -127,6 +126,25 @@
         // Adiciona a classe 'active' ao botão clicado
         document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
     }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const messages = document.querySelectorAll(".alert");
+
+        // Espera 5 segundos antes de aplicar o fade-out
+        setTimeout(() => {
+            messages.forEach(message => {
+                message.classList.add("fade-out");
+            });
+        }, 5000);
+
+        // Remove os elementos do DOM após o fade-out
+        setTimeout(() => {
+            messages.forEach(message => {
+                message.remove();
+            });
+        }, 6000);
+    });
 </script>
 
 {% endblock %}

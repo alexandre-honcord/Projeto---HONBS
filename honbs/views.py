@@ -366,14 +366,12 @@ def registrations(request):
             if 'add_fridge' in request.POST:
                 nome = request.POST.get('nome')
                 quantidade_prateleiras = int(request.POST.get('quantidade_prateleiras', 0))
-                numero = request.POST.get('numero')
-                if not nome or quantidade_prateleiras <= 0 or not numero:
+                if not nome or quantidade_prateleiras <= 0:
                     messages.error(request, "Todos os campos da geladeira são obrigatórios.")
                 else:
                     Fridge.objects.create(
                         nome=nome,
-                        quantidade_prateleiras=quantidade_prateleiras,
-                        numero=numero
+                        quantidade_prateleiras=quantidade_prateleiras
                     )
                     messages.success(request, "Geladeira cadastrada com sucesso.")
                     return redirect('registrations')

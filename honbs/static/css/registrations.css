@@ -140,6 +140,23 @@ table thead th {
     border: 1px solid #f5c6cb;
 }
 
+.messages {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: opacity 1s ease-out; /* Define a transição para o efeito de fade */
+    opacity: 1;
+}
+
+.fade-out {
+    opacity: 0; /* Gradualmente desaparece */
+}
+
 table td i {
     font-size: 1.2rem;
     cursor: pointer;

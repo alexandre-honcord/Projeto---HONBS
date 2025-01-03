@@ -115,10 +115,14 @@
                     <td>{{ lote.fim }}</td>
                     <td>{{ lote.geracao }}</td>
                     <td>{{ lote.dt_saida }}</td>
-                    <td>{{ lote.temp_saida }}</td>
+                    <td>
+                        {{ lote.temp_saida }}{% if lote.temp_saida != "N/A" %}°C{% endif %}
+                    </td>
                     <td>{{ lote.resp_saida }}</td>
                     <td>{{ lote.dt_chegada }}</td>
-                    <td>{{ lote.temp_chegada }}</td>
+                    <td>
+                        {{ lote.temp_chegada }}{% if lote.temp_chegada != "N/A" %}°C{% endif %}
+                    </td>
                     <td>{{ lote.resp_chegada }}</td>
                     <td>{{ lote.resp_transporte }}</td>
                 </tr>

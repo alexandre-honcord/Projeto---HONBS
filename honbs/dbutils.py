@@ -557,10 +557,10 @@ def lista_lotes(data_inicial=None, data_final=None):
             a.dt_geracao as geracao,
             a.dt_saida_bs as dt_saida,
             a.qt_temp_transp as temp_saida,
-            a.cd_resp as resp_saida,
+            TASY.OBTER_NOME_PF(a.cd_resp) as resp_saida,
             a.dt_chegada_local as dt_chegada,
             a.qt_temp_chegada as temp_chegada,
-            a.nm_resp_local as resp_chegada,
+            TASY.OBTER_NOME_PF(a.nm_resp_local) as resp_chegada,
             a.nm_resp_transporte as resp_transporte
         FROM
             TASY.san_lote_hemoterapia a

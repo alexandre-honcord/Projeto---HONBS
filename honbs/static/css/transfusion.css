@@ -11,6 +11,8 @@ nav ul li:nth-child(4) a i {
     height: 100%;
     padding: 20px;
     font-family: Arial, sans-serif;
+    overflow-x: auto; /* Rolagem horizontal */
+    overflow-y: auto; /* Rolagem vertical */
 }
 
 .table-container {

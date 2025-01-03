@@ -65,7 +65,7 @@
                 <tbody>
                     {% for doacao in doacoes %}
                         {% if doacao.lote != "N/A" %}
-                        <tr>
+                        <tr data-url="{% url 'donator' %}" onclick="redirectTo(this)"class="clickable-row">
                             <td>
                                 {% if doacao.status == 1 %}
                                     <i class="fas fa-circle status-icon yellow"></i>
@@ -147,7 +147,7 @@
             </thead>
             <tbody>
                 {% for doacao in triagem %}
-                <tr>
+                <tr data-url="{% url 'donator' %}" onclick="redirectTo(this)"class="clickable-row">
                     <td>
                         {% if doacao.status == 1 %}
                             <i class="fas fa-circle status-icon yellow"></i>
@@ -201,7 +201,7 @@
     {% if coletas %}
         <table id="donations-table">
             <thead>
-                <tr>
+                <tr data-url="{% url 'donator' %}" onclick="redirectTo(this)"class="clickable-row">
                     <th>Status</th>
                     <th>Bolsa</th>
                     <th>Doador</th>

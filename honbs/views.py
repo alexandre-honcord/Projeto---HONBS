@@ -15,7 +15,7 @@ from django.core.files.base import ContentFile
 from .models import Fridge, HemocomponentStock
 from collections import defaultdict
 
-from honbs.dbutils import estoque, lista_estoque, lista_doacoes
+from honbs.dbutils import estoque, lista_estoque, lista_doacoes, lista_producao
 from honbs.utils import format_datetime
 from itertools import groupby 
 from operator import itemgetter
@@ -289,9 +289,22 @@ def stock_list(request):
 @login_required
 def fractionation(request):
     user = request.user
+
+    # Chamar a função para buscar as doações
+    producoes_data = lista_producao()
+
+    # Processar e formatar os dados
+    for producao in producoes_data:
+        if "data" in producao:
+            producao["data"] = format_datetime(producao["data"], include_time=True)
+        if "data_recebimento" in producao:
+            producao["data_recebimento"] = format_datetime(producao["data_recebimento"])
+
+    # Contexto atualizado para o template
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,
+        'producoes': producoes_data,
     }
     return render(request, 'fractionation.html', context)
 

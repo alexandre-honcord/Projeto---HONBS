@@ -38,81 +38,51 @@
                     <th>Volume(ml)</th>
                     <th>Sexo</th>
                     <th>Apto</th>
+                    <th>Descarte</th>
                     <th>Produzido</th>
                     <th>Tempo de Coleta</th>
                     <th>Coletor</th>
+                    <th>Conector</th>
                     <th>Fracionar Bolsa</th>
+                    <th>Usuário Recebimento</th>
                     <th>Data de Recebimento</th>
                     <th>Sequência</th>
+                    <th>Trali</th>
+                    <th>Multigesta</th>
+                    <th>ISBT</th>
                 </tr>
             </thead>
             <tbody>
-                <tr onclick="redirectToprodHemo()">
-                    <td>J.S.</td>
-                    <td>553/02</td>
-                    <td>Voluntária</td>
-                    <td>2023-12-01</td>
-                    <td>12345</td>
-                    <td>987654</td>
-                    <td>00AA00AA00</td>
-                    <td>Dupla</td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td>Citrato</td>
-                    <td>Automática</td>
-                    <td>450</td>
-                    <td>Masculino</td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td>7 min</td>
-                    <td>Dr. Silva</td>
-                    <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    <td>2023-12-02</td>
-                    <td>001</td>
-                </tr>
-                <tr onclick="redirectToprodHemo()">
-                    <td>M.A.</td>
-                    <td>554/01</td>
-                    <td>Reposição</td>
-                    <td>2023-12-02</td>
-                    <td>54321</td>
-                    <td>123456</td>
-                    <td>11BB11BB11</td>
-                    <td>Tripla</td>
-                    <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    <td>Heparina</td>
-                    <td>Manual</td>
-                    <td>500</td>
-                    <td>Feminino</td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td>10 min</td>
-                    <td>Dra. Costa</td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td>2023-12-03</td>
-                    <td>002</td>
-                </tr>
-                <tr onclick="redirectToprodHemo()">
-                    <td>R.T.</td>
-                    <td>555/01</td>
-                    <td>Doação OVG</td>
-                    <td>2023-12-03</td>
-                    <td>67890</td>
-                    <td>654321</td>
-                    <td>22CC22CC22</td>
-                    <td>Quadrupla</td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td>EDTA</td>
-                    <td>Automática</td>
-                    <td>600</td>
-                    <td>Masculino</td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    <td>8 min</td>
-                    <td>Dr. Lima</td>
-                    <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    <td>2023-12-04</td>
-                    <td>003</td>
-                </tr>
+                {% for producao in producoes %}
+                    <tr>
+                        <td>{{ producao.doador }}</td>
+                        <td>{{ producao.doacoes }}</td>
+                        <td>{{ producao.tipo_doacoes }}</td>
+                        <td>{{ producao.data }}</td>
+                        <td>{{ producao.numero_sangue }}</td>
+                        <td>{{ producao.numero_bolsa }}</td>
+                        <td>{{ producao.lote_bolsa }}</td>
+                        <td>{{ producao.tipo_bolsa }}</td>
+                        <td>{{ producao.teste_acido_nucleico }}</td>
+                        <td>{{ producao.anticoagulante }}</td>
+                        <td>{{ producao.tipo_coleta }}</td>
+                        <td>{{ producao.volume }}</td>
+                        <td>{{ producao.sexo }}</td>
+                        <td>{{ producao.apto }}</td>
+                        <td>{{ producao.descarte }}</td>
+                        <td>{{ producao.produzido }}</td>
+                        <td>{{ producao.tempo_coleta }}</td>
+                        <td>{{ producao.coletor }}</td>
+                        <td>{{ producao.conector }}</td>
+                        <td>{{ producao.fracionar_bolsa }}</td>
+                        <td>{{ producao.usuario_recebimento }}</td>
+                        <td>{{ producao.data_recebimento }}</td>
+                        <td>{{ producao.sequencia }}</td>
+                        <td>{{ producao.trali }}</td>
+                        <td>{{ producao.multigesta }}</td>
+                        <td>{{ producao.isbt }}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

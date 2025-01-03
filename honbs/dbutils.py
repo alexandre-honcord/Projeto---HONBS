@@ -427,3 +427,105 @@ def lista_doacoes(data_inicial=None, data_final=None):
     finally:
         cursor.close()
         connection.close()
+
+def lista_producao():
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+        SELECT
+            SUBSTR(obter_iniciais_nome(a.cd_pessoa_fisica,NULL),1,50) as doador,
+            a.cd_pessoa_fisica||'/'||SUBSTR(san_qtd_doacao_coletada(a.cd_pessoa_fisica),1,50) doacoes,
+            c.ds_tipo_doacao as tipoDoacoes,
+            a.dt_doacao as data,
+            a.nr_sangue as numeroSangue,
+            a.nr_bolsa as numeroBolsa,
+            a.nr_lote_bolsa as loteBolsa,
+            SUBSTR(obter_valor_dominio(2176,ie_tipo_bolsa),1,100) tipoBolsa,
+            DECODE(a.IE_REALIZA_NAT, 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) teste_acido_nucleico,
+            SUBSTR(san_obter_desc_anticoagulante(a.nr_seq_antic),1,255) anticoalugante,
+            SUBSTR(obter_valor_dominio(1353,a.ie_tipo_coleta),1,255) tipo_coleta,
+            NVL(a.qt_volume_atual,a.qt_coletada) as volume,
+            DECODE(SUBSTR(Obter_Sexo_PF(a.cd_pessoa_fisica, 'C'),1,10), 'M', obter_desc_expressao(292932), obter_desc_expressao(290058)) sexo,
+            DECODE(a.IE_AVALIACAO_FINAL, 'A', obter_desc_expressao(283718), 'I', obter_desc_expressao(309592)) apto,
+            DECODE(a.ie_dms, 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) descarte,
+            DECODE(SUBSTR(san_obter_se_produzido(a.nr_sequencia),1,1), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) produzido,
+            a.qt_min_coleta as tempoColeta,
+            SUBSTR(obter_nome_pf(a.cd_pessoa_coleta),1,150) coletor,
+            a.nr_conector as conector,
+            DECODE(NVL(a.ie_fracionar_bolsa,'S'), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) fracionar_bolsa,
+            a.nm_usuario_recebimento as usuarioRecebimento,
+            a.dt_recebimento_bolsa as dtRecebimento,
+            a.nr_sequencia as sequencia,
+            DECODE(SUBSTR(san_obter_se_doador_trali(a.cd_pessoa_fisica),1,1), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) trali,
+            DECODE(SUBSTR(obter_se_doadora_multigesta(a.nr_sequencia),1,1), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) ie_multigesta,
+            OBTER_ISBT_DOADOR(a.nr_sequencia, null, 'D') as ISBT
+        FROM
+            san_tipo_doacao c,
+            san_doacao a
+        WHERE
+            a.nr_seq_tipo = c.nr_sequencia 
+        AND	a.ie_status >= 2 
+        AND	a.ie_tipo_coleta <> 2 
+        AND	((a.ie_dms = 'S' 
+        AND	a.dt_inutilizacao is null) OR (a.ie_dms = 'N' OR a.ie_dms is null))   
+        AND	a.cd_estabelecimento = 1  
+        AND	nvl(a.ie_auto_exclusao, 'N') = 'N'  
+        AND	a.ie_avaliacao_final <> 'I'  
+        AND	a.dt_doacao > sysdate - 30 
+        AND	a.cd_estabelecimento = 1
+        AND	not exists   (SELECT 1  
+        FROM	 san_producao z  
+        WHERE z.nr_seq_doacao = a.nr_sequencia  
+            AND	z.dt_liberacao is not null  ) 
+            AND	a.dt_fim_prod_doacao is null 
+        ORDER BY a.dt_doacao desc
+        """
+
+        # Executar consulta com os parâmetros
+        cursor.execute(sql)
+
+        # Colunas correspondentes à consulta
+        keys = [
+            "doador",
+            "doacoes",
+            "tipo_doacoes",
+            "data",
+            "numero_sangue",
+            "numero_bolsa",
+            "lote_bolsa",
+            "tipo_bolsa",
+            "teste_acido_nucleico",
+            "anticoagulante",
+            "tipo_coleta",
+            "volume",
+            "sexo",
+            "apto",
+            "descarte",
+            "produzido",
+            "tempo_coleta",
+            "coletor",
+            "conector",
+            "fracionar_bolsa",
+            "usuario_recebimento",
+            "data_recebimento",
+            "sequencia",
+            "trali",
+            "ie_multigesta",
+            "isbt"
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()

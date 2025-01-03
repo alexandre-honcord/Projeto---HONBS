@@ -20,145 +20,111 @@
 <div class="production-section">
     <h1>Produção</h1>
     <br>
-    <div class="table-container">
-        <table id="soro-table">
-            <thead>
-                <tr>
-                    <th>Doador</th>
-                    <th>N° de Doadores/Doações</th>
-                    <th>Tipo de Doação</th>
-                    <th>Data da Doação</th>
-                    <th>N° do Sangue</th>
-                    <th>N° da Bolsa</th>
-                    <th>Lote</th>
-                    <th>Tipo de Bolsa</th>
-                    <th>Teste de Ácido Nucleico</th>
-                    <th>Anticoagulante/Solução</th>
-                    <th>Tipo Coleta</th>
-                    <th>Volume(ml)</th>
-                    <th>Sexo</th>
-                    <th>Apto</th>
-                    <th>Descarte</th>
-                    <th>Produzido</th>
-                    <th>Tempo de Coleta</th>
-                    <th>Coletor</th>
-                    <th>Conector</th>
-                    <th>Fracionar Bolsa</th>
-                    <th>Usuário Recebimento</th>
-                    <th>Data de Recebimento</th>
-                    <th>Sequência</th>
-                    <th>Trali</th>
-                    <th>Multigesta</th>
-                    <th>ISBT</th>
+    <table id="soro-table">
+        <thead>
+            <tr>
+                <th>Doador</th>
+                <th>N° de Doadores/Doações</th>
+                <th>Tipo de Doação</th>
+                <th>Data da Doação</th>
+                <th>N° do Sangue</th>
+                <th>N° da Bolsa</th>
+                <th>Lote</th>
+                <th>Tipo de Bolsa</th>
+                <th>Teste de Ácido Nucleico</th>
+                <th>Anticoagulante/Solução</th>
+                <th>Tipo Coleta</th>
+                <th>Volume(ml)</th>
+                <th>Sexo</th>
+                <th>Apto</th>
+                <th>Descarte</th>
+                <th>Produzido</th>
+                <th>Tempo de Coleta</th>
+                <th>Coletor</th>
+                <th>Conector</th>
+                <th>Fracionar Bolsa</th>
+                <th>Usuário Recebimento</th>
+                <th>Data de Recebimento</th>
+                <th>Sequência</th>
+                <th>Trali</th>
+                <th>Multigesta</th>
+                <th>ISBT</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producao in producoes %}
+            <tr onclick="redirectToprodHemo()">
+                    <td>{{ producao.doador }}</td>
+                    <td>{{ producao.doacoes }}</td>
+                    <td>{{ producao.tipo_doacoes }}</td>
+                    <td>{{ producao.data }}</td>
+                    <td>{{ producao.numero_sangue }}</td>
+                    <td>{{ producao.numero_bolsa }}</td>
+                    <td>{{ producao.lote_bolsa }}</td>
+                    <td>{{ producao.tipo_bolsa }}</td>
+                    <td>{{ producao.teste_acido_nucleico }}</td>
+                    <td>{{ producao.anticoagulante }}</td>
+                    <td>{{ producao.tipo_coleta }}</td>
+                    <td>{{ producao.volume }}</td>
+                    <td>{{ producao.sexo }}</td>
+                    <td>{{ producao.apto }}</td>
+                    <td>{{ producao.descarte }}</td>
+                    <td>{{ producao.produzido }}</td>
+                    <td>{{ producao.tempo_coleta }}</td>
+                    <td>{{ producao.coletor }}</td>
+                    <td>{{ producao.conector }}</td>
+                    <td>{{ producao.fracionar_bolsa }}</td>
+                    <td>{{ producao.usuario_recebimento }}</td>
+                    <td>{{ producao.data_recebimento }}</td>
+                    <td>{{ producao.sequencia }}</td>
+                    <td>{{ producao.trali }}</td>
+                    <td>{{ producao.multigesta }}</td>
+                    <td>{{ producao.isbt }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for producao in producoes %}
-                    <tr>
-                        <td>{{ producao.doador }}</td>
-                        <td>{{ producao.doacoes }}</td>
-                        <td>{{ producao.tipo_doacoes }}</td>
-                        <td>{{ producao.data }}</td>
-                        <td>{{ producao.numero_sangue }}</td>
-                        <td>{{ producao.numero_bolsa }}</td>
-                        <td>{{ producao.lote_bolsa }}</td>
-                        <td>{{ producao.tipo_bolsa }}</td>
-                        <td>{{ producao.teste_acido_nucleico }}</td>
-                        <td>{{ producao.anticoagulante }}</td>
-                        <td>{{ producao.tipo_coleta }}</td>
-                        <td>{{ producao.volume }}</td>
-                        <td>{{ producao.sexo }}</td>
-                        <td>{{ producao.apto }}</td>
-                        <td>{{ producao.descarte }}</td>
-                        <td>{{ producao.produzido }}</td>
-                        <td>{{ producao.tempo_coleta }}</td>
-                        <td>{{ producao.coletor }}</td>
-                        <td>{{ producao.conector }}</td>
-                        <td>{{ producao.fracionar_bolsa }}</td>
-                        <td>{{ producao.usuario_recebimento }}</td>
-                        <td>{{ producao.data_recebimento }}</td>
-                        <td>{{ producao.sequencia }}</td>
-                        <td>{{ producao.trali }}</td>
-                        <td>{{ producao.multigesta }}</td>
-                        <td>{{ producao.isbt }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <div class="batch-section hidden">
     <h1>Lote da Hemoterapia</h1>
     <br>
-    <div class="table-container">
-        <table id="batch-table">
-            <thead>
-                <tr>
-                    <th>Sequência</th>
-                    <th>Data Inicial</th>
-                    <th>Data Final</th>
-                    <th>Data Geração</th>
-                    <th>Data Saída</th>
-                    <th>Temperatura Saída</th>
-                    <th>Responsável Saída</th>
-                    <th>Data Chegada</th>
-                    <th>Temperatura Chegada</th>
-                    <th>Responsável Chegada</th>
-                    <th>Responsável Transporte</th>
-                    <th>Quantidade de Amostras</th>
-                    <th>Classificação</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table id="batch-table">
+        <thead>
+            <tr>
+                <th>Sequência</th>
+                <th>Quantidade de Amostras</th>
+                <th>Data Inicial</th>
+                <th>Data Final</th>
+                <th>Data Geração</th>
+                <th>Data Saída</th>
+                <th>Temperatura Saída</th>
+                <th>Responsável Saída</th>
+                <th>Data Chegada</th>
+                <th>Temperatura Chegada</th>
+                <th>Responsável Chegada</th>
+                <th>Responsável Transporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lote in lotes %}
                 <tr onclick="redirectTolote()">
-                    <td>001</td>
-                    <td>2023-12-01</td>
-                    <td>2023-12-05</td>
-                    <td>2023-12-06</td>
-                    <td>2023-12-06</td>
-                    <td>-5°C</td>
-                    <td>Dr. João Silva</td>
-                    <td>2023-12-07</td>
-                    <td>-4°C</td>
-                    <td>Dra. Maria Costa</td>
-                    <td>Logística Hemovida</td>
-                    <td>50</td>
-                    <td>Sorologia/Imunohemato (Imunolab)</td>
+                    <td>{{ lote.sequencia }}</td>
+                    <td>{{ lote.qt_amostras }}</td>
+                    <td>{{ lote.inicio }}</td>
+                    <td>{{ lote.fim }}</td>
+                    <td>{{ lote.geracao }}</td>
+                    <td>{{ lote.dt_saida }}</td>
+                    <td>{{ lote.temp_saida }}</td>
+                    <td>{{ lote.resp_saida }}</td>
+                    <td>{{ lote.dt_chegada }}</td>
+                    <td>{{ lote.temp_chegada }}</td>
+                    <td>{{ lote.resp_chegada }}</td>
+                    <td>{{ lote.resp_transporte }}</td>
                 </tr>
-                <tr onclick="redirectTolote()">
-                    <td>002</td>
-                    <td>2023-11-28</td>
-                    <td>2023-12-02</td>
-                    <td>2023-12-03</td>
-                    <td>2023-12-03</td>
-                    <td>2°C</td>
-                    <td>Enf. Carlos Lima</td>
-                    <td>2023-12-04</td>
-                    <td>3°C</td>
-                    <td>Enf. Ana Sousa</td>
-                    <td>Transporte Seguro Ltda</td>
-                    <td>40</td>
-                    <td>Sorologia/Imunohemato (Imunolab)</td>
-                </tr>
-                <tr onclick="redirectTolote()">
-                    <td>003</td>
-                    <td>2023-12-01</td>
-                    <td>2023-12-05</td>
-                    <td>2023-12-06</td>
-                    <td>2023-12-06</td>
-                    <td>-30°C</td>
-                    <td>Dr. Pedro Albuquerque</td>
-                    <td>2023-12-07</td>
-                    <td>-28°C</td>
-                    <td>Dr. Renata Vieira</td>
-                    <td>TransHemovida</td>
-                    <td>60</td>
-                    <td>Sorologia/Imunohemato (Imunolab)</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <script>

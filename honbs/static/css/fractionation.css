@@ -12,6 +12,8 @@ nav ul li:nth-child(3) a i {
     height: 100%;
     padding: 20px;
     font-family: Arial, sans-serif;
+    overflow-x: auto; /* Rolagem horizontal */
+    overflow-y: auto; /* Rolagem vertical */
 }
 
 .tabs-container {
@@ -54,14 +56,12 @@ nav ul li:nth-child(3) a i {
 }
 
 .table-container {
-    overflow-x: auto; /* Adiciona rolagem horizontal se necessário */
-    max-width: 100%;
-    margin: 0 auto;
+    height: 100%; /* Altura máxima maior para mais espaço vertical */
+    width: 100%; /* Largura máxima limitada para reduzir o espaço horizontal */
+    margin: 0 auto; /* Centraliza o contêiner horizontalmente */
+    border: 1px solid #ddd; /* Opcional: borda ao redor do contêiner */
     background-color: #fff; /* Fundo branco para destaque */
-    border: 1px solid #ddd; /* Borda para separar a tabela */
-    border-radius: 5px; /* Bordas arredondadas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para aparência elegante */
-    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para visual mais elegante */
 }
 
 table {

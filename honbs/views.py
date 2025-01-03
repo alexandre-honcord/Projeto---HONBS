@@ -15,11 +15,11 @@ from django.core.files.base import ContentFile
 from .models import Fridge, HemocomponentStock
 from collections import defaultdict
 
-from honbs.dbutils import estoque, lista_estoque, lista_doacoes, lista_producao
+from honbs.dbutils import estoque, lista_estoque, lista_doacoes, lista_lotes, lista_producao
 from honbs.utils import format_datetime
 from itertools import groupby 
 from operator import itemgetter
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -300,11 +300,31 @@ def fractionation(request):
         if "data_recebimento" in producao:
             producao["data_recebimento"] = format_datetime(producao["data_recebimento"])
 
+    # Calcular datas para o último mês
+    today = date.today()
+    first_day_last_month = (today.replace(day=1) - timedelta(days=1)).replace(day=1)
+    last_day_last_month = (today.replace(day=1) - timedelta(days=1))
+
+    # Chamar a função para buscar os lotes do último mês
+    lotes_data = lista_lotes(data_inicial=first_day_last_month.isoformat(), data_final=last_day_last_month.isoformat())
+
+    # Processar e formatar os dados
+    for lote in lotes_data:
+        for key in ["inicio", "fim", "geracao", "dt_saida", "dt_chegada"]:
+            if key in lote:
+                lote[key] = format_datetime(lote[key]) if lote[key] else "N/A"
+        for key in ["resp_transporte", "resp_chegada", "temp_chegada"]:
+            if key in lote and lote[key] is None:
+                lote[key] = "N/A"
+
     # Contexto atualizado para o template
     context = {
         'username': user.username,
         'foto': user.foto.url if user.foto else None,
         'producoes': producoes_data,
+        'lotes': lotes_data,
+        'data_inicial': first_day_last_month.isoformat(),
+        'data_final': last_day_last_month.isoformat(),
     }
     return render(request, 'fractionation.html', context)
 

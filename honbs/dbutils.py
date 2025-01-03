@@ -1,7 +1,7 @@
 # db_utils.py
 import cx_Oracle
 from django.conf import settings
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 
 def obter_conexao():
@@ -438,35 +438,35 @@ def lista_producao():
     try:
         sql = """
         SELECT
-            SUBSTR(obter_iniciais_nome(a.cd_pessoa_fisica,NULL),1,50) as doador,
-            a.cd_pessoa_fisica||'/'||SUBSTR(san_qtd_doacao_coletada(a.cd_pessoa_fisica),1,50) doacoes,
+            SUBSTR(TASY.obter_iniciais_nome(a.cd_pessoa_fisica,NULL),1,50) as doador,
+            a.cd_pessoa_fisica||'/'||SUBSTR(TASY.san_qtd_doacao_coletada(a.cd_pessoa_fisica),1,50) doacoes,
             c.ds_tipo_doacao as tipoDoacoes,
             a.dt_doacao as data,
             a.nr_sangue as numeroSangue,
             a.nr_bolsa as numeroBolsa,
             a.nr_lote_bolsa as loteBolsa,
-            SUBSTR(obter_valor_dominio(2176,ie_tipo_bolsa),1,100) tipoBolsa,
-            DECODE(a.IE_REALIZA_NAT, 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) teste_acido_nucleico,
-            SUBSTR(san_obter_desc_anticoagulante(a.nr_seq_antic),1,255) anticoalugante,
-            SUBSTR(obter_valor_dominio(1353,a.ie_tipo_coleta),1,255) tipo_coleta,
+            SUBSTR(TASY.obter_valor_dominio(2176,ie_tipo_bolsa),1,100) tipoBolsa,
+            DECODE(a.IE_REALIZA_NAT, 'S', TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) teste_acido_nucleico,
+            SUBSTR(TASY.san_obter_desc_anticoagulante(a.nr_seq_antic),1,255) anticoalugante,
+            SUBSTR(TASY.obter_valor_dominio(1353,a.ie_tipo_coleta),1,255) tipo_coleta,
             NVL(a.qt_volume_atual,a.qt_coletada) as volume,
-            DECODE(SUBSTR(Obter_Sexo_PF(a.cd_pessoa_fisica, 'C'),1,10), 'M', obter_desc_expressao(292932), obter_desc_expressao(290058)) sexo,
-            DECODE(a.IE_AVALIACAO_FINAL, 'A', obter_desc_expressao(283718), 'I', obter_desc_expressao(309592)) apto,
-            DECODE(a.ie_dms, 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) descarte,
-            DECODE(SUBSTR(san_obter_se_produzido(a.nr_sequencia),1,1), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) produzido,
+            DECODE(SUBSTR(TASY.Obter_Sexo_PF(a.cd_pessoa_fisica, 'C'),1,10), 'M', TASY.obter_desc_expressao(292932), TASY.obter_desc_expressao(290058)) sexo,
+            DECODE(a.IE_AVALIACAO_FINAL, 'A', TASY.obter_desc_expressao(283718), 'I', TASY.obter_desc_expressao(309592)) apto,
+            DECODE(a.ie_dms, 'S', TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) descarte,
+            DECODE(SUBSTR(TASY.san_obter_se_produzido(a.nr_sequencia),1,1), 'S', TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) produzido,
             a.qt_min_coleta as tempoColeta,
-            SUBSTR(obter_nome_pf(a.cd_pessoa_coleta),1,150) coletor,
+            SUBSTR(TASY.obter_nome_pf(a.cd_pessoa_coleta),1,150) coletor,
             a.nr_conector as conector,
-            DECODE(NVL(a.ie_fracionar_bolsa,'S'), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) fracionar_bolsa,
+            DECODE(NVL(a.ie_fracionar_bolsa,'S'), 'S', TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) fracionar_bolsa,
             a.nm_usuario_recebimento as usuarioRecebimento,
             a.dt_recebimento_bolsa as dtRecebimento,
             a.nr_sequencia as sequencia,
-            DECODE(SUBSTR(san_obter_se_doador_trali(a.cd_pessoa_fisica),1,1), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) trali,
-            DECODE(SUBSTR(obter_se_doadora_multigesta(a.nr_sequencia),1,1), 'S', obter_desc_expressao(719927), obter_desc_expressao(327114)) ie_multigesta,
-            OBTER_ISBT_DOADOR(a.nr_sequencia, null, 'D') as ISBT
+            DECODE(SUBSTR(TASY.san_obter_se_doador_trali(a.cd_pessoa_fisica),1,1), 'S', TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) trali,
+            DECODE(SUBSTR(TASY.obter_se_doadora_multigesta(a.nr_sequencia),1,1), 'S', TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) ie_multigesta,
+            TASY.OBTER_ISBT_DOADOR(a.nr_sequencia, null, 'D') as ISBT
         FROM
-            san_tipo_doacao c,
-            san_doacao a
+            TASY.san_tipo_doacao c,
+            TASY.san_doacao a
         WHERE
             a.nr_seq_tipo = c.nr_sequencia 
         AND	a.ie_status >= 2 
@@ -479,7 +479,7 @@ def lista_producao():
         AND	a.dt_doacao > sysdate - 30 
         AND	a.cd_estabelecimento = 1
         AND	not exists   (SELECT 1  
-        FROM	 san_producao z  
+        FROM	 TASY.san_producao z  
         WHERE z.nr_seq_doacao = a.nr_sequencia  
             AND	z.dt_liberacao is not null  ) 
             AND	a.dt_fim_prod_doacao is null 
@@ -517,6 +517,81 @@ def lista_producao():
             "trali",
             "ie_multigesta",
             "isbt"
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def lista_lotes(data_inicial=None, data_final=None):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        # Se as datas não forem fornecidas, use o intervalo padrão (mês atual)
+        if not data_inicial:
+            today = date.today()
+            data_inicial = today.replace(day=1).strftime('%Y-%m-%d')  # Primeiro dia do mês atual
+        if not data_final:
+            today = date.today()
+            next_month = today.replace(day=28) + timedelta(days=4)  # Garantir que esteja no próximo mês
+            data_final = next_month.replace(day=1) - timedelta(days=1)  # Último dia do mês atual
+            data_final = data_final.strftime('%Y-%m-%d')
+
+        sql = """
+        SELECT
+            a.nr_sequencia as sequencia,
+            TASY.obter_qtd_exame_lote_hemo(a.nr_sequencia) as qt_amostras,
+            a.dt_inicio as inicio,
+            a.dt_fim as fim,
+            a.dt_geracao as geracao,
+            a.dt_saida_bs as dt_saida,
+            a.qt_temp_transp as temp_saida,
+            a.cd_resp as resp_saida,
+            a.dt_chegada_local as dt_chegada,
+            a.qt_temp_chegada as temp_chegada,
+            a.nm_resp_local as resp_chegada,
+            a.nm_resp_transporte as resp_transporte
+        FROM
+            TASY.san_lote_hemoterapia a
+        WHERE TRUNC(a.dt_inicio) >= TO_DATE(:data_inicial, 'YYYY-MM-DD')
+        AND TRUNC(a.dt_fim) <= TO_DATE(:data_final, 'YYYY-MM-DD')
+        ORDER BY a.dt_inicio DESC
+        """
+
+        # Parâmetros para consulta
+        params = {
+            'data_inicial': data_inicial,
+            'data_final': data_final
+        }
+
+        # Executar consulta com os parâmetros
+        cursor.execute(sql, params)
+
+        # Colunas correspondentes à consulta
+        keys = [
+            "sequencia",
+            "qt_amostras",
+            "inicio",
+            "fim",
+            "geracao",
+            "dt_saida",
+            "temp_saida",
+            "resp_saida",
+            "dt_chegada",
+            "temp_chegada",
+            "resp_chegada",
+            "resp_transporte"
         ]
 
         # Obter todas as linhas e mapear para dicionários

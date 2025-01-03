@@ -38,52 +38,71 @@
             <button class="apply-filter-btn" onclick="applyDateFilter()">Aplicar Filtro</button>
         </div>
     </div>
-    <div class="table-container">
-        <table id="donations-table">
-            <thead>
-                <tr>
-                    <th>Bolsa</th>
-                    <th>Doador</th>
-                    <th>Data</th>
-                    <th>Tipo Doação</th>
-                    <th>Tipo Coleta</th>
-                    <th>Tipagem</th>
-                    <th>Data Retorno</th>
-                    <th>Altura</th>
-                    <th>Peso</th>
-                    <th>Pulso</th>
-                    <th>Temperatura</th>
-                    <th>Lote</th>
-                    <th>N° Sangue</th>
-                    <th>Volume(ml)</th>
-                    <th>Sequencia</th>
-                    <th>Codigo de Barras</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for doacao in doacoes %}
-                <tr data-url="{% url 'donator' %}" onclick="redirectTo(this)"class="clickable-row">
-                    <td>{{ doacao.bolsa }}</td>
-                    <td>{{ doacao.doador }}</td>
-                    <td>{{ doacao.data }}</td>
-                    <td>{{ doacao.tipo_doacao }}</td>
-                    <td>{{ doacao.tipo_coleta }}</td>
-                    <td>{{ doacao.tipo_sangue }}</td>
-                    <td>{{ doacao.data_retorno }}</td>
-                    <td>{{ doacao.altura }}</td>
-                    <td>{{ doacao.peso }}kg</td>
-                    <td>{{ doacao.pulso }}</td>
-                    <td>{{ doacao.temperatura }}º</td>
-                    <td>{{ doacao.lote }}</td>
-                    <td>{{ doacao.sangue }}</td>
-                    <td>{{ doacao.volume }}ml</td>
-                    <td>{{ doacao.sequencia }}</td>
-                    <td>{{ doacao.codigo_barras }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% if doacoes %}
+        <div class="table-container">
+            <table id="donations-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Bolsa</th>
+                        <th>Doador</th>
+                        <th>Data</th>
+                        <th>Tipo Doação</th>
+                        <th>Tipo Coleta</th>
+                        <th>Tipagem</th>
+                        <th>Data Retorno</th>
+                        <th>Altura</th>
+                        <th>Peso</th>
+                        <th>Pulso</th>
+                        <th>Temperatura</th>
+                        <th>Lote</th>
+                        <th>N° Sangue</th>
+                        <th>Volume(ml)</th>
+                        <th>Sequencia</th>
+                        <th>Codigo de Barras</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tbody>
+                        {% for doacao in doacoes %}
+                            {% if doacao.lote != "N/A" %}
+                            <tr>
+                                <td>
+                                    {% if doacao.status == 1 %}
+                                        <i class="fas fa-circle status-icon yellow"></i>
+                                    {% elif doacao.status == 2 %}
+                                        <i class="fas fa-circle status-icon red"></i>
+                                    {% else %}
+                                        <i class="fas fa-circle status-icon gray"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{ doacao.bolsa }}</td>
+                                <td>{{ doacao.doador }}</td>
+                                <td>{{ doacao.data }}</td>
+                                <td>{{ doacao.tipo_doacao }}</td>
+                                <td>{{ doacao.tipo_coleta }}</td>
+                                <td>{{ doacao.tipo_sangue }}</td>
+                                <td>{{ doacao.data_retorno }}</td>
+                                <td>{{ doacao.altura }}</td>
+                                <td>{{ doacao.peso }}kg</td>
+                                <td>{{ doacao.pulso }}</td>
+                                <td>{{ doacao.temperatura }}º</td>
+                                <td>{{ doacao.lote }}</td>
+                                <td>{{ doacao.sangue }}</td>
+                                <td>{{ doacao.volume }}ml</td>
+                                <td>{{ doacao.sequencia }}</td>
+                                <td>{{ doacao.codigo_barras }}</td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="no-results">
+            <p>Seu filtro não encontrou nenhum resultado.</p>
+        </div>
+    {% endif %}
 </div>
 
 <div class="trial-section hidden">
@@ -94,52 +113,79 @@
         </span>
         <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
         <div id="filter-options" class="filter-options hidden">
-            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
-            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
-            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
-            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+            <div>
+                <label for="start-date">Data inicial:</label>
+                <input type="date" id="start-date" name="start-date">
+            </div>
+            <div>
+                <label for="end-date">Data final:</label>
+                <input type="date" id="end-date" name="end-date">
+            </div>
+            <button class="apply-filter-btn" onclick="applyDateFilter()">Aplicar Filtro</button>
         </div>
     </div>
-    <table id="trial-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    {% if triagem %}
+        <div class="table-container">
+            <table id="triage-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Bolsa</th>
+                        <th>Doador</th>
+                        <th>Data</th>
+                        <th>Tipo Doação</th>
+                        <th>Tipo Coleta</th>
+                        <th>Tipagem</th>
+                        <th>Data Retorno</th>
+                        <th>Altura</th>
+                        <th>Peso</th>
+                        <th>Pulso</th>
+                        <th>Temperatura</th>
+                        <th>Lote</th>
+                        <th>N° Sangue</th>
+                        <th>Volume(ml)</th>
+                        <th>Sequencia</th>
+                        <th>Codigo de Barras</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doacao in triagem %}
+                    <tr>
+                        <td>
+                            {% if doacao.status == 1 %}
+                                <i class="fas fa-circle status-icon yellow"></i>
+                            {% elif doacao.status == 2 %}
+                                <i class="fas fa-circle status-icon red"></i>
+                            {% else %}
+                                <i class="fas fa-circle status-icon gray"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ doacao.bolsa }}</td>
+                        <td>{{ doacao.doador }}</td>
+                        <td>{{ doacao.data }}</td>
+                        <td>{{ doacao.tipo_doacao }}</td>
+                        <td>{{ doacao.tipo_coleta }}</td>
+                        <td>{{ doacao.tipo_sangue }}</td>
+                        <td>{{ doacao.data_retorno }}</td>
+                        <td>{{ doacao.altura }}</td>
+                        <td>{{ doacao.peso }}kg</td>
+                        <td>{{ doacao.pulso }}</td>
+                        <td>{{ doacao.temperatura }}º</td>
+                        <td>{{ doacao.lote }}</td>
+                        <td>{{ doacao.sangue }}</td>
+                        <td>{{ doacao.volume }}ml</td>
+                        <td>{{ doacao.sequencia }}</td>
+                        <td>{{ doacao.codigo_barras }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="no-results">
+            <p>Seu filtro não encontrou nenhum resultado.</p>
+        </div>
+    {% endif %}
 </div>
 
 <div class="collect-section hidden">
@@ -156,46 +202,71 @@
             <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
         </div>
     </div>
-    <table id="collect-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    {% if coletas %}
+        <div class="table-container">
+            <table id="donations-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Bolsa</th>
+                        <th>Doador</th>
+                        <th>Data</th>
+                        <th>Tipo Doação</th>
+                        <th>Tipo Coleta</th>
+                        <th>Tipagem</th>
+                        <th>Data Retorno</th>
+                        <th>Altura</th>
+                        <th>Peso</th>
+                        <th>Pulso</th>
+                        <th>Temperatura</th>
+                        <th>Lote</th>
+                        <th>N° Sangue</th>
+                        <th>Volume(ml)</th>
+                        <th>Sequencia</th>
+                        <th>Codigo de Barras</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tbody>
+                        {% for doacao in coletas %}
+                            {% if doacao.lote != "N/A" %}
+                            <tr>
+                                <td>
+                                    {% if doacao.status == 1 %}
+                                        <i class="fas fa-circle status-icon yellow"></i>
+                                    {% elif doacao.status == 2 %}
+                                        <i class="fas fa-circle status-icon red"></i>
+                                    {% else %}
+                                        <i class="fas fa-circle status-icon gray"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{ doacao.bolsa }}</td>
+                                <td>{{ doacao.doador }}</td>
+                                <td>{{ doacao.data }}</td>
+                                <td>{{ doacao.tipo_doacao }}</td>
+                                <td>{{ doacao.tipo_coleta }}</td>
+                                <td>{{ doacao.tipo_sangue }}</td>
+                                <td>{{ doacao.data_retorno }}</td>
+                                <td>{{ doacao.altura }}</td>
+                                <td>{{ doacao.peso }}kg</td>
+                                <td>{{ doacao.pulso }}</td>
+                                <td>{{ doacao.temperatura }}º</td>
+                                <td>{{ doacao.lote }}</td>
+                                <td>{{ doacao.sangue }}</td>
+                                <td>{{ doacao.volume }}ml</td>
+                                <td>{{ doacao.sequencia }}</td>
+                                <td>{{ doacao.codigo_barras }}</td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="no-results">
+            <p>Seu filtro não encontrou nenhum resultado.</p>
+        </div>
+    {% endif %}
 </div>
 
 <script>

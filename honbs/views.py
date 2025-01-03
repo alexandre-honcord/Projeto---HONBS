@@ -151,11 +151,22 @@ def donations(request):
             if key in doacao and doacao[key] is None:
                 doacao[key] = "N/A"
 
-    # Contexto para o template
+        # Adicionar uma descrição para o status
+        status_map = {0: "Pendente", 1: "Iniciada", 2: "Finalizada"}
+        doacao["status_desc"] = status_map.get(doacao.get("status"), "Desconhecido")
+
+    # Separar doações por status
+    coletas = [doacao for doacao in doacoes_data if doacao.get("status") == 1]
+    triagem = [doacao for doacao in doacoes_data if doacao.get("status") == 0]
+    doacoes = [doacao for doacao in doacoes_data if doacao.get("status") >= 0]
+
+    # Contexto atualizado para o template
     context = {
         'username': user.username,
         'foto': user.foto.url if user.foto else None,
-        'doacoes': doacoes_data,
+        'coletas': coletas,
+        'triagem': triagem,
+        'doacoes': doacoes,
         'data_inicial': data_inicial.isoformat(),
         'data_final': data_final.isoformat(),
     }

@@ -378,7 +378,8 @@ def lista_doacoes(data_inicial=None, data_final=None):
             a.qt_coletada as volume,
             a.nr_sequencia as sequencia,
             a.nr_seq_isbt as codigo_barras,
-            b.ie_tipo_sangue || b.ie_fator_rh as tipo_sangue
+            b.ie_tipo_sangue || b.ie_fator_rh as tipo_sangue,
+            a.ie_status as status
         FROM TASY.san_doacao a
         JOIN TASY.pessoa_fisica b ON b.cd_pessoa_fisica = a.cd_pessoa_fisica
         WHERE TRUNC(a.dt_doacao) >= TO_DATE(:data_inicial, 'YYYY-MM-DD')
@@ -412,7 +413,8 @@ def lista_doacoes(data_inicial=None, data_final=None):
             "volume",
             "sequencia",
             "codigo_barras",
-            "tipo_sangue"
+            "tipo_sangue",
+            "status"
         ]
 
         # Obter todas as linhas e mapear para dicionários

@@ -27,6 +27,29 @@ nav ul li:nth-child(3) a i {
     font-size: 0.9rem;
 }
 
+.sorology-tables {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+#sorology-table-left, #sorology-table-right {
+    width: 48%; /* Cada tabela ocupa 48% da largura */
+    border-collapse: collapse;
+}
+
+#sorology-table-left th, #sorology-table-right th,
+#sorology-table-left td, #sorology-table-right td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#sorology-table-left th, #sorology-table-right th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
 table th, table td {
     padding: 10px;
     text-align: center;

@@ -49,11 +49,12 @@
                 <th>Trali</th>
                 <th>Multigesta</th>
                 <th>ISBT</th>
+                <th>Código</th>
             </tr>
         </thead>
         <tbody>
             {% for producao in producoes %}
-            <tr onclick="redirectToprodHemo()">
+            <tr data-url="{% url 'prodHemo' producao.numero_sangue %}" class="clickable-row">
                     <td>{{ producao.doador }}</td>
                     <td>{{ producao.doacoes }}</td>
                     <td>{{ producao.tipo_doacoes }}</td>
@@ -80,6 +81,7 @@
                     <td>{{ producao.trali }}</td>
                     <td>{{ producao.multigesta }}</td>
                     <td>{{ producao.isbt }}</td>
+                    <td>{{ producao.codigo }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -108,7 +110,7 @@
         </thead>
         <tbody>
             {% for lote in lotes %}
-                <tr onclick="redirectTolote()">
+            <tr data-url="{% url 'batch' lote.sequencia %}" class="clickable-row">
                     <td>{{ lote.sequencia }}</td>
                     <td>{{ lote.qt_amostras }}</td>
                     <td>{{ lote.inicio }}</td>
@@ -147,11 +149,16 @@
         // Adiciona a classe 'active' ao botão clicado
         document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
     }
-    function redirectToprodHemo() {
-        window.location.href = "{% url 'prodHemo' %}";
-    }
-    function redirectTolote() {
-        window.location.href = "{% url 'batch' %}";
-    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function () {
+                const url = this.getAttribute("data-url");
+                window.location.href = url;
+            });
+        });
+    });
 </script>
 {% endblock %}

@@ -16,86 +16,70 @@
 </div>
 <br>
 <div class="exam-section">
-    <h1>Exames do lote</h1>
+    <h1>Exames do Lote {{ grouped_data.0.NR_SEQ_LOTE }}</h1> <!-- Exibe o número do lote -->
     <br>
     <div class="table-container">
-        <table id="exam-table">
+        <form method="get" id="filter-form">
+            <label>
+                <input type="checkbox" name="mostrar_inativos" 
+                       onchange="document.getElementById('filter-form').submit();" 
+                       {% if mostrar_inativos %}checked{% endif %}>
+                Mostrar inativos
+            </label>
+        </form>
+        <br>
+        <table id="batch-table">
             <thead>
                 <tr>
+                    <th>N° do Exame</th>
                     <th>Sequência</th>
-                    <th>Exame Lote</th>
-                    <th>Doação</th>
-                    <th>N° do Sangue</th>
-                    <th>Data da Doação</th>
-                    <th>Doador</th>
-                    <th>Tipo de Doação</th>
-                    <th>Tipagem</th>
-                    <th>Tipo Resultado</th>
+                    <th>Tipo de Exame</th>
                 </tr>
             </thead>
             <tbody>
-                <tr onclick="redirectToprodHemo()">
-                    <td>001</td>
-                    <td>1000000</td>
-                    <td>DOA001</td>
-                    <td>12345</td>
-                    <td>2023-12-01</td>
-                    <td>J.S</td>
-                    <td>Voluntária</td>
-                    <td>O+</td>
-                    <td>Negativo</td>
+                {% for group in grouped_data %}
+                <tr>
+                    <td rowspan="{{ group.exames|length }}" class="clickable">
+                        {% if group.numeroSangue != "N/A" %}
+                            <a href="{% url 'prodHemo' group.numeroSangue %}" title="Ver Hemocomponentes">
+                                {{ group.NR_SEQ_EXAME_LOTE }}
+                                <i class="fas fa-check-circle" style="color: lightgreen;" title="Número de Sangue Disponível"></i>
+                            </a>
+                        {% else %}
+                            {{ group.NR_SEQ_EXAME_LOTE }}
+                            <i class="fas fa-times-circle" style="color: red;" title="Número de Sangue Indisponível"></i>
+                        {% endif %}
+                    </td>
+                    {% for exame in group.exames %}
+                        {% if not forloop.first %}
+                        <tr>
+                        {% endif %}
+                            <td>{{ exame.NR_SEQUENCIA }}</td>
+                            <td>{{ exame.NR_SEQ_EXAME }}</td>
+                        </tr>
+                    {% endfor %}
+                {% empty %}
+                <tr>
+                    <td colspan="3">Nenhum dado encontrado.</td>
                 </tr>
-                <tr onclick="redirectToprodHemo()">
-                    <td>002</td>
-                    <td>1100000</td>
-                    <td>DOA002</td>
-                    <td>54321</td>
-                    <td>2023-12-02</td>
-                    <td>M.A</td>
-                    <td>Reposição</td>
-                    <td>A-</td>
-                    <td>Descritivo</td>
-                </tr>
-                <tr onclick="redirectToprodHemo()">
-                    <td>003</td>
-                    <td>1200000</td>
-                    <td>DOA003</td>
-                    <td>67890</td>
-                    <td>2023-12-03</td>
-                    <td>R.T</td>
-                    <td>Doação OVG</td>
-                    <td>AB+</td>
-                    <td>Positivo</td>
-                </tr>
-                <tr onclick="redirectToprodHemo()">
-                    <td>004</td>
-                    <td>1300000</td>
-                    <td>DOA004</td>
-                    <td>11223</td>
-                    <td>2023-12-04</td>
-                    <td>L.C</td>
-                    <td>Voluntária</td>
-                    <td>B+</td>
-                    <td>Indeterminado</td>
-                </tr>
-                <tr onclick="redirectToprodHemo()">
-                    <td>005</td>
-                    <td>1400000</td>
-                    <td>DOA005</td>
-                    <td>33445</td>
-                    <td>2023-12-05</td>
-                    <td>A.S</td>
-                    <td>Reposição</td>
-                    <td>O-</td>
-                    <td>Negativo</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 <script>
-    function redirectToprodHemo() {
-        window.location.href = "{% url 'prodHemo' %}";
-    }
+    document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll(".clickable-row");
+    rows.forEach(row => {
+        row.addEventListener("click", function () {
+            if (!this.classList.contains("no-sangue")) {
+                const url = this.getAttribute("data-url");
+                if (url) {
+                    window.location.href = url;
+                }
+            }
+        });
+    });
+});
 </script>
 {% endblock %}

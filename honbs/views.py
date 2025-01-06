@@ -15,8 +15,8 @@ from django.core.files.base import ContentFile
 from .models import Fridge, HemocomponentStock
 from collections import defaultdict
 
-from honbs.dbutils import dados_cabecalho, dados_doador, estoque, hist_doacao, lista_estoque, lista_doacoes, lista_lotes, lista_producao
-from honbs.utils import format_datetime
+from honbs.dbutils import dados_cabecalho, dados_doador, estoque, exames_lote, hemocomponentes, hist_doacao, lista_estoque, lista_doacoes, lista_lotes, lista_producao
+from honbs.utils import format_datetime, separar_iniciais_por_ponto
 from itertools import groupby 
 from operator import itemgetter
 from datetime import date, datetime, timedelta
@@ -335,6 +335,10 @@ def stock_list(request):
 def fractionation(request):
     user = request.user
 
+    # Calcular o intervalo dos últimos 30 dias
+    today = date.today()
+    thirty_days_ago = today - timedelta(days=30)
+
     # Chamar a função para buscar as doações
     producoes_data = lista_producao()
 
@@ -345,13 +349,8 @@ def fractionation(request):
         if "data_recebimento" in producao:
             producao["data_recebimento"] = format_datetime(producao["data_recebimento"])
 
-    # Calcular datas para o último mês
-    today = date.today()
-    first_day_last_month = (today.replace(day=1) - timedelta(days=1)).replace(day=1)
-    last_day_last_month = (today.replace(day=1) - timedelta(days=1))
-
-    # Chamar a função para buscar os lotes do último mês
-    lotes_data = lista_lotes(data_inicial=first_day_last_month.isoformat(), data_final=last_day_last_month.isoformat())
+    # Chamar a função para buscar os lotes dos últimos 30 dias
+    lotes_data = lista_lotes(data_inicial=thirty_days_ago.isoformat(), data_final=today.isoformat())
 
     # Processar e formatar os dados
     for lote in lotes_data:
@@ -368,26 +367,143 @@ def fractionation(request):
         'foto': user.foto.url if user.foto else None,
         'producoes': producoes_data,
         'lotes': lotes_data,
-        'data_inicial': first_day_last_month.isoformat(),
-        'data_final': last_day_last_month.isoformat(),
+        'data_inicial': thirty_days_ago.isoformat(),
+        'data_final': today.isoformat(),
     }
     return render(request, 'fractionation.html', context)
 
 @login_required
-def prodHemocomponente(request):
+def prodHemocomponente(request, codigo):
     user = request.user
+
+    # Obter os dados do doador pelo código único
+    hemocomponente_data = hemocomponentes(codigo)
+
+    # Verificar se há resultados e processar as iniciais do doador
+    if hemocomponente_data:
+        for item in hemocomponente_data:
+            item["doador"] = separar_iniciais_por_ponto(item["doador"])
+
+    # Usar o primeiro registro para o header
+    hemocomponente = hemocomponente_data[0] if hemocomponente_data else None
+
+    # Ordem predefinida dos exames
+    ordem_exames = [
+        "Tipo de Sangue ABO",
+        "Fator RH",
+        "CDE",
+        "Pesquisa de Anticorpos Irregulares (PAI)",
+        "Doença de Chagas",
+        "HBsAg",
+        "Anti-HBc Total",
+        "Anti-HCV",
+        "Anti-HIV 1+2 A",
+        "Anti-HIV 1+2 B",
+        "Anti HTLV I / II",
+        "Sífilis ",
+        "Triagem Laboratorial de Hemoglobina ",
+        "NAT HIV",
+        "NAT HCV",
+        "NAT HBV",
+    ]
+
+    # Agrupamento de hemocomponentes e exames
+    hemocomponentes_unicos = {}
+    exames_unicos = defaultdict(lambda: {"resultado": None, "dt_realizado": None})
+
+    if hemocomponente_data:
+        for item in hemocomponente_data:
+            # Agrupar hemocomponentes por sequência
+            hemocomponente_id = item["sequencia"]
+            if hemocomponente_id not in hemocomponentes_unicos:
+                hemocomponentes_unicos[hemocomponente_id] = {
+                    "sequencia": item["sequencia"],
+                    "hemocomponente": item["hemocomponente"],
+                    "dt_producao": item["dt_producao"],
+                    "dt_vencimento": item["dt_vencimento"],
+                    "volume": item["volume"],
+                    "filtrado": item["filtrado"],
+                    "irradiado": item["irradiado"],
+                    "aliquotado": item["aliquotado"],
+                    "lavado": item["lavado"],
+                }
+            # Mapear exames com resultado e data de realização
+            if item["exame"]:
+                exames_unicos[item["exame"]] = {
+                    "resultado": item["resultado"],
+                    "dt_realizado": item["dt_realizado"],
+                }
+
+    # Reorganizar exames na ordem predefinida e adicionar outros no final
+    exames_ordenados = []
+    for exame in ordem_exames:
+        exames_ordenados.append(
+            {
+                "nome": exame,
+                "resultado": exames_unicos[exame]["resultado"],
+                "dt_realizado": exames_unicos[exame]["dt_realizado"],
+            }
+        )
+    outros_exames = [
+        {
+            "nome": exame,
+            "resultado": exames_unicos[exame]["resultado"],
+            "dt_realizado": exames_unicos[exame]["dt_realizado"],
+        }
+        for exame in exames_unicos
+        if exame not in ordem_exames
+    ]
+    exames_ordenados.extend(outros_exames)
+
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,
+        'hemocomponente': hemocomponente,
+        'hemocomponente_data': list(hemocomponentes_unicos.values()),
+        'exames_ordenados': exames_ordenados,
     }
     return render(request, 'prodHemocomponente.html', context)
 
 @login_required
-def batch(request):
+def batch(request, sequencia):
     user = request.user
+
+    # Verificar se o checkbox foi selecionado para exibir os inativos
+    mostrar_inativos = request.GET.get("mostrar_inativos") == "on"
+
+    # Obter os dados do lote
+    lote_data = exames_lote(sequencia)
+
+    # Aplicar filtro: Exibir apenas os registros com numeroSangue válido, se não estiver mostrando inativos
+    if not mostrar_inativos:
+        lote_data = [item for item in lote_data if item["numeroSangue"]]
+
+    # Agrupar os dados por NR_SEQ_EXAME_LOTE
+    grouped_data = {}
+    for item in lote_data:
+        numeroSangue = item["numeroSangue"] or "N/A"  # Definir um valor padrão para casos None
+        key = item["NR_SEQ_EXAME_LOTE"]
+        if key not in grouped_data:
+            grouped_data[key] = {
+                "NR_SEQ_EXAME_LOTE": key,
+                "NR_SEQ_LOTE": item["NR_SEQ_LOTE"],
+                "numeroSangue": numeroSangue,
+                "exames": []
+            }
+        grouped_data[key]["exames"].append({
+            "NR_SEQUENCIA": item["NR_SEQUENCIA"],
+            "NR_SEQ_EXAME": item["NR_SEQ_EXAME"],
+            "ie_resultado": item["ie_resultado"],
+        })
+
+    # Converter para uma lista para facilitar o uso no template
+    grouped_data = list(grouped_data.values())
+
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,
+        'grouped_data': grouped_data,
+        'mostrar_inativos': mostrar_inativos,
     }
     return render(request, 'batch.html', context)
 

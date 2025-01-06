@@ -9,3 +9,9 @@ def format_datetime(date_obj, include_time=False):
     elif isinstance(date_obj, date):
         return date_obj.strftime("%d/%m/%Y")
     return "Data Inválida"
+
+def separar_iniciais_por_ponto(iniciais):
+    """Recebe as iniciais e separa cada letra por ponto."""
+    if not iniciais:
+        return "N/A"
+    return ".".join(list(iniciais.upper())) + "."

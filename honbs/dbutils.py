@@ -440,6 +440,7 @@ def lista_producao():
     try:
         sql = """
         SELECT
+            a.nr_sequencia as codigo,
             SUBSTR(TASY.obter_iniciais_nome(a.cd_pessoa_fisica,NULL),1,50) as doador,
             a.cd_pessoa_fisica||'/'||SUBSTR(TASY.san_qtd_doacao_coletada(a.cd_pessoa_fisica),1,50) doacoes,
             c.ds_tipo_doacao as tipoDoacoes,
@@ -493,6 +494,7 @@ def lista_producao():
 
         # Colunas correspondentes à consulta
         keys = [
+            "codigo",
             "doador",
             "doacoes",
             "tipo_doacoes",
@@ -532,6 +534,78 @@ def lista_producao():
         cursor.close()
         connection.close()
 
+def hemocomponentes(codigo):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+        SELECT
+            a.cd_pessoa_fisica as codigo,
+            SUBSTR(TASY.obter_iniciais_nome(a.cd_pessoa_fisica,NULL),1,50) as doador,
+            a.nr_sangue as numeroSangue,
+            a.nr_bolsa as numeroBolsa,
+            DECODE(SUBSTR(TASY.Obter_Sexo_PF(a.cd_pessoa_fisica, 'C'),1,10), 'M', TASY.obter_desc_expressao(292932), TASY.obter_desc_expressao(290058)) sexo,
+            b.nr_sequencia as sequencia,
+            TASY.obter_desc_hemocomponente(b.nr_seq_derivado) as hemocomponente,
+            b.dt_producao as dt_producao,
+            b.dt_vencimento as dt_vencimento,
+            a.qt_volume_real as volume,
+            b.ie_filtrado as filtrado,
+            b.ie_irradiado as irradiado,
+            b.ie_aliquotado as aliquotado,
+            b.ie_lavado as lavado,
+            TASY.san_obter_desc_exame(d.nr_seq_exame) as exame,
+            d.ds_resultado as resultado,
+            d.dt_realizado as dt_realizado
+        FROM TASY.san_doacao a
+        JOIN TASY.san_producao b ON b.nr_sangue = a.nr_sangue
+        JOIN TASY.san_exame_lote c ON c.nr_seq_doacao = a.nr_sequencia
+        JOIN TASY.san_exame_realizado d ON d.nr_seq_exame_lote = c.nr_sequencia
+        WHERE
+            a.nr_bolsa = :codigo
+        ORDER BY a.dt_doacao DESC
+        """
+
+        # Executar consulta com o código como parâmetro
+        params = {'codigo': codigo}
+        cursor.execute(sql, params)
+
+        # Colunas correspondentes à consulta
+        keys = [
+            "codigo",
+            "doador",
+            "numero_sangue",
+            "numero_bolsa",
+            "sexo",
+            "sequencia",
+            "hemocomponente",
+            "dt_producao",
+            "dt_vencimento",
+            "volume",
+            "filtrado",
+            "irradiado",
+            "aliquotado",
+            "lavado",
+            "exame",
+            "resultado",
+            "dt_realizado"
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
 def lista_lotes(data_inicial=None, data_final=None):
     connection = obter_conexao()
     if connection is None:
@@ -544,11 +618,9 @@ def lista_lotes(data_inicial=None, data_final=None):
         if not data_inicial:
             today = date.today()
             data_inicial = today.replace(day=1).strftime('%Y-%m-%d')  # Primeiro dia do mês atual
+
         if not data_final:
-            today = date.today()
-            next_month = today.replace(day=28) + timedelta(days=4)  # Garantir que esteja no próximo mês
-            data_final = next_month.replace(day=1) - timedelta(days=1)  # Último dia do mês atual
-            data_final = data_final.strftime('%Y-%m-%d')
+            data_final = date.today().strftime('%Y-%m-%d')  # Data atual
 
         sql = """
         SELECT
@@ -771,6 +843,66 @@ def hist_doacao(codigo):
             "tipo_doacao",
             "data",
             "aptidao"
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def exames_lote(sequencia):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+            SELECT  
+                b.NR_SEQUENCIA,	
+                b.NR_SEQ_LOTE,
+                b.NR_SEQ_EXAME_LOTE,
+                TASY.san_obter_desc_exame(b.NR_SEQ_EXAME),
+                g.ie_resultado,
+                e.nr_bolsa as numeroSangue
+            FROM	  
+                TASY.san_doacao e,
+                TASY.san_exame g,
+                TASY.san_exame_lote c,
+                TASY.san_exame_realizado d,
+                TASY.san_lote_hemoterapia a,
+                TASY.SAN_LOTE_HEMOTERAPIa_item b,
+                TASY.san_tipo_doacao f
+            WHERE   a.nr_sequencia  = b.nr_Seq_lote
+            and  c.nr_sequencia  = b.nr_seq_exame_lote
+            and  d.nr_seq_exame_lote  = c.nr_sequencia 
+            and  b.nr_seq_exame  = d.nr_seq_exame
+            and b.nr_seq_lote   = :sequencia
+            and d.nr_seq_exame  = g.nr_sequencia
+            and  b.nr_seq_exame_lote  = d.nr_seq_exame_lote   
+            and  c.nr_seq_doacao  = e.nr_sequencia(+) 
+            and  f.nr_sequencia(+)  = e.nr_seq_tipo 
+            ORDER BY  b.nr_sequencia
+        """
+
+        # Executar consulta com o código como parâmetro
+        params = {'sequencia': sequencia}
+        cursor.execute(sql, params)
+
+        keys = [
+            "NR_SEQUENCIA",
+            "NR_SEQ_LOTE",
+            "NR_SEQ_EXAME_LOTE",
+            "NR_SEQ_EXAME",
+            "ie_resultado",
+            "numeroSangue"
         ]
 
         # Obter todas as linhas e mapear para dicionários

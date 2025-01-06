@@ -19,18 +19,22 @@
         <h3>DOADOR</h3>
         <div class="header-left-grid">
             <div>
-                <p><strong>Nome:</strong> J.S</p>
-                <p><strong>N° do Sangue:</strong> 12345</p>
+                <p><strong>Nome:</strong> {{ hemocomponente.doador }}</p>
+                <p><strong>N° do Sangue:</strong> {{ hemocomponente.numero_sangue }}</p>
             </div>
             <div>
-                <p><strong>N° da Bolsa:</strong> 987654</p>
-                <p><strong>Sexo:</strong> Masculino</p>
+                <p><strong>N° da Bolsa:</strong> {{ hemocomponente.numero_bolsa }}</p>
+                <p><strong>Sexo:</strong> {{ hemocomponente.sexo }}</p>
             </div>
         </div>
     </div>
 </div>
+
 <div class="prodHemo-section">
+    <!-- Tabela de Hemocomponentes -->
     <div class="hemocomponents-section">
+        <h3>Hemocomponentes</h3>
+        <br>
         <div class="hemocomponents-table">
             <table id="hemocomponents-table">
                 <thead>
@@ -39,240 +43,142 @@
                         <th>Hemocomponente</th>
                         <th>Data de Produção</th>
                         <th>Data de Vencimento</th>
-                        <th>Volume(ml)</th>
+                        <th>Volume (ml)</th>
                         <th>Filtrado</th>
-                        <th>Inutilizado</th>
-                        <th>Aliquotado</th>
                         <th>Irradiado</th>
+                        <th>Aliquotado</th>
                         <th>Lavado</th>
-                        <th>N° do Sangue</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for item in hemocomponente_data %}
                     <tr>
-                        <td>001</td>
-                        <td>Plasma Fresco</td>
-                        <td>2023-12-01</td>
-                        <td>2024-06-01</td>
-                        <td>500</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td>12345</td>
+                        <td>{{ item.sequencia }}</td>
+                        <td>{{ item.hemocomponente }}</td>
+                        <td>{{ item.dt_producao|date:"d/m/Y" }}</td>
+                        <td>{{ item.dt_vencimento|date:"d/m/Y" }}</td>
+                        {% if item.volume %}
+                            <td>{{ item.volume }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        <td>
+                            {% if item.filtrado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.irradiado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.aliquotado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.lavado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
                     </tr>
+                    {% empty %}
                     <tr>
-                        <td>002</td>
-                        <td>Concentrado de Hemácias</td>
-                        <td>2023-12-02</td>
-                        <td>2024-05-30</td>
-                        <td>500</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td>54321</td>
+                        <td colspan="9">Nenhum hemocomponente encontrado.</td>
                     </tr>
-                    <tr>
-                        <td>003</td>
-                        <td>Crioprecipitado</td>
-                        <td>2023-12-03</td>
-                        <td>2023-12-10</td>
-                        <td>300</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td>67890</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 
+    <!-- Tabela de Exames -->
     <div class="sorology-section">
-        <div class="sorology-table">
-            <table id="sorology-table">
+        <h3>Exames Realizados</h3>
+        <br>
+        <div class="sorology-tables">
+            <!-- Primeira Coluna -->
+            <table id="sorology-table-left">
                 <thead>
                     <tr>
-                        <th>Status</th> <!-- Ícones de status: Verde (Liberado), Amarelo (Pendente), Vermelho (Positivo) -->
+                        <th>Status</th>
                         <th>Exame</th>
                         <th>Data de Realização</th>
-                        <th>Pendente de confirmação</th> <!-- Sim ou Não -->
-                        <th>Andamento</th> <!-- Sim ou Não -->
-                        <th>Anticorpos</th> <!-- Sim ou Não -->
-                        <th>P.A.I</th> <!-- Sim ou Não -->
                     </tr>
                 </thead>
                 <tbody>
+                    {% for exame in exames_ordenados|slice:":10" %} <!-- Primeiros 10 exames -->
                     <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Tipo de Sangue ABO</td>
-                        <td>2023-12-01</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
+                        <td>
+                            {% if exame.resultado %}
+                                <i class="fas fa-check-circle" style="color: green;" title="Pronto"></i>
+                            {% else %}
+                                <i class="fas fa-exclamation-circle" style="color: orange;" title="Não Liberado"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ exame.nome }}</td>
+                        <td>
+                            {% if exame.dt_realizado %}
+                                {{ exame.dt_realizado|date:"d/m/Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
                     </tr>
+                    {% empty %}
                     <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Fator RH</td>
-                        <td>2023-12-01</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
+                        <td colspan="3">Nenhum exame encontrado.</td>
                     </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    
+            <!-- Segunda Coluna -->
+            <table id="sorology-table-right">
+                <thead>
                     <tr>
-                        <td><i class="fa-solid fa-circle-exclamation" style="color: yellow;"></i></td>
-                        <td>CDE</td>
-                        <td>2023-12-02</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
+                        <th>Status</th>
+                        <th>Exame</th>
+                        <th>Data de Realização</th>
                     </tr>
+                </thead>
+                <tbody>
+                    {% for exame in exames_ordenados|slice:"10:" %} <!-- Exames a partir do 11 -->
                     <tr>
-                        <td><i class="fa-solid fa-triangle-exclamation" style="color: red;"></i></td>
-                        <td>Pesquisa de Anticorpos Irregulares (PAI)</td>
-                        <td>2023-12-03</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
+                        <td>
+                            {% if exame.resultado %}
+                                <i class="fas fa-check-circle" style="color: green;" title="Pronto"></i>
+                            {% else %}
+                                <i class="fas fa-exclamation-circle" style="color: orange;" title="Não Liberado"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ exame.nome }}</td>
+                        <td>
+                            {% if exame.dt_realizado %}
+                                {{ exame.dt_realizado|date:"d/m/Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
                     </tr>
+                    {% empty %}
                     <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Doença de Chagas</td>
-                        <td>2023-12-01</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
+                        <td colspan="3">Nenhum exame encontrado.</td>
                     </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>HBsAg</td>
-                        <td>2023-12-02</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Anti-HBc Total</td>
-                        <td>2023-12-02</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Anti-HCV</td>
-                        <td>2023-12-03</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Anti-IV 1+2 A</td>
-                        <td>2023-12-03</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Anti-IV 1+2 B</td>
-                        <td>2023-12-01</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Anti HLTV I/II</td>
-                        <td>2023-12-01</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-exclamation" style="color: yellow;"></i></td>
-                        <td>Sífilis</td>
-                        <td>2023-12-02</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-triangle-exclamation" style="color: red;"></i></td>
-                        <td>Triagem Laboratorial de Hemoglobina</td>
-                        <td>2023-12-03</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>NAT HIV</td>
-                        <td>2023-12-01</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>NAT HCV</td>
-                        <td>2023-12-02</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>NAT HBV</td>
-                        <td>2023-12-02</td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Titulação ABO</td>
-                        <td>2023-12-03</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa-solid fa-circle-check" style="color: green;"></i></td>
-                        <td>Detecção de Antígenos D FRACO</td>
-                        <td>2023-12-03</td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                        <td><i class="fas fa-check-circle" style="color: green;"></i></td>
-                        <td><i class="fas fa-times-circle" style="color: red;"></i></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
 {% endblock %}

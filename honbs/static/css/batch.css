@@ -11,6 +11,8 @@ nav ul li:nth-child(3) a i {
     height: 100%;
     padding: 20px;
     font-family: Arial, sans-serif;
+    overflow-y: auto;
+    overflow-x: auto;
 }
 
 .table-container {
@@ -28,13 +30,13 @@ table {
     width: 100%;
     border-collapse: collapse; /* Remove espaços entre células */
     font-size: 14px;
-    text-align: left;
+    text-align: center; /* Centraliza texto em todas as células */
 }
 
 table th, table td {
-    padding: 10px;
+    padding: 8px; /* Reduz o espaçamento interno para alinhamento mais compacto */
     border: 1px solid #ddd; /* Linha divisória entre células */
-    white-space: nowrap;
+    white-space: nowrap; /* Evita quebra de texto em células */
 }
 
 table th {
@@ -47,10 +49,47 @@ table tr:nth-child(even) {
     background-color: #f9f9f9; /* Fundo alternado para linhas pares */
 }
 
+table tr:nth-child(odd) {
+    background-color: #ffffff; /* Fundo branco para linhas ímpares */
+}
+
 tbody tr {
     transition: background-color 0.3s;
 }
 
 tbody tr:hover {
     background-color: #f0f0f0;
+    cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
+}
+
+table tbody td {
+    cursor: default; /* Padrão: não permitir clique */
+}
+
+table tbody td.clickable {
+    cursor: pointer; /* Permitir clique apenas na primeira coluna */
+    color: blue; /* Destacar como clicável */
+    text-decoration: underline; /* Opcional, para destacar o link */
+}
+
+/* Estilo para as linhas com número de sangue */
+.has-sangue {
+    background-color: #d4f8d4; /* Verde claro */
+    cursor: pointer; /* Indicador de clique */
+    transition: background-color 0.3s ease; /* Suaviza o efeito de hover */
+}
+
+.has-sangue:hover {
+    background-color: #c3f2c3; /* Hover para as linhas clicáveis */
+}
+
+/* Estilo para as linhas sem número de sangue */
+.no-sangue {
+    background-color: #f9f9f9; /* Cinza claro */
+    cursor: not-allowed; /* Cursor bloqueado */
+    color: #a9a9a9; /* Texto em cinza para indicar inatividade */
+}
+
+.no-sangue:hover {
+    background-color: #f9f9f9; /* Sem mudança ao passar o mouse */
 }

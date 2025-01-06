@@ -9,13 +9,13 @@ from .backends import exists_ad, tasy_user_data
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 import logging
-from django.http import JsonResponse
+from django.http import HttpResponseNotFound, JsonResponse
 import base64
 from django.core.files.base import ContentFile
 from .models import Fridge, HemocomponentStock
 from collections import defaultdict
 
-from honbs.dbutils import estoque, lista_estoque, lista_doacoes, lista_lotes, lista_producao
+from honbs.dbutils import dados_cabecalho, dados_doador, estoque, hist_doacao, lista_estoque, lista_doacoes, lista_lotes, lista_producao
 from honbs.utils import format_datetime
 from itertools import groupby 
 from operator import itemgetter
@@ -104,11 +104,56 @@ def reports(request):
 
 
 @login_required
-def donator(request):
+def donator(request, codigo):
     user = request.user
+
+    # Obter os dados do doador pelo código único
+    cabecalho_data = dados_cabecalho(codigo)
+    
+    # Verificar se os dados foram retornados
+    if not cabecalho_data:
+        return HttpResponseNotFound("Doador não encontrado.")
+
+    # Formatar a data de nascimento
+    cabecalho = cabecalho_data[0]
+    if "dt_nascimento" in cabecalho:
+        cabecalho["dt_nascimento"] = format_datetime(cabecalho["dt_nascimento"])
+
+    # Garantir que 'tipo_sangue' tenha um valor válido
+    if "tipo_sangue" not in cabecalho or cabecalho["tipo_sangue"] is None:
+        cabecalho["tipo_sangue"] = "#"
+
+    doador_data = dados_doador(codigo)
+
+    for key in doador_data.keys():
+        if doador_data[key] is None or doador_data[key] == "":
+            doador_data[key] = "N/A"
+
+    if not doador_data:
+        return HttpResponseNotFound("Dados do doador não encontrados.")
+    
+    # Formatar a data de cadastro para datetime-local
+    if doador_data.get("cadastro") != "N/A":
+        doador_data["cadastro"] = doador_data["cadastro"].strftime("%Y-%m-%dT%H:%M")
+
+    historico_data = hist_doacao(codigo)
+
+    # Verificar e substituir aptidão
+    for item in historico_data:
+        if item["aptidao"] is None or item["aptidao"] == "A":
+            item["aptidao"] = "Apto"
+        else:
+            item["aptidao"] = "Inapto"
+
+    if not historico_data:
+        return HttpResponseNotFound("Dados do doador não encontrados.")
+
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,
+        'cabecalho': cabecalho,
+        'doador_data': doador_data,
+        'historico_data': historico_data,
     }
     return render(request, 'donator.html', context)
 

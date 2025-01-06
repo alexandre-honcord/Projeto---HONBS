@@ -363,6 +363,7 @@ def lista_doacoes(data_inicial=None, data_final=None):
 
         sql = """
         SELECT
+            a.cd_pessoa_fisica as codigo,
             a.nr_bolsa as bolsa,
             TASY.obter_nome_social_pf(a.cd_pessoa_fisica) as doador,
             a.dt_doacao as data,
@@ -398,6 +399,7 @@ def lista_doacoes(data_inicial=None, data_final=None):
 
         # Colunas correspondentes à consulta
         keys = [
+            "codigo",
             "bolsa",
             "doador",
             "data",
@@ -592,6 +594,183 @@ def lista_lotes(data_inicial=None, data_final=None):
             "temp_chegada",
             "resp_chegada",
             "resp_transporte"
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def dados_cabecalho(codigo):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+            SELECT
+                a.nm_pessoa_fisica as nome,
+                TASY.obter_nome_mae_pf(a.cd_pessoa_fisica) as nome_mae,
+                a.dt_nascimento,
+                DECODE(SUBSTR(TASY.Obter_Sexo_PF(b.cd_pessoa_fisica, 'C'),1,10), 'M', TASY.obter_desc_expressao(292932), TASY.obter_desc_expressao(290058)) sexo,
+                a.ie_tipo_sangue || a.ie_fator_rh as tipo_sangue
+            FROM TASY.pessoa_fisica a
+            JOIN TASY.san_doacao b ON b.cd_pessoa_fisica = a.cd_pessoa_fisica
+            WHERE
+                a.cd_pessoa_fisica = :codigo
+        """
+
+        # Executar consulta com o código como parâmetro
+        params = {'codigo': codigo}
+        cursor.execute(sql, params)
+
+        keys = [
+            "nome",
+            "nome_mae",
+            "dt_nascimento",
+            "sexo",
+            "tipo_sangue",
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def dados_doador(codigo):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return {}
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+            SELECT
+                a.nm_pessoa_fisica as nome,
+                TASY.obter_desc_profissao(b.cd_profissao) as profissao,
+                TASY.obter_nome_pai_mae(a.cd_pessoa_fisica, 'M') as nome_mae,
+                TASY.obter_nome_pai_mae(a.cd_pessoa_fisica, 'P') nome_pai,
+                a.dt_nascimento as nascimento,
+                TASY.obter_dados_pf(a.cd_pessoa_fisica, 'N') as nacionalidade,
+                DECODE(SUBSTR(TASY.Obter_Sexo_PF(b.cd_pessoa_fisica, 'C'),1,10), 'M', TASY.obter_desc_expressao(292932), TASY.obter_desc_expressao(290058)) sexo,
+                TASY.obter_valor_dominio(5, a.ie_estado_civil) as estado_civil,
+                TASY.obter_dados_pf(a.cd_pessoa_fisica, 'CP') as cor_pele,
+                a.nr_cpf as cpf,
+                a.nr_identidade as rg,
+                a.ds_orgao_emissor_ci as orgaoEmissor,
+                a.ds_observacao as observacao,
+                a.dt_cadastro_original as cadastro,
+                a.nm_usuario_original as usuario_cadastro,
+                a.nr_ddd_celular || a.nr_telefone_celular as telefone1,
+                b.nr_ddd_telefone || b.nr_telefone as telefone2,
+                b.ds_email as email,
+                b.cd_cep as cep,
+                b.ds_endereco as logradouro,
+                b.ds_complemento as complemento,
+                b.nr_endereco as numero,
+                b.ds_municipio as cidade,
+                b.sg_estado as estado,
+                c.nm_pais as pais,
+                a.ie_tipo_sangue as tipoSangue,
+                a.ie_fator_rh as fatorRH,
+                substr(TASY.san_ultimo_fenotipo_pf(a.cd_pessoa_fisica,'N'),1,255) as fenotipo
+            FROM TASY.pessoa_fisica a
+            JOIN TASY.compl_pessoa_fisica b ON b.cd_pessoa_fisica = a.cd_pessoa_fisica
+            JOIN TASY.pais c on c.nr_sequencia = b.nr_seq_pais
+            WHERE
+                a.cd_pessoa_fisica = :codigo
+            AND
+                ROWNUM = 1
+        """
+
+        params = {'codigo': codigo}
+        cursor.execute(sql, params)
+
+        keys = [
+            "nome",
+            "profissao",
+            "nome_mae",
+            "nome_pai",
+            "nascimento",
+            "nacionalidade",
+            "sexo",
+            "estado_civil",
+            "cor_pele",
+            "cpf",
+            "rg",
+            "orgao_emissor",
+            "observacao",
+            "cadastro",
+            "usuario_cadastro",
+            "telefone1",
+            "telefone2",
+            "email",
+            "cep",
+            "logradouro",
+            "complemento",
+            "numero",
+            "cidade",
+            "estado",
+            "pais",
+            "tipoSangue",
+            "fatorRH",
+            "fenotipo"
+        ]
+
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results[0] if results else {}
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return {}
+    finally:
+        cursor.close()
+        connection.close()
+
+def hist_doacao(codigo):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+            SELECT
+                a.nr_sequencia as numDoacao,
+                TASY.obter_desc_tipo_doacao(a.nr_seq_tipo) as tipo_doacao,
+                a.dt_doacao as data,
+                a.ie_avaliacao_final
+            FROM TASY.san_doacao a
+            WHERE
+                a.cd_pessoa_fisica = :codigo
+            ORDER BY a.dt_doacao DESC
+        """
+
+        # Executar consulta com o código como parâmetro
+        params = {'codigo': codigo}
+        cursor.execute(sql, params)
+
+        keys = [
+            "numDoacao",
+            "tipo_doacao",
+            "data",
+            "aptidao"
         ]
 
         # Obter todas as linhas e mapear para dicionários

@@ -85,11 +85,10 @@ nav ul li:nth-child(2) a i {
 }
 
 .form-container {
-    height: 100%; /* Define a altura máxima do contêiner */
     border: 1px solid #ccc; /* Opcional: borda para destacar o contêiner */
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #fff;
+    background-color: #FFF;
 }
 
 .donator-form {

@@ -15,8 +15,8 @@ from django.core.files.base import ContentFile
 from .models import Fridge, HemocomponentStock
 from collections import defaultdict
 
-from honbs.dbutils import dados_cabecalho, dados_doador, estoque, exames_lote, hemocomponentes, hist_doacao, lista_estoque, lista_doacoes, lista_lotes, lista_producao
-from honbs.utils import format_datetime, separar_iniciais_por_ponto
+from honbs.dbutils import cabecalho_transfusao, dados_cabecalho, dados_doador, estoque, exames_lote, hemocomponentes, hist_doacao, lista_estoque, lista_doacoes, lista_lotes, lista_producao, lista_transfusao
+from honbs.utils import format_date, format_datetime, formatar_data_oracle, separar_iniciais_por_ponto
 from itertools import groupby 
 from operator import itemgetter
 from datetime import date, datetime, timedelta
@@ -538,18 +538,62 @@ def capture(request):
 @login_required
 def transfusion(request):
     user = request.user
+
+    # Datas de ontem e hoje no formato esperado pelo Oracle
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    # Formatar as datas como DD/MM/YYYY
+    today_formatted = today.strftime('%d/%m/%Y')
+    yesterday_formatted = yesterday.strftime('%d/%m/%Y')
+
+    # Chamar a função para buscar as transfusões de ontem e hoje
+    transfusao_data = lista_transfusao(data_inicial=yesterday_formatted, data_final=today_formatted)
+
+    for transfusao in transfusao_data:
+        for key, value in transfusao.items():
+            if value is None:
+                transfusao[key] = "N/A"
+        if "DT_INF_INICIADA" in transfusao:
+            transfusao["DT_INF_INICIADA"] = formatar_data_oracle(transfusao["DT_INF_INICIADA"])
+
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,  
+        'transfusao_data': transfusao_data,
     }
     return render(request, 'transfusion.html', context)
 
 @login_required
-def infoTransfusion(request):
+def infoTransfusion(request, codigo):
     user = request.user
+
+    # Datas de ontem e hoje no formato esperado pelo Oracle
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    # Formatar as datas como DD/MM/YYYY
+    today_formatted = today.strftime('%d/%m/%Y')
+    yesterday_formatted = yesterday.strftime('%d/%m/%Y')
+
+    # Chamar a função para buscar as transfusões de ontem e hoje
+    transfusao_data = lista_transfusao(data_inicial=yesterday_formatted, data_final=today_formatted)
+
+    # Tratar valores nulos no transfusao_data
+    for transfusao in transfusao_data:
+        for key, value in transfusao.items():
+            if value is None:
+                transfusao[key] = "N/A"
+        if "DS_NASCIMENTO" in transfusao:
+            transfusao["DS_NASCIMENTO"] = format_date(transfusao["DS_NASCIMENTO"], include_time=True)
+
+    header = cabecalho_transfusao(codigo)
+
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,  
+        'transfusao_data': transfusao_data,
+        'header': header,
     }
     return render(request, 'infoTransfusion.html', context)
 

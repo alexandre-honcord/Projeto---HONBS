@@ -6,5 +6,26 @@
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/capture.css' %}"/>
 
-Captação
+<div class="capture-section">
+    <h1>Captação</h1>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Doador</th>
+                <th>Tipagem</th>
+                <th>Última Doação</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ciclano</td>
+                <td>O+</td>
+                <td>01/01/2025</td>
+                <td>
+                    <a href="#" class="btn btn-info">Entrar em contato</a>
+                </td>
+            </tr>
+        </tbody>
 {% endblock %}

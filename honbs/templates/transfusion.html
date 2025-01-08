@@ -12,337 +12,78 @@
     <table id="soro-table">
         <thead>
             <tr>
-                <th>Status</th>
-                <th>Urgência</th>
-                <th>Atendimento</th>
+                <th>Data de Transfusão</th>
                 <th>Receptor</th>
-                <th>ABO/Rh</th>
-                <th>Fenótipo</th>
-                <th>Data Nasc.</th>
-                <th>Reação?</th>
+                <th>Data de Nascimento</th>
                 <th>Idade</th>
                 <th>Convênio</th>
-                <th>Pendências</th>
-                <th>Data Transfusão</th>
-                <th>Médico</th>
+                <th>Tipo de Sangue</th>
                 <th>Hospital</th>
-                <th>Reserva</th>
+                <th>Fenótipo</th>
+                <th>Pendências</th>
+                <th>Reação</th>
+                <th>Médico Requisitante</th>
                 <th>Realizado por</th>
-                <th>Observação</th>
-                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>Alta</td>
-                <td>001234</td>
-                <td>João Silva</td>
-                <td>O+</td>
-                <td>CcD.eeK+</td>
-                <td>12/03/1985</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>38</td>
-                <td>Unimed</td>
-                <td>Nenhuma</td>
-                <td>04/12/2024</td>
-                <td>Dr. Roberto Lima</td>
-                <td>Hospital Santa Cruz</td>
-                <td>2 unidades</td>
-                <td>Ana Souza</td>
-                <td>Sem observações</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
+            {% for transfusao in transfusao_data %}
+            <tr data-url="{% url 'infoTransfusion' transfusao.CD_PESSOA_FISICA %}" class="clickable-row">
+                <td>
+                    {% if transfusao.IE_TRANSF_INICIADA|default:"N" == "S" and transfusao.DT_INF_INICIADA %}
+                        {{ transfusao.DT_INF_INICIADA }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>{{ transfusao.NM_RECEPTOR }}</td>
+                <td>
+                    {% if transfusao.DS_NASCIMENTO %}
+                        {{ transfusao.DS_NASCIMENTO|date:"d/m/Y" }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>{{ transfusao.DS_IDADE }} anos</td>
+                <td>{{ transfusao.DS_CONVENIO }}</td>
+                <td>{{ transfusao.DS_SANGUE }}</td>
+                <td>{{ transfusao.DS_SETOR_UNIDADE }}</td>
+                <td>{{ transfusao.DS_FENOTIPO }}</td>                
+                <td>
+                    {% if transfusao.IE_PEND_PACIENTE == "Sim" %}
+                        <i class="fas fa-check-circle" style="color: green;" title="Sim"></i>
+                    {% elif transfusao.IE_PEND_PACIENTE == "Não" %}
+                        <i class="fas fa-times-circle" style="color: red;" title="Não"></i>
+                    {% else %}
+                        <span title="Não informado">N/A</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if transfusao.DS_IE_REACAO == "Sim" %}
+                        <i class="fas fa-check-circle" style="color: green;" title="Sim"></i>
+                    {% elif transfusao.DS_IE_REACAO == "Não" %}
+                        <i class="fas fa-times-circle" style="color: red;" title="Não"></i>
+                    {% else %}
+                        <span title="Não informado">N/A</span>
+                    {% endif %}
+                </td>
+                <td>{{ transfusao.NM_MEDICO_REQUISITANTE }}</td>
+                <td>{{ transfusao.NM_PF_REALIZOU }}</td>
             </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-times-circle negative-icon"></i></td>
-                <td>Média</td>
-                <td>002567</td>
-                <td>Maria Costa</td>
-                <td>A-</td>
-                <td>CcD.EEK-</td>
-                <td>08/07/1990</td>
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>33</td>
-                <td>Amil</td>
-                <td>Exame pendente</td>
-                <td>05/12/2024</td>
-                <td>Dr. Pedro Carvalho</td>
-                <td>Hospital Vida</td>
-                <td>1 unidade</td>
-                <td>Carlos Dias</td>
-                <td>Aguardando laudo</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
+            {% empty %}
+            <tr>
+                <td colspan="11">Nenhuma transfusão encontrada nos últimos 30 dias.</td>
             </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-exclamation-circle indeterminate-icon"></i></td>
-                <td>Baixa</td>
-                <td>003890</td>
-                <td>Pedro Almeida</td>
-                <td>AB+</td>
-                <td>ccdd.eeK+</td>
-                <td>22/05/1975</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>49</td>
-                <td>Particular</td>
-                <td>Pagamento pendente</td>
-                <td>06/12/2024</td>
-                <td>Dr. Marina Silva</td>
-                <td>Hospital São José</td>
-                <td>3 unidades</td>
-                <td>Laura Fernandes</td>
-                <td>Contato da família realizado</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>Alta</td>
-                <td>001234</td>
-                <td>João Silva</td>
-                <td>O+</td>
-                <td>CcD.eeK+</td>
-                <td>12/03/1985</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>38</td>
-                <td>Unimed</td>
-                <td>Nenhuma</td>
-                <td>04/12/2024</td>
-                <td>Dr. Roberto Lima</td>
-                <td>Hospital Santa Cruz</td>
-                <td>2 unidades</td>
-                <td>Ana Souza</td>
-                <td>Sem observações</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-times-circle negative-icon"></i></td>
-                <td>Média</td>
-                <td>002567</td>
-                <td>Maria Costa</td>
-                <td>A-</td>
-                <td>CcD.EEK-</td>
-                <td>08/07/1990</td>
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>33</td>
-                <td>Amil</td>
-                <td>Exame pendente</td>
-                <td>05/12/2024</td>
-                <td>Dr. Pedro Carvalho</td>
-                <td>Hospital Vida</td>
-                <td>1 unidade</td>
-                <td>Carlos Dias</td>
-                <td>Aguardando laudo</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-exclamation-circle indeterminate-icon"></i></td>
-                <td>Baixa</td>
-                <td>003890</td>
-                <td>Pedro Almeida</td>
-                <td>AB+</td>
-                <td>ccdd.eeK+</td>
-                <td>22/05/1975</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>49</td>
-                <td>Particular</td>
-                <td>Pagamento pendente</td>
-                <td>06/12/2024</td>
-                <td>Dr. Marina Silva</td>
-                <td>Hospital São José</td>
-                <td>3 unidades</td>
-                <td>Laura Fernandes</td>
-                <td>Contato da família realizado</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>Alta</td>
-                <td>001234</td>
-                <td>João Silva</td>
-                <td>O+</td>
-                <td>CcD.eeK+</td>
-                <td>12/03/1985</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>38</td>
-                <td>Unimed</td>
-                <td>Nenhuma</td>
-                <td>04/12/2024</td>
-                <td>Dr. Roberto Lima</td>
-                <td>Hospital Santa Cruz</td>
-                <td>2 unidades</td>
-                <td>Ana Souza</td>
-                <td>Sem observações</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-times-circle negative-icon"></i></td>
-                <td>Média</td>
-                <td>002567</td>
-                <td>Maria Costa</td>
-                <td>A-</td>
-                <td>CcD.EEK-</td>
-                <td>08/07/1990</td>
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>33</td>
-                <td>Amil</td>
-                <td>Exame pendente</td>
-                <td>05/12/2024</td>
-                <td>Dr. Pedro Carvalho</td>
-                <td>Hospital Vida</td>
-                <td>1 unidade</td>
-                <td>Carlos Dias</td>
-                <td>Aguardando laudo</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-exclamation-circle indeterminate-icon"></i></td>
-                <td>Baixa</td>
-                <td>003890</td>
-                <td>Pedro Almeida</td>
-                <td>AB+</td>
-                <td>ccdd.eeK+</td>
-                <td>22/05/1975</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>49</td>
-                <td>Particular</td>
-                <td>Pagamento pendente</td>
-                <td>06/12/2024</td>
-                <td>Dr. Marina Silva</td>
-                <td>Hospital São José</td>
-                <td>3 unidades</td>
-                <td>Laura Fernandes</td>
-                <td>Contato da família realizado</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>Alta</td>
-                <td>001234</td>
-                <td>João Silva</td>
-                <td>O+</td>
-                <td>CcD.eeK+</td>
-                <td>12/03/1985</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>38</td>
-                <td>Unimed</td>
-                <td>Nenhuma</td>
-                <td>04/12/2024</td>
-                <td>Dr. Roberto Lima</td>
-                <td>Hospital Santa Cruz</td>
-                <td>2 unidades</td>
-                <td>Ana Souza</td>
-                <td>Sem observações</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-times-circle negative-icon"></i></td>
-                <td>Média</td>
-                <td>002567</td>
-                <td>Maria Costa</td>
-                <td>A-</td>
-                <td>CcD.EEK-</td>
-                <td>08/07/1990</td>
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>33</td>
-                <td>Amil</td>
-                <td>Exame pendente</td>
-                <td>05/12/2024</td>
-                <td>Dr. Pedro Carvalho</td>
-                <td>Hospital Vida</td>
-                <td>1 unidade</td>
-                <td>Carlos Dias</td>
-                <td>Aguardando laudo</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-exclamation-circle indeterminate-icon"></i></td>
-                <td>Baixa</td>
-                <td>003890</td>
-                <td>Pedro Almeida</td>
-                <td>AB+</td>
-                <td>ccdd.eeK+</td>
-                <td>22/05/1975</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>49</td>
-                <td>Particular</td>
-                <td>Pagamento pendente</td>
-                <td>06/12/2024</td>
-                <td>Dr. Marina Silva</td>
-                <td>Hospital São José</td>
-                <td>3 unidades</td>
-                <td>Laura Fernandes</td>
-                <td>Contato da família realizado</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>Alta</td>
-                <td>001234</td>
-                <td>João Silva</td>
-                <td>O+</td>
-                <td>CcD.eeK+</td>
-                <td>12/03/1985</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>38</td>
-                <td>Unimed</td>
-                <td>Nenhuma</td>
-                <td>04/12/2024</td>
-                <td>Dr. Roberto Lima</td>
-                <td>Hospital Santa Cruz</td>
-                <td>2 unidades</td>
-                <td>Ana Souza</td>
-                <td>Sem observações</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-times-circle negative-icon"></i></td>
-                <td>Média</td>
-                <td>002567</td>
-                <td>Maria Costa</td>
-                <td>A-</td>
-                <td>CcD.EEK-</td>
-                <td>08/07/1990</td>
-                <td><i class="fas fa-check-circle positive-icon"></i></td>
-                <td>33</td>
-                <td>Amil</td>
-                <td>Exame pendente</td>
-                <td>05/12/2024</td>
-                <td>Dr. Pedro Carvalho</td>
-                <td>Hospital Vida</td>
-                <td>1 unidade</td>
-                <td>Carlos Dias</td>
-                <td>Aguardando laudo</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
-            <tr data-url="{% url 'infoTransfusion' %}">
-                <td><i class="fas fa-exclamation-circle indeterminate-icon"></i></td>
-                <td>Baixa</td>
-                <td>003890</td>
-                <td>Pedro Almeida</td>
-                <td>AB+</td>
-                <td>ccdd.eeK+</td>
-                <td>22/05/1975</td>
-                <td><i class="fas fa-times-circle negative-icon"></td>
-                <td>49</td>
-                <td>Particular</td>
-                <td>Pagamento pendente</td>
-                <td>06/12/2024</td>
-                <td>Dr. Marina Silva</td>
-                <td>Hospital São José</td>
-                <td>3 unidades</td>
-                <td>Laura Fernandes</td>
-                <td>Contato da família realizado</td>
-                <td><a href="{% url 'infoTransfusion' %}" class="action-btn">Detalhes</a></td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const rows = document.querySelectorAll('#soro-table tbody tr');
-
+        const rows = document.querySelectorAll('.clickable-row');
         rows.forEach(row => {
             row.addEventListener('click', function () {
-                const url = row.getAttribute('data-url');
+                const url = this.getAttribute('data-url');
                 if (url) {
                     window.location.href = url;
                 }

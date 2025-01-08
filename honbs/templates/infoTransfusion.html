@@ -16,22 +16,45 @@
 <br>
 <div class="header">
     <div class="header-left">
-        <h3>RECEPTOR</h3>
+        <h2>RECEPTOR</h2>
+        <br>
         <div class="header-left-grid">
-            <div>
-                <p><strong>Nome:</strong> João da Silva</p>
-                <p><strong>Nome da Mãe:</strong> Maria da Silva</p>
-            </div>
-            <div>
-                <p><strong>Data de Nasc.:</strong> 12/03/1985</p>
-                <p><strong>Sexo:</strong> Masculino</p>
-            </div>
+            {% if header %}
+                <div>
+                    <p><strong>Nome:</strong> {{ header.0.nome }}</p>
+                    <p><strong>Nome da Mãe:</strong> {{ header.0.nome_mae|default:"N/A" }}</p>
+                </div>
+                <div>
+                    <p><strong>Data de Nasc.:</strong> 
+                        {% if header.0.dt_nascimento != "N/A" %}
+                            {{ header.0.dt_nascimento|date:"d/m/Y" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                    <p><strong>Convênio:</strong> {{ header.0.DS_CONVENIO|default:"Particular" }}</p>
+                </div>
+            {% else %}
+                <div>
+                    <p><strong>Nome:</strong> N/A</p>
+                    <p><strong>Nome da Mãe:</strong> N/A</p>
+                </div>
+                <div>
+                    <p><strong>Data de Nasc.:</strong> N/A</p>
+                    <p><strong>Convênio:</strong> N/A</p>
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="header-right">
-        <h2 class="blood-type">AB+</h2>
+        {% if header %}
+            <h2 class="blood-type">{{ header.0.tipo_sangue|default:"N/A" }}</h2>
+        {% else %}
+            <h2 class="blood-type">N/A</h2>
+        {% endif %}
     </div>
 </div>
+
 <br>
 <div class="tab-container">
     <button class="tab-btn active" onclick="openTab(event, 'features-section')">

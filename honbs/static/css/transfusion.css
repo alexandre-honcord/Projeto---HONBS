@@ -30,7 +30,7 @@ table {
     width: 100%;
     border-collapse: collapse; /* Remove espaços entre células */
     font-size: 14px;
-    text-align: left;
+    text-align: center;
 }
 
 table th, table td {
@@ -89,4 +89,13 @@ table tr:hover {
 
 #soro-table tbody tr {
     cursor: pointer;
+}
+
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.clickable-row:hover {
+    background-color: #f0f0f0;
 }

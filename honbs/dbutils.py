@@ -915,3 +915,150 @@ def exames_lote(sequencia):
     finally:
         cursor.close()
         connection.close()
+
+def lista_transfusao(data_inicial=None, data_final=None):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        # Se as datas não forem fornecidas, use um intervalo padrão (ontem e hoje)
+        if not data_inicial or not data_final:
+            today = date.today()
+            yesterday = today - timedelta(days=1)
+            data_inicial = yesterday.strftime('%d/%m/%Y')
+            data_final = today.strftime('%d/%m/%Y')
+
+        sql = """
+        SELECT
+            CD_PESSOA_FISICA,
+            SUBSTR(TASY.obter_nome_pf(CD_PESSOA_FISICA), 1, 50) NM_RECEPTOR,    
+            TASY.obter_nome_pai_mae(cd_pessoa_fisica, 'M') as nome_mae,
+            SUBSTR(TASY.obter_descricao_padrao('PESSOA_FISICA', 'IE_TIPO_SANGUE', CD_PESSOA_FISICA), 1, 2) ||
+            SUBSTR(TASY.obter_dados_pf(cd_pessoa_fisica, 'DSRH'), 1, 10) DS_SANGUE,
+            TASY.obter_data_nascto_pf(cd_pessoa_fisica) DS_NASCIMENTO,
+            SUBSTR(TASY.obter_dados_pf(cd_pessoa_fisica, 'I'), 1, 25) DS_IDADE,
+            SUBSTR(TASY.OBTER_NOME_CONVENIO(TASY.obter_convenio_atendimento(nr_atendimento)), 1, 25) DS_CONVENIO,
+            SUBSTR(TASY.obter_se_houve_reacao_trans(cd_pessoa_fisica, null), 1, 10) IE_REACAO,
+            SUBSTR(DECODE(TASY.obter_se_houve_reacao_trans(cd_pessoa_fisica, null), 'S',
+            TASY.obter_desc_expressao(719927), 'N', TASY.obter_desc_expressao(327114)), 1, 255) DS_IE_REACAO,
+            SUBSTR(TASY.obter_nome_pf(CD_MEDICO_REQUISITANTE), 1, 50) NM_MEDICO_REQUISITANTE,
+            SUBSTR(TASY.obter_nome_pf(CD_PF_REALIZOU), 1, 50) NM_PF_REALIZOU,
+            SUBSTR(TASY.san_obter_cor_reserva_trans(nr_seq_classif, 'CLAS'), 1, 150) DS_CLASSIF_COR_TRANS,
+            DECODE(IE_CONTA_GERADA, 'S', TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) DS_IE_CONTA_GERADA,
+            DECODE(SUBSTR(TASY.san_obter_se_amostra_valida(CD_PESSOA_FISICA), 1, 1), 'S',
+            TASY.obter_desc_expressao(719927), TASY.obter_desc_expressao(327114)) IE_POSSUI_AMOSTRA,
+            SUBSTR(TASY.obter_unidade_atendimento(nr_atendimento, 'IAA', 'S'), 1, 50) DS_SETOR_UNIDADE,
+            SUBSTR(TASY.san_ultimo_fenotipo_pf(cd_pessoa_fisica, 'N'), 1, 255) DS_FENOTIPO,
+            SUBSTR(TASY.san_ultimo_fenotipo_pf(cd_pessoa_fisica, 'N', 1), 1, 255) DS_FENOTIPO_PADRAO,
+            DECODE(TASY.obter_qt_pend_paciente(nr_seq_reserva), 0, TASY.obter_desc_expressao(327114), TASY.obter_desc_expressao(719927)) IE_PEND_PACIENTE,
+            SUBSTR(TASY.Obter_se_transfusao_iniciada(nr_sequencia), 1, 1) IE_TRANSF_INICIADA,
+            TASY.obter_se_prescricao_suspensa(NR_PRESCRICAO) IE_PRESCR_SUSP,
+            TASY.obter_inf_producao_reserva(NR_SEQUENCIA, 'DI') DT_INF_INICIADA,
+            SUBSTR(TASY.san_obter_cor_reserva_trans(nr_seq_classif, 'COR'), 1, 150) DS_COR,
+            SUBSTR(TASY.obter_se_houve_reacao(nr_sequencia, null), 1, 1) IE_HOUVE_REACAO,
+            SUBSTR(TASY.chk_dispensar_sanprodu_sts(nr_sequencia), 1, 1) CHK_DT_DISPENSACAO,
+            SUBSTR(TASY.san_possui_prod_utilizada(nr_sequencia, 'T'), 1, 1) IE_POSSUI_PROD_UTIL
+        FROM TASY.SAN_TRANSFUSAO a
+        WHERE 1 = 1 
+            AND SUBSTR(TASY.san_obter_se_amostra_valida(CD_PESSOA_FISICA), 1, 1) = 'S'
+            AND ((TASY.obter_qt_pend_paciente(nr_seq_reserva) > 0 AND 'N' = 'S') OR ('N' = 'N'))
+            AND a.cd_estabelecimento = 1 
+            AND a.dt_transfusao BETWEEN TO_DATE(:data_inicial, 'DD/MM/YYYY') 
+            AND TO_DATE(:data_final, 'DD/MM/YYYY')
+        ORDER BY DT_TRANSFUSAO DESC
+        """
+
+        # Parâmetros para consulta
+        params = {
+            'data_inicial': data_inicial,
+            'data_final': data_final
+        }
+
+        # Executar consulta com os parâmetros
+        cursor.execute(sql, params)
+
+        # Colunas correspondentes à consulta
+        keys = [
+            "CD_PESSOA_FISICA",
+            "NM_RECEPTOR",
+            "nome_mae",
+            "DS_SANGUE",
+            "DS_NASCIMENTO",
+            "DS_IDADE",
+            "DS_CONVENIO",
+            "IE_REACAO",
+            "DS_IE_REACAO",
+            "NM_MEDICO_REQUISITANTE",
+            "NM_PF_REALIZOU",
+            "DS_CLASSIF_COR_TRANS",
+            "DS_IE_CONTA_GERADA",
+            "IE_POSSUI_AMOSTRA",
+            "DS_SETOR_UNIDADE",
+            "DS_FENOTIPO",
+            "DS_FENOTIPO_PADRAO",
+            "IE_PEND_PACIENTE",
+            "IE_TRANSF_INICIADA",
+            "IE_PRESCR_SUSP",
+            "DT_INF_INICIADA",
+            "DS_COR",
+            "IE_HOUVE_REACAO",
+            "CHK_DT_DISPENSACAO",
+            "IE_POSSUI_PROD_UTIL"
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def cabecalho_transfusao(codigo):
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+            SELECT
+                SUBSTR(TASY.obter_nome_pf(CD_PESSOA_FISICA), 1, 50) nome,
+                TASY.obter_nome_pai_mae(cd_pessoa_fisica, 'M') as nome_mae,
+                SUBSTR(TASY.obter_descricao_padrao('PESSOA_FISICA', 'IE_TIPO_SANGUE', CD_PESSOA_FISICA), 1, 2) ||
+                        SUBSTR(TASY.obter_dados_pf(cd_pessoa_fisica, 'DSRH'), 1, 10) tipo_sangue,
+                TASY.obter_data_nascto_pf(cd_pessoa_fisica) dt_nascimento,
+                SUBSTR(TASY.OBTER_NOME_CONVENIO(TASY.obter_convenio_atendimento(nr_atendimento)), 1, 25) DS_CONVENIO
+            FROM TASY.san_transfusao
+            WHERE
+                cd_pessoa_fisica = :codigo
+        """
+
+        # Executar consulta com o código como parâmetro
+        params = {'codigo': codigo}
+        cursor.execute(sql, params)
+
+        keys = [
+            "nome",
+            "nome_mae",
+            "tipo_sangue",
+            "dt_nascimento",
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()

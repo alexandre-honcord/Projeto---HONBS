@@ -6,6 +6,32 @@ nav ul li:nth-child(3) a i {
     color: #235db3;
 }
 
+.back-button-container {
+    margin-bottom: 1.5rem;
+}
+
+.back-button {
+    display: inline-flex; /* Certifica que o conteúdo interno é flexível */
+    align-items: center; /* Alinha o ícone e o texto verticalmente */
+    gap: 0.5rem; /* Espaço entre o ícone e o texto */
+    padding: 0.5rem 1rem;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+}
+
+.back-button i {
+    font-size: 1.2rem; /* Ajusta o tamanho do ícone, se necessário */
+}
+
+.back-button:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
 .prodHemo-section {
     display: block; /* Alinha as tabelas verticalmente */
     width: 100%; /* Garante que o contêiner ocupe toda a largura */

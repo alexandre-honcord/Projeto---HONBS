@@ -13,6 +13,7 @@ urlpatterns = [
     path('donator/<int:codigo>/', views.donator, name='donator'),
     path('doacoes/', views.donations, name='donations'),
     path('fracionamento/', views.fractionation, name='fractionation'),
+    path('liberacao/', views.liberation, name='liberation'),
     path('hemocomponentes/<int:codigo>/', views.prodHemocomponente, name='prodHemo'),
     path('lote/<int:sequencia>/', views.batch, name='batch'),
     path('alertas/', views.alertas, name='alerts'),

@@ -15,7 +15,7 @@ from django.core.files.base import ContentFile
 from .models import Fridge, HemocomponentStock
 from collections import defaultdict
 
-from honbs.dbutils import cabecalho_transfusao, dados_cabecalho, dados_doador, estoque, exames_lote, hemocomponentes, hist_doacao, lista_estoque, lista_doacoes, lista_lotes, lista_producao, lista_transfusao
+from honbs.dbutils import cabecalho_transfusao, dados_cabecalho, dados_doador, estoque, exames_lote, hemocomponentes, hist_doacao, lista_captaçao, lista_estoque, lista_doacoes, lista_lotes, lista_producao, lista_transfusao
 from honbs.utils import format_date, format_datetime, formatar_data_oracle, separar_iniciais_por_ponto
 from itertools import groupby 
 from operator import itemgetter
@@ -529,9 +529,21 @@ def qualidade(request):
 @login_required
 def capture(request):
     user = request.user
+
+    # Obter os dados do doador
+    captacao_data = lista_captaçao()
+
+    # Formatar datas e tratar valores nulos
+    for doador in captacao_data:
+        if "dt_doacao" in doador:
+            doador["dt_doacao"] = format_date(doador["dt_doacao"])
+        if "tipo_sangue" not in doador or doador["tipo_sangue"] is None:
+            doador["tipo_sangue"] = "#"
+
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,
+        'captacao_data': captacao_data,
     }
     return render(request, 'capture.html', context)
 
@@ -605,6 +617,15 @@ def dash(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'dash.html', context)
+
+@login_required
+def liberation(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'liberation.html', context)
 
 @login_required
 def registrations(request):

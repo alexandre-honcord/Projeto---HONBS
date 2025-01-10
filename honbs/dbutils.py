@@ -748,8 +748,8 @@ def dados_doador(codigo):
                 a.ds_observacao as observacao,
                 a.dt_cadastro_original as cadastro,
                 a.nm_usuario_original as usuario_cadastro,
-                a.nr_ddd_celular || a.nr_telefone_celular as telefone1,
-                b.nr_ddd_telefone || b.nr_telefone as telefone2,
+                a.nr_telefone_celular as telefone1,
+                b.nr_telefone as telefone2,
                 b.ds_email as email,
                 b.cd_cep as cep,
                 b.ds_endereco as logradouro,
@@ -1050,6 +1050,62 @@ def cabecalho_transfusao(codigo):
             "nome_mae",
             "tipo_sangue",
             "dt_nascimento",
+        ]
+
+        # Obter todas as linhas e mapear para dicionários
+        raw_data = cursor.fetchall()
+        results = [dict(zip(keys, row)) for row in raw_data]
+        return results
+    except Exception as e:
+        print(f"Erro ao executar a consulta: {e}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def lista_captaçao():
+    connection = obter_conexao()
+    if connection is None:
+        print("Connection is None.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        sql = """
+            SELECT
+                SUBSTR(TASY.obter_nome_pf(a.CD_PESSOA_FISICA), 1, 50) nome,
+                SUBSTR(TASY.obter_descricao_padrao('PESSOA_FISICA', 'IE_TIPO_SANGUE', a.CD_PESSOA_FISICA), 1, 2) ||
+                        SUBSTR(TASY.obter_dados_pf(a.cd_pessoa_fisica, 'DSRH'), 1, 10) tipo_sangue,
+                TASY.obter_desc_tipo_doacao(a.nr_seq_tipo) as tipo_doacao,
+                a.dt_doacao as dt_doacao,
+                a.dt_retorno as dt_retorno,
+                '+'||TASY.obter_dados_pf(a.cd_pessoa_fisica, 'TCD') as telefone,
+                b.ie_sexo as sexo
+            FROM TASY.san_doacao a
+            JOIN TASY.pessoa_fisica b ON b.cd_pessoa_fisica = a.cd_pessoa_fisica
+            WHERE
+                a.ie_avaliacao_final = 'A'
+            AND
+                TRUNC(a.dt_doacao) >= TO_DATE(:data_inicial, 'DD-MM-YYYY')
+            AND 
+                TRUNC(a.dt_doacao) <= TO_DATE(:data_final, 'DD-MM-YYYY')
+            ORDER BY 4 ASC
+        """
+
+        params = {
+            'data_inicial': (datetime.now() - timedelta(days=90)).strftime('%d-%m-%Y'),
+            'data_final': (datetime.now() - timedelta(days=60)).strftime('%d-%m-%Y')
+        }
+        cursor.execute(sql, params)
+
+        keys = [
+            "nome",
+            "tipo_sangue",
+            "tipo_doacao",
+            "dt_doacao",
+            "dt_retorno",
+            "telefone",
+            "sexo",
         ]
 
         # Obter todas as linhas e mapear para dicionários

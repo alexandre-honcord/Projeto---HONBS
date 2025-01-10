@@ -89,7 +89,7 @@ nav ul {
     flex-direction: column;
     margin: 0;
     padding: 0;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     gap: 5px;
 }

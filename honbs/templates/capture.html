@@ -7,25 +7,109 @@
 <link rel="stylesheet" href="{% static 'css/capture.css' %}"/>
 
 <div class="capture-section">
-    <h1>Captação</h1>
+    <h1 style="text-align: center;">Captação</h1>
     <br>
-    <table>
-        <thead>
-            <tr>
-                <th>Doador</th>
-                <th>Tipagem</th>
-                <th>Última Doação</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Ciclano</td>
-                <td>O+</td>
-                <td>01/01/2025</td>
-                <td>
-                    <a href="#" class="btn btn-info">Entrar em contato</a>
-                </td>
-            </tr>
-        </tbody>
+    <hr>
+    <br>
+
+    <div class="filter-section">
+        <label for="blood-type-filter">Filtrar por Tipagem:</label>
+        <select id="blood-type-filter" name="tipo_sangue" onchange="applyFilter()">
+            <option value="">Todos</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select>
+    
+        <label for="donation-type-filter">Filtrar por Tipo de Doação:</label>
+        <select id="donation-type-filter" name="tipo_doacao" onchange="applyFilter()">
+            <option value="">Todos</option>
+            <option value="Amostra">Amostra</option>
+            <option value="Voluntária-Indicação">Voluntária-Indicação</option>
+            <option value="Aférese Voluntária">Aférese Voluntária</option>
+            <option value="Auto Doação">Auto Doação</option>
+            <option value="Plasma Convalescente">Plasma Convalescente</option>
+            <option value="Voluntária-Google">Voluntária-Google</option>
+            <option value="Direcionada">Direcionada</option>
+            <option value="Doação para OVG">Doação para OVG</option>
+            <option value="Aférese Reposição">Aférese Reposição</option>
+            <option value="Reposição">Reposição</option>
+            <option value="Voluntária">Voluntária</option>
+            <option value="Voluntária-Redes Sociais">Voluntária-Redes Sociais</option>
+        </select>
+    
+        <label for="sex-filter">Filtrar por Sexo:</label>
+        <select id="sex-filter" name="sexo" onchange="applyFilter()">
+            <option value="">Todos</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+        </select>
+    </div>
+    <br>
+    <!-- Tabela -->
+    <div class="table-section">
+        <table class="styled-table" id="donors-table">
+            <thead>
+                <tr>
+                    <th>Doador</th>
+                    <th>Tipagem</th>
+                    <th>Última Doação</th>
+                    <th>Tipo de Doação</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="donor-table-body">
+                {% for doador in captacao_data %}
+                <tr class="donor-row" data-blood-type="{{ doador.tipo_sangue }}" data-donation-type="{{ doador.tipo_doacao }}" data-sex="{{ doador.sexo }}">
+                    <td>{{ doador.nome }}</td>
+                    <td>{{ doador.tipo_sangue }}</td>
+                    <td>{{ doador.dt_doacao }}</td>
+                    <td>{{ doador.tipo_doacao }}</td>
+                    <td class="action-icons">
+                        <a href="https://wa.me/{{ doador.telefone }}" target="_blank" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">Nenhum doador encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>   
+</div>
+
+<!-- Script para o filtro -->
+<script>
+    function applyFilter() {
+        const bloodTypeFilter = document.getElementById("blood-type-filter").value;
+        const donationTypeFilter = document.getElementById("donation-type-filter").value;
+        const sexFilter = document.getElementById("sex-filter").value;
+        const rows = document.querySelectorAll(".donor-row");
+
+        rows.forEach(row => {
+            const bloodType = row.getAttribute("data-blood-type");
+            const donationType = row.getAttribute("data-donation-type");
+            const sex = row.getAttribute("data-sex");
+
+            if (
+                (bloodTypeFilter === "" || bloodType === bloodTypeFilter) &&
+                (donationTypeFilter === "" || donationType === donationTypeFilter) &&
+                (sexFilter === "" || sex === sexFilter)
+            ) {
+                row.style.display = ""; // Mostra a linha
+            } else {
+                row.style.display = "none"; // Oculta a linha
+            }
+        });
+    }
+
+</script>
 {% endblock %}

@@ -607,23 +607,35 @@ def infoTransfusion(request, codigo):
         'transfusao_data': transfusao_data,
         'header': header,
     }
-    return render(request, 'infoTransfusion.html', context)
-
-@login_required
-def dash(request):
-    user = request.user
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
-    }
-    return render(request, 'dash.html', context)
+    return render(request, 'infoTransfusion.html', context) 
 
 @login_required
 def liberation(request):
     user = request.user
+
+    # Calcular o intervalo dos últimos 30 dias
+    today = date.today()
+    thirty_days_ago = today - timedelta(days=30)
+
+    # Chamar a função para buscar os lotes dos últimos 30 dias
+    lotes_data = lista_lotes(data_inicial=thirty_days_ago.isoformat(), data_final=today.isoformat())
+
+    # Processar e formatar os dados
+    for lote in lotes_data:
+        for key in ["inicio", "fim", "geracao", "dt_saida", "dt_chegada"]:
+            if key in lote:
+                lote[key] = format_datetime(lote[key]) if lote[key] else "N/A"
+        for key in ["resp_transporte", "resp_chegada", "temp_chegada"]:
+            if key in lote and lote[key] is None:
+                lote[key] = "N/A"
+
+    # Contexto atualizado para o template
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None,
+        'lotes': lotes_data,
+        'data_inicial': thirty_days_ago.isoformat(),
+        'data_final': today.isoformat(),
     }
     return render(request, 'liberation.html', context)
 

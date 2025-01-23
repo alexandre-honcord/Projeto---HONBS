@@ -525,6 +525,32 @@ def qualidade(request):
     }
     return render(request, 'quality.html', context)
 
+@login_required
+def autoexclude(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'autoexclude.html', context)
+
+@login_required
+def autoexclusion(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'autoexclusion.html', context)
+
+@login_required
+def exclusionDados(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'exclusionDados.html', context)
 
 @login_required
 def capture(request):

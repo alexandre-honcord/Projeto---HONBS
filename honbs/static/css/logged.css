@@ -89,9 +89,12 @@ nav ul {
     flex-direction: column;
     margin: 0;
     padding: 0;
-    overflow-y: hidden;
-    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-x: auto;
     gap: 5px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #B32325 #f1f1f1;
 }
 
 nav ul li {

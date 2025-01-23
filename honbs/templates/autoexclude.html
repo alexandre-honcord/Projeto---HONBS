@@ -1,0 +1,47 @@
+
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="{% static 'css/base.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/logged.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/autoexclude.css' %}"/>
+
+<div class="auto-exclusion-container">
+    <h1>Auto Exclusão</h1><br>
+    <p class="instruction-text">
+        O voto de autoexclusão é uma etapa importante para garantir a segurança de quem receberá a doação.<br> 
+        Se você foi sincero na entrevista e acredita que seu sangue é seguro para doação, marque <strong>SIM</strong>.<br>
+        Se você não informou algo que pode colocar o paciente em risco, marque <strong>NÃO</strong>.
+    </p>
+    <br>
+    <div class="button-container">
+        <button class="btn-exclude yes" onclick="confirmExclusion(true)">SIM <i class="fa-solid fa-thumbs-up"></i></button>
+        <button class="btn-exclude no" onclick="confirmExclusion(false)">NÃO <i class="fa-solid fa-thumbs-down"></i></button>
+    </div>
+    <br>
+</div>
+
+<script>
+    function confirmExclusion(choice) {
+        if (choice) {
+            alert("Você confirmou que seu sangue é seguro para doação.");
+            window.location.href = "#";
+        } else {
+            alert("Parabéns Pinóquio!");
+            window.location.href = "#";
+        }
+    }
+
+    function openFullScreen() {
+        let url = "{% url 'autoexclude' %}";
+        let newWindow = window.open(url, "_blank");
+
+        if (newWindow) {
+            newWindow.onload = function() {
+                newWindow.document.documentElement.requestFullscreen();
+            };
+        }
+    }
+</script>
+
+{% endblock %}

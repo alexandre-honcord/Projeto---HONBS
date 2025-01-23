@@ -6,6 +6,22 @@ nav ul li:nth-child(6) a i {
     color: #235db3;
 }
 
+.action-icons {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.action-icons a {
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.action-icons a:hover {
+    transform: scale(1.2);
+}
+
 .header {
     display: flex;
     justify-content: center;

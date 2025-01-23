@@ -23,6 +23,9 @@ urlpatterns = [
     path('estoque/', views.stock, name='stock'),
     path('detalhe-estoque/', views.stock_list, name='stock_list'),
     path('captacao/', views.capture, name='capture'),
+    path('auto-exclusao/', views.autoexclude, name='autoexclude'),
+    path('exclusao/', views.autoexclusion, name='autoexclusion'),
+    path('data-exclusao/', views.exclusionDados, name='exclusionDados'),
 
     path('cadastros/', views.registrations, name='registrations'),
     path('edit-stock/<int:hemocomponente_id>/', views.edit_stock, name='edit_stock'),

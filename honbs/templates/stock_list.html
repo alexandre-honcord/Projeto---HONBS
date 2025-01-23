@@ -25,6 +25,7 @@
     <table id="donations-table">
         <thead>
             <tr>
+                <th>Ação</th>
                 <th>N° Sangue</th>
                 <th>Quantidade</th>
                 <th>N° Produção</th>
@@ -48,6 +49,11 @@
         <tbody>
             {% for stock in stocks %}
             <tr class="{{ stock.row_class }}">
+                <td class="action-icons">
+                    <a href="#" class="delete-stock" title="Excluir">
+                        <i class="fas fa-trash-alt" style="color: red;"></i>
+                    </a>
+                </td>
                 <td>{{ stock.NR_SANGUE }}</td>
                 <td>{{ stock.QTD }}</td>
                 <td>{{ stock.NR_SEQ_PRODUCAO }}</td>
@@ -71,4 +77,24 @@
         </tbody>
     </table>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Seleciona todas as lixeiras
+        const deleteButtons = document.querySelectorAll(".delete-stock");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault(); // Evita que a página recarregue ao clicar no link
+
+                const row = this.closest("tr"); // Pega a linha da tabela onde a lixeira foi clicada
+                row.style.transition = "opacity 0.3s ease"; // Animação de desaparecimento
+                row.style.opacity = "0"; 
+
+                setTimeout(() => {
+                    row.remove(); // Remove a linha após a animação
+                }, 300);
+            });
+        });
+    });
+</script>
 {% endblock %}

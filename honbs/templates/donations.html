@@ -1,4 +1,7 @@
 {% extends "logged.html" %}
+{% block title %}
+    Doação
+{% endblock %}
 {% load static %}
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/donations.css' %}"/>
@@ -14,9 +17,6 @@
     <button class="tab-btn" onclick="showSection('collect-section')">
         <i class="fas fa-flask"></i> Coletas
     </button>
-    <button class="tab-btn" onclick="showSection('alerts-section')">
-        <i class="fas fa-bell"></i> Alertas
-    </button>
 </div>
 
 <div class="donations-section">
@@ -27,52 +27,82 @@
         </span>
         <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
         <div id="filter-options" class="filter-options hidden">
-            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
-            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
-            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
-            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+            <div>
+                <label for="start-date">Data inicial:</label>
+                <input type="date" id="start-date" name="start-date">
+            </div>
+            <div>
+                <label for="end-date">Data final:</label>
+                <input type="date" id="end-date" name="end-date">
+            </div>
+            <button class="apply-filter-btn" onclick="applyDateFilter()">Aplicar Filtro</button>
         </div>
     </div>
-    <table id="donations-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="{% url 'donator' %}" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    {% if doacoes %}
+        <table id="donations-table">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Bolsa</th>
+                    <th>Doador</th>
+                    <th>Data</th>
+                    <th>Tipo Doação</th>
+                    <th>Tipo Coleta</th>
+                    <th>Tipagem</th>
+                    <th>Data Retorno</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Pulso</th>
+                    <th>Temperatura</th>
+                    <th>Lote</th>
+                    <th>N° Sangue</th>
+                    <th>Volume(ml)</th>
+                    <th>Sequencia</th>
+                    <th>Codigo de Barras</th>
+                    <th>Codigo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tbody>
+                    {% for doacao in doacoes %}
+                        {% if doacao.lote != "N/A" %}
+                        <tr data-url="{% url 'donator' doacao.codigo %}" class="clickable-row">
+                            <td>
+                                {% if doacao.status == 1 %}
+                                    <i class="fas fa-circle status-icon yellow"></i>
+                                {% elif doacao.status == 2 %}
+                                    <i class="fas fa-circle status-icon red"></i>
+                                {% else %}
+                                    <i class="fas fa-circle status-icon gray"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ doacao.bolsa }}</td>
+                            <td>{{ doacao.doador }}</td>
+                            <td>{{ doacao.data }}</td>
+                            <td>{{ doacao.tipo_doacao }}</td>
+                            <td>{{ doacao.tipo_coleta }}</td>
+                            <td>{{ doacao.tipo_sangue }}</td>
+                            <td>{{ doacao.data_retorno }}</td>
+                            <td>{{ doacao.altura }}</td>
+                            <td>{{ doacao.peso }}kg</td>
+                            <td>{{ doacao.pulso }}</td>
+                            <td>{{ doacao.temperatura }}º</td>
+                            <td>{{ doacao.lote }}</td>
+                            <td>{{ doacao.sangue }}</td>
+                            <td>{{ doacao.volume }}ml</td>
+                            <td>{{ doacao.sequencia }}</td>
+                            <td>{{ doacao.codigo_barras }}</td>
+                            <td>{{ doacao.codigo }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+        </table>
+    {% else %}
+        <div class="no-results">
+            <p>Seu filtro não encontrou nenhum resultado.</p>
+        </div>
+    {% endif %}
 </div>
 
 <div class="trial-section hidden">
@@ -83,52 +113,77 @@
         </span>
         <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
         <div id="filter-options" class="filter-options hidden">
-            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
-            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
-            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
-            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+            <div>
+                <label for="start-date">Data inicial:</label>
+                <input type="date" id="start-date" name="start-date">
+            </div>
+            <div>
+                <label for="end-date">Data final:</label>
+                <input type="date" id="end-date" name="end-date">
+            </div>
+            <button class="apply-filter-btn" onclick="applyDateFilter()">Aplicar Filtro</button>
         </div>
     </div>
-    <table id="trial-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    {% if triagem %}
+        <table id="triage-table">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Bolsa</th>
+                    <th>Doador</th>
+                    <th>Data</th>
+                    <th>Tipo Doação</th>
+                    <th>Tipo Coleta</th>
+                    <th>Tipagem</th>
+                    <th>Data Retorno</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Pulso</th>
+                    <th>Temperatura</th>
+                    <th>Lote</th>
+                    <th>N° Sangue</th>
+                    <th>Volume(ml)</th>
+                    <th>Sequencia</th>
+                    <th>Codigo de Barras</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doacao in triagem %}
+                <tr>
+                    <td>
+                        {% if doacao.status == 1 %}
+                            <i class="fas fa-circle status-icon yellow"></i>
+                        {% elif doacao.status == 2 %}
+                            <i class="fas fa-circle status-icon red"></i>
+                        {% else %}
+                            <i class="fas fa-circle status-icon gray"></i>
+                        {% endif %}
+                    </td>
+                    <td>{{ doacao.bolsa }}</td>
+                    <td>{{ doacao.doador }}</td>
+                    <td>{{ doacao.data }}</td>
+                    <td>{{ doacao.tipo_doacao }}</td>
+                    <td>{{ doacao.tipo_coleta }}</td>
+                    <td>{{ doacao.tipo_sangue }}</td>
+                    <td>{{ doacao.data_retorno }}</td>
+                    <td>{{ doacao.altura }}</td>
+                    <td>{{ doacao.peso }}kg</td>
+                    <td>{{ doacao.pulso }}</td>
+                    <td>{{ doacao.temperatura }}º</td>
+                    <td>{{ doacao.lote }}</td>
+                    <td>{{ doacao.sangue }}</td>
+                    <td>{{ doacao.volume }}ml</td>
+                    <td>{{ doacao.sequencia }}</td>
+                    <td>{{ doacao.codigo_barras }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-results">
+            <p>Seu filtro não encontrou nenhum resultado.</p>
+        </div>
+    {% endif %}
 </div>
 
 <div class="collect-section hidden">
@@ -145,159 +200,163 @@
             <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
         </div>
     </div>
-    <table id="collect-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="alerts-section hidden">
-    <h1>Alertas</h1>
-    <div class="filter-container">
-        <span class="filter-label" onclick="toggleFilterOptions()">
-            <i class="fas fa-filter"></i> Filtro
-        </span>
-        <button class="clear-filter-btn" onclick="clearFilter()">Limpar Filtros</button>
-        <div id="filter-options" class="filter-options hidden">
-            <button onclick="applyFilter('fenotipado-sim')">Fenotipado: Sim</button>
-            <button onclick="applyFilter('fenotipado-nao')">Fenotipado: Não</button>
-            <button onclick="applyFilter('abo-o')">ABO/Rh: O+</button>
-            <button onclick="applyFilter('abo-a')">ABO/Rh: A-</button>
+    {% if coletas %}
+        <table id="donations-table">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Bolsa</th>
+                    <th>Doador</th>
+                    <th>Data</th>
+                    <th>Tipo Doação</th>
+                    <th>Tipo Coleta</th>
+                    <th>Tipagem</th>
+                    <th>Data Retorno</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Pulso</th>
+                    <th>Temperatura</th>
+                    <th>Lote</th>
+                    <th>N° Sangue</th>
+                    <th>Volume(ml)</th>
+                    <th>Sequencia</th>
+                    <th>Codigo de Barras</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tbody>
+                    {% for doacao in coletas %}
+                        {% if doacao.lote != "N/A" %}
+                        <tr>
+                            <td>
+                                {% if doacao.status == 1 %}
+                                    <i class="fas fa-circle status-icon yellow"></i>
+                                {% elif doacao.status == 2 %}
+                                    <i class="fas fa-circle status-icon red"></i>
+                                {% else %}
+                                    <i class="fas fa-circle status-icon gray"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ doacao.bolsa }}</td>
+                            <td>{{ doacao.doador }}</td>
+                            <td>{{ doacao.data }}</td>
+                            <td>{{ doacao.tipo_doacao }}</td>
+                            <td>{{ doacao.tipo_coleta }}</td>
+                            <td>{{ doacao.tipo_sangue }}</td>
+                            <td>{{ doacao.data_retorno }}</td>
+                            <td>{{ doacao.altura }}</td>
+                            <td>{{ doacao.peso }}kg</td>
+                            <td>{{ doacao.pulso }}</td>
+                            <td>{{ doacao.temperatura }}º</td>
+                            <td>{{ doacao.lote }}</td>
+                            <td>{{ doacao.sangue }}</td>
+                            <td>{{ doacao.volume }}ml</td>
+                            <td>{{ doacao.sequencia }}</td>
+                            <td>{{ doacao.codigo_barras }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+        </table>
+    {% else %}
+        <div class="no-results">
+            <p>Seu filtro não encontrou nenhum resultado.</p>
         </div>
-    </div>
-    <table id="alerts-table">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome do Receptor</th>
-                <th>Nome da Mãe</th>
-                <th>ABO/Rh</th>
-                <th>Prontuário</th>
-                <th>Data Nasc.</th>
-                <th>Fenotipado</th>
-                <th>Ação</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-fenotipado="sim" data-abo="ab+">
-                <td>001</td>
-                <td>João da Silva</td>
-                <td>Maria da Silva</td>
-                <td>AB+</td>
-                <td>12345</td>
-                <td>12/03/1985</td>
-                <td>Sim</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-            <tr data-fenotipado="nao" data-abo="a-">
-                <td>002</td>
-                <td>Ana Souza</td>
-                <td>Clara Souza</td>
-                <td>A-</td>
-                <td>67890</td>
-                <td>24/07/1990</td>
-                <td>Não</td>
-                <td>
-                    <a href="#" class="action-btn">Detalhes</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    {% endif %}
 </div>
 
 <script>
+    // Fecha o filtro ao clicar fora
+    document.addEventListener('click', function (event) {
+        const filterContainer = document.getElementById('filter-options');
+        const filterLabel = document.querySelector('.filter-label');
+        if (!filterContainer.contains(event.target) && !filterLabel.contains(event.target)) {
+            if (!filterContainer.classList.contains('hidden')) {
+                filterContainer.classList.add('hidden');
+            }
+        }
+    });
+
+    // Configurações iniciais ao carregar a página
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date().toISOString().split('T')[0]; // Obter data no formato 'YYYY-MM-DD'
+
+        // Configurar a data de hoje como padrão nos inputs de data
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+
+        if (startDateInput && !startDateInput.value) {
+            startDateInput.value = today;
+        }
+
+        if (endDateInput && !endDateInput.value) {
+            endDateInput.value = today;
+        }
+    });
+
+    // Alterna entre as seções (tabs)
     function showSection(sectionClass) {
-        // Esconde todas as seções
-        const sections = document.querySelectorAll('.donations-section, .trial-section, .collect-section, .alerts-section');
+        const sections = document.querySelectorAll('.donations-section, .trial-section, .collect-section');
         sections.forEach(section => section.classList.add('hidden'));
 
-        // Remove a classe 'active' de todos os botões
         const buttons = document.querySelectorAll('.tab-btn');
         buttons.forEach(button => button.classList.remove('active'));
 
-        // Mostra a seção clicada
         document.querySelector(`.${sectionClass}`).classList.remove('hidden');
-
-        // Adiciona a classe 'active' ao botão clicado
         document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
     }
 
+    // Alterna a exibição das opções de filtro
     function toggleFilterOptions() {
         const filterOptions = document.getElementById("filter-options");
         filterOptions.classList.toggle("hidden");
     }
 
-    function applyFilter(filter) {
-        const rows = document.querySelectorAll("#donations-table tbody tr");
+    // Aplica o filtro por datas
+    function applyDateFilter() {
+        const startDateInput = document.getElementById("start-date").value;
+        const endDateInput = document.getElementById("end-date").value;
 
-        rows.forEach(row => {
-            const fenotipado = row.getAttribute("data-fenotipado");
-            const abo = row.getAttribute("data-abo");
+        if (!startDateInput || !endDateInput) {
+            alert("Por favor, selecione as datas inicial e final.");
+            return;
+        }
 
-            if (
-                (filter === "fenotipado-sim" && fenotipado !== "sim") ||
-                (filter === "fenotipado-nao" && fenotipado !== "nao") ||
-                (filter === "abo-o" && abo !== "o+") ||
-                (filter === "abo-a" && abo !== "a-")
-            ) {
-                row.style.display = "none";
-            } else {
-                row.style.display = "";
-            }
-        });
+        const startDate = new Date(startDateInput);
+        const endDate = new Date(endDateInput);
 
-        toggleFilterOptions();
+        if (startDate > endDate) {
+            alert("A data inicial não pode ser maior que a data final.");
+            return;
+        }
+
+        // Atualizar a URL para enviar os filtros para o backend
+        const params = new URLSearchParams(window.location.search);
+        params.set('data_inicial', startDateInput);
+        params.set('data_final', endDateInput);
+        window.location.search = params.toString();
     }
 
+    // Limpa os filtros e recarrega a página
     function clearFilter() {
-        const rows = document.querySelectorAll("#donations-table tbody tr");
-        rows.forEach(row => {
-            row.style.display = "";
-        });
-
-        const filterOptions = document.getElementById("filter-options");
-        if (!filterOptions.classList.contains("hidden")) {
-            toggleFilterOptions();
-        }
+        // Atualizar a URL removendo os filtros de data
+        const params = new URLSearchParams(window.location.search);
+        params.delete('data_inicial');
+        params.delete('data_final');
+        window.location.search = params.toString();
     }
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function () {
+                const url = this.getAttribute("data-url");
+                window.location.href = url;
+            });
+        });
+    });
+</script>
+
 
 {% endblock %}

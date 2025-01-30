@@ -1,0 +1,65 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 0 auto 2rem; /* Centraliza e adiciona margem inferior de 2rem */
+    width: 70%;
+    max-width: 1000px;
+}
+
+.header-left {
+    width: 100%;
+}
+
+.header-left h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.header-left-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Cria duas colunas iguais */
+    gap: 1rem; /* Espaçamento entre as colunas */
+}
+
+.header-left p {
+    font-size: 1rem;
+    margin: 0.3rem 0;
+    color: #555;
+}
+
+.header-left strong {
+    color: #333;
+}
+
+.header-right {
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    position: relative;
+    min-width: 100px;
+    background-color: #fff;
+}
+
+.header-right::before {
+    content: "ABO/Rh"; /* Texto indicador */
+    position: absolute;
+    top: -12px;
+    left: 10px;
+    background-color: #fff; /* Fundo branco para sobrescrever bordas */
+    padding: 0 5px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.blood-type {
+    font-size: 48px;
+    color: #d9534f; /* Cor de destaque para a tipagem sanguínea */
+    margin: 0;
+}

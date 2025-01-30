@@ -1,127 +1,276 @@
 {% extends "logged.html" %}
+{% block title %}
+    Doador
+{% endblock %}
 {% load static %}
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/donator.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/header.css' %}"/>
 
-<div class="section">
-    <div class="header">
-        <div class="header-left">
-            <h2>DOADOR</h2>
-            <p><strong>Nome:</strong> João da Silva</p>
-            <p><strong>Nome da Mãe:</strong> Maria da Silva</p>
-            <p><strong>Data de Nasc.:</strong> 12/03/1985</p>
-            <p><strong>Sexo:</strong> Masculino</p>
-        </div>
-        <div class="header-right">
-            <h2 class="blood-type">AB+</h2>
-        </div>
-    </div>
-
-    <!-- Aba Navigation -->
-    <div class="tab-container">
-        <button class="tab-btn active" onclick="openTab(event, 'dados')">Dados</button>
-        <button class="tab-btn" onclick="openTab(event, 'contato')">Contato</button>
-        <button class="tab-btn" onclick="openTab(event, 'imuno-hemato')">Imuno/Hemato</button>
-        <button class="tab-btn" onclick="openTab(event, 'historico')">Histórico</button>
-    </div>
-
-    <div id="dados" class="tab-content" style="display: block;">
-        <h3 class="dados-doador">Dados do Doador</h3>
-        <div class="form-container">
-            <form class="donator-form">
-                <div class="form-group">
-                    <label for="nome">Nome:</label>
-                    <input type="text" id="nome" value="João da Silva" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="profissao">Profissão:</label>
-                    <input type="text" id="profissao" value="Engenheiro" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="nome_mae">Nome da Mãe:</label>
-                    <input type="text" id="nome_mae" value="Maria da Silva" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="nome_pai">Nome do Pai:</label>
-                    <input type="text" id="nome_pai" value="José da Silva" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="data_nascimento">Data de Nascimento:</label>
-                    <input type="date" id="data_nascimento" value="1985-03-12" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="nacionalidade">Nacionalidade:</label>
-                    <input type="text" id="nacionalidade" value="Brasileiro" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="sexo">Sexo:</label>
-                    <input type="text" id="sexo" value="Masculino" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="estado_civil">Estado Civil:</label>
-                    <input type="text" id="estado_civil" value="Solteiro" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="etnia">Etnia:</label>
-                    <input type="text" id="etnia" value="Pardo" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="cpf">CPF:</label>
-                    <input type="text" id="cpf" value="123.456.789-00" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="rg">RG:</label>
-                    <input type="text" id="rg" value="1234567" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="orgao_expedidor">Órgão Expedidor:</label>
-                    <input type="text" id="orgao_expedidor" value="SSP-GO" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="convenio">Convênio:</label>
-                    <input type="text" id="convenio" value="Unimed" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="observacao">Observação:</label>
-                    <textarea id="observacao" readonly>Paciente regular sem restrições.</textarea>
-                </div>
-                <div class="form-group">
-                    <label for="doador_relacionado">Doador Relacionado:</label>
-                    <input type="text" id="doador_relacionado" value="Carlos da Silva" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="paciente_relacionado">Paciente Relacionado:</label>
-                    <input type="text" id="paciente_relacionado" value="Paulo Souza" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="usuario_cadastro">Usuário que fez o cadastro:</label>
-                    <input type="text" id="usuario_cadastro" value="Admin01" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="data_cadastro">Data do Cadastro:</label>
-                    <input type="datetime-local" id="data_cadastro" value="2023-11-30T15:30" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="ativo">Ativo:</label>
-                    <input type="checkbox" id="ativo" checked disabled>
-                </div>
-            </form>
+<br>
+<div class="back-button-container">
+    <a href="javascript:history.back()" class="back-button">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+<br>
+<div class="header">
+    <div class="header-left">
+        <h2>DOADOR</h2>
+        <br>
+        <div class="header-left-grid">
+            <div>
+                <p><strong>Nome:</strong> {{ cabecalho.nome }}</p>
+                <p><strong>Nome da Mãe:</strong> {{ cabecalho.nome_mae }}</p>
+            </div>
+            <div>
+                <p><strong>Data de Nasc.:</strong> {{ cabecalho.dt_nascimento }}</p>
+                <p><strong>Sexo:</strong> {{ cabecalho.sexo }}</p>
+            </div>
         </div>
     </div>
-
-    <div id="contato" class="tab-content">
-        <h3>Contato</h3>
-        <p>Informações de contato do doador.</p>
+    <div class="header-right">
+        <h2 class="blood-type">{{ cabecalho.tipo_sangue }}</h2>
     </div>
+</div>
+<!-- Aba Navigation -->
+<div class="tab-container">
+    <button class="tab-btn active" onclick="openTab(event, 'dados')">Dados</button>
+    <button class="tab-btn" onclick="openTab(event, 'contato')">Contato</button>
+    <button class="tab-btn" onclick="openTab(event, 'imuno-hemato')">Imuno/Hemato</button>
+    <button class="tab-btn" onclick="openTab(event, 'historico')">Histórico</button>
+    <button class="tab-btn" onclick="openTab(event, 'alerta')">Alertas</button>
+</div>
 
-    <div id="imuno-hemato" class="tab-content">
-        <h3>Imuno/Hemato</h3>
-        <p>Resultados de exames imunológicos e hematológicos.</p>
+<div id="dados" class="data-section tab-content" style="display: block;">
+    <h3 class="dados-doador">Dados do Doador</h3>
+    <br>
+    <div class="form-container">
+        <form class="donator-form">
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" value="{{ doador_data.nome }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="profissao">Profissão:</label>
+                <input type="text" id="profissao" value="{{ doador_data.profissao }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nome_mae">Nome da Mãe:</label>
+                <input type="text" id="nome_mae" value="{{ doador_data.nome_mae }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nome_pai">Nome do Pai:</label>
+                <input type="text" id="nome_pai" value="{{ doador_data.nome_pai }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="data_nascimento">Data de Nascimento:</label>
+                <input type="date" id="data_nascimento" value="{{ doador_data.nascimento|date:'Y-m-d' }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nacionalidade">Nacionalidade:</label>
+                <input type="text" id="nacionalidade" value="{{ doador_data.nacionalidade }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <input type="text" id="sexo" value="{{ doador_data.sexo }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="estado_civil">Estado Civil:</label>
+                <input type="text" id="estado_civil" value="{{ doador_data.estado_civil }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="etnia">Etnia:</label>
+                <input type="text" id="etnia" value="{{ doador_data.cor_pele }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" value="{{ doador_data.cpf }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="rg">RG:</label>
+                <input type="text" id="rg" value="{{ doador_data.rg }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="orgao_expedidor">Órgão Expedidor:</label>
+                <input type="text" id="orgao_expedidor" value="{{ doador_data.orgao_emissor }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="observacao">Observação:</label>
+                <textarea id="observacao" readonly>{{ doador_data.observacao }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="usuario_cadastro">Usuário que fez o cadastro:</label>
+                <input type="text" id="usuario_cadastro" value="{{ doador_data.usuario_cadastro }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="data_cadastro">Data do Cadastro:</label>
+                <input type="datetime-local" id="data_cadastro" value="{{ doador_data.cadastro }}" readonly>
+            </div>
+        </form>
     </div>
+</div>
 
-    <div id="historico" class="tab-content">
-        <h3>Histórico</h3>
-        <p>Histórico de doações e registros médicos.</p>
+<div id="contato" class="contact-section tab-content" style="display: none;">
+    <!-- Telefones -->
+    <div class="form-section">
+        <br>
+        <div class="form-grid two-columns">
+            <label>
+                Tel. Pessoal
+                <input type="text" name="tel_pessoal" value="{{ doador_data.telefone1 }}" placeholder="(XX) XXXX-XXXX" readonly>
+            </label>
+            <label>
+                Tel. Complementar
+                <input type="text" name="tel_complementar" value="{{ doador_data.telefone2 }}" placeholder="(XX) XXXX-XXXX" readonly>
+            </label>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <!-- Email -->
+    <div class="form-section">
+        <br>
+        <div class="form-grid">
+            <label>
+                Email
+                <input type="email" name="email_pessoal" value="{{ doador_data.email }}" placeholder="exemplo@email.com" readonly>
+            </label>
+        </div>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <!-- Endereço Residencial -->
+    <div class="form-section">
+        <br>
+        <div class="form-grid two-columns">
+            <label>
+                CEP
+                <input type="text" name="cep_residencial" value="{{ doador_data.cep }}" placeholder="XXXXX-XXX" readonly>
+            </label>
+            <label>
+                Logradouro
+                <input type="text" name="logradouro_residencial" value="{{ doador_data.logradouro }}" placeholder="Rua, Avenida..." readonly>
+            </label>
+            <label>
+                Complemento
+                <input type="text" name="complemento_residencial" value="{{ doador_data.complemento }}" readonly>
+            </label>
+            <label>
+                N°
+                <input type="text" name="numero_residencial" value="{{ doador_data.numero }}" readonly>
+            </label>
+            <label>
+                Cidade
+                <input type="text" name="cidade_residencial" value="{{ doador_data.cidade }}" readonly>
+            </label>
+            <label>
+                Estado
+                <input type="text" name="estado_residencial" value="{{ doador_data.estado }}" readonly>
+            </label>
+            <label>
+                País
+                <input type="text" name="pais_residencial" value="{{ doador_data.pais }}" readonly>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div id="imuno-hemato" class="imuno-section tab-content" style="display: none;">
+    <h3>Imuno/Hemato</h3>
+    <br>
+    <div class="form-container">
+        <form class="donator-form">
+            <div class="form-group">
+                <label for="tipoSangue">Tipo Sanguíneo:</label>
+                <input type="text" id="tipoSangue" value="{{ doador_data.tipoSangue }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="fatorRH">Fator RH:</label>
+                <input type="text" id="fatorRH" value="{{ doador_data.fatorRH }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="fenotipo">Fenótipo:</label>
+                <input type="text" id="fenotipo" value="{{ doador_data.fenotipo }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="cde">CDE:</label>
+                <input type="text" id="cde" value="TBD" readonly>
+            </div>
+            <div class="form-group">
+                <label for="hemoglobina">Hemoglobina:</label>
+                <input type="text" id="hemoglobina" value="TBD" readonly>
+            </div>
+            <div class="form-group">
+                <label for="dfraco">D Fraco:</label>
+                <input type="text" id="dfraco" value="TBD" readonly>
+            </div>
+            <div class="form-group">
+                <label for="faalcizacao">Teste Falcização:</label>
+                <input type="text" id="faalcizacao" value="TBD" readonly>
+            </div>
+            <div class="form-group">
+                <label for="pai">P.A.I:</label>
+                <input type="text" id="pai" value="TBD" readonly>
+            </div>
+            <div class="form-group">
+                <label for="especial">TBD:</label>
+                <input type="checkbox" id="ativo" checked>
+            </div>
+            <div class="form-group">
+                <label for="neo">TBD:</label>
+                <input type="checkbox" id="ativo" checked>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="historico" class="history-section tab-content" style="display: none;">
+    <!-- Histórico de Doações -->
+    <div class="history-table">
+        <h3>Histórico de Doações</h3>
+        <br>
+        <table id="history-table">
+            <thead>
+                <tr>
+                    <th>Cód. Doação</th>
+                    <th>Tipo Doação</th>
+                    <th>Data</th>
+                    <th>Condição</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for historico in historico_data %}
+                <tr>
+                    <td>{{ historico.numDoacao }}</td>
+                    <td>{{ historico.tipo_doacao }}</td>
+                    <td>{{ historico.data|date:"d/m/Y" }}</td>
+                    <td>{{ historico.aptidao }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="alerta" class="alerts-section tab-content" style="display: none;">
+    <h3>Alertas Transfusionais TBD</h3>
+    <br>
+    <div class="alert-container">
+        <div class="alert transfusional">
+            <h4>Alto Risco de Reação Transfusional</h4>
+            <p>Histórico de reações graves a transfusões anteriores.</p>
+        </div>
+        <div class="alert transfusional">
+            <h4>Anticorpos Detectados</h4>
+            <p>Presença de anticorpos irregulares que exigem compatibilidade específica.</p>
+        </div>
+        <div class="alert blood-related">
+            <h4>Fenótipo Raro</h4>
+            <p>Fenótipo sanguíneo raro identificado: CcD.eeK-.</p>
+        </div>
     </div>
 </div>
 
@@ -140,6 +289,17 @@
 
         // Adiciona a classe 'active' ao botão clicado
         evt.currentTarget.classList.add('active');
+    }
+    // Função para visualizar detalhes da doação
+    function viewDetails(donationCode) {
+        alert(`Exibindo detalhes da doação: ${donationCode}`);
+        // Substituir este alert por lógica real para exibir detalhes
+    }
+
+    // Função para imprimir detalhes da doação
+    function printDonation(donationCode) {
+        alert(`Imprimindo informações da doação: ${donationCode}`);
+        // Substituir este alert por lógica real de impressão
     }
 </script>
 

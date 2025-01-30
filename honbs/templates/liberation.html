@@ -1,0 +1,65 @@
+{% extends "logged.html" %}
+{% block title %}
+    Liberação
+{% endblock %}
+{% load static %}
+{% block contents %}
+
+<link rel="stylesheet" href="{% static 'css/liberation.css' %}"/>
+<div class="batch-section">
+    <h1>Lote da Hemoterapia</h1>
+    <br>
+    <table id="batch-table">
+        <thead>
+            <tr>
+                <th>Sequência</th>
+                <th>Quantidade de Amostras</th>
+                <th>Data Inicial</th>
+                <th>Data Final</th>
+                <th>Data Geração</th>
+                <th>Data Saída</th>
+                <th>Temperatura Saída</th>
+                <th>Responsável Saída</th>
+                <th>Data Chegada</th>
+                <th>Temperatura Chegada</th>
+                <th>Responsável Chegada</th>
+                <th>Responsável Transporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lote in lotes %}
+            <tr data-url="{% url 'batch' lote.sequencia %}" class="clickable-row">
+                    <td>{{ lote.sequencia }}</td>
+                    <td>{{ lote.qt_amostras }}</td>
+                    <td>{{ lote.inicio }}</td>
+                    <td>{{ lote.fim }}</td>
+                    <td>{{ lote.geracao }}</td>
+                    <td>{{ lote.dt_saida }}</td>
+                    <td>
+                        {{ lote.temp_saida }}{% if lote.temp_saida != "N/A" %}°C{% endif %}
+                    </td>
+                    <td>{{ lote.resp_saida }}</td>
+                    <td>{{ lote.dt_chegada }}</td>
+                    <td>
+                        {{ lote.temp_chegada }}{% if lote.temp_chegada != "N/A" %}°C{% endif %}
+                    </td>
+                    <td>{{ lote.resp_chegada }}</td>
+                    <td>{{ lote.resp_transporte }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function () {
+                const url = this.getAttribute("data-url");
+                window.location.href = url;
+            });
+        });
+    });
+</script>
+{% endblock %}

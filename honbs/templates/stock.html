@@ -1,10 +1,22 @@
 {% extends "logged.html" %}
+{% block title %}
+    Estoque
+{% endblock %}
 {% load static %}
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/stock.css' %}"/>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.rawgit.com/rendro/easy-pie-chart/master/dist/jquery.easypiechart.min.js"></script>
+
+<!-- Tela de Loading -->
+<div id="loading-screen" style="display: none;">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <br>
+        <p>Carregando, por favor aguarde...</p>
+    </div>
+</div>
 
 <!-- Linha de texto com o total geral de bolsas -->
 <div class="total-bolsas">
@@ -20,7 +32,7 @@
                 <p class="percent_sang">{{ dados.porcentagem }}%</p>
             </div>
             <div class="qtd">{{ dados.soma_total }}/{{ dados.estoque_total }}</div>
-            <p class="blood-bag">Detalhes</p>
+            <p class="blood-bag" onclick="redirectToStockList('{{ fator_rh }}')">Detalhes</p>
             <ul class="blood-list" style="list-style: none;">
                 {% for bolsa in dados.bolsas %}
                 <li>{{ bolsa.tipo_bolsa }}: <b>{{ bolsa.qtd }}</b></li>
@@ -45,5 +57,17 @@
             animate: 800
         });
     });
+    function redirectToStockList(fatorRh) {
+        // Exibe a tela de loading
+        document.getElementById('loading-screen').style.display = 'flex';
+
+        // Adiciona o filtro como query parameter na URL
+        const url = `{% url 'stock_list' %}?fator_rh=${encodeURIComponent(fatorRh)}`;
+
+        // Redireciona para a URL após um pequeno atraso (opcional, para mostrar o loading)
+        setTimeout(() => {
+            window.location.href = url;
+        }, 10); // 300ms de atraso para garantir que o loading apareça visualmente
+    }
 </script>
 {% endblock %}

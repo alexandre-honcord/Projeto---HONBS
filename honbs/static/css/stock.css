@@ -1,8 +1,8 @@
-nav ul li:nth-child(7) {
+nav ul li:nth-child(6) {
     background-color: #fafafa;
 }
 
-nav ul li:nth-child(7) a i {
+nav ul li:nth-child(6) a i {
     color: #235db3;
 }
 
@@ -70,9 +70,16 @@ nav ul li:nth-child(7) a i {
 }
 
 .blood-bag {
+    cursor: pointer; 
     color: #6b53d6;
     font-size: 0.9rem;
     font-weight: 600;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
+.blood-bag:hover {
+    color: #4d3c99; /* Cor ao passar o mouse */
 }
 
 .blood-list {

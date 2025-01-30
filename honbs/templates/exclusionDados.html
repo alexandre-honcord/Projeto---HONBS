@@ -1,0 +1,39 @@
+
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="{% static 'css/base.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/logged.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/exclusionDados.css' %}"/>
+
+<div class="confirmation-container">
+    <h1>Confirmação de Dados</h1>
+    <p class="instruction-text">
+        Por favor, os seus dados pessoais abaixo estão corretos?
+    </p>
+
+    <div class="info-box">
+        <p><strong>Nome:</strong> João da Silva</p>
+        <p><strong>Data de Nascimento:</strong> 12/03/1985</p>
+        <p><strong>Tipo Sanguíneo:</strong> O+</p>
+        <p><strong>Documento:</strong> 123.456.789-00</p>
+    </div>
+
+    <div class="button-container">
+        <button class="btn-confirm" onclick="confirmData()">SIM <i class="fa-solid fa-thumbs-up"></i></button>
+        <button class="btn-correct" onclick="correctData()">NÃO <i class="fa-solid fa-thumbs-down"></i></button>
+    </div>
+</div>
+
+<script>
+    function confirmData() {
+        window.location.href = "{% url 'autoexclude' %}";
+    }
+
+    function correctData() {
+        alert("Leia novamente");
+        window.location.href = "#";
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends "logged.html" %}
+{% block title %}
+    Produção
+{% endblock %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/prodHemocomponente.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/header.css' %}"/>
+
+<br>
+<div class="back-button-container">
+    <a href="javascript:history.back()" class="back-button">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+<br>
+<div class="header">
+    <div class="header-left">
+        <h3>DOADOR</h3>
+        <div class="header-left-grid">
+            <div>
+                <p><strong>Nome:</strong> {{ hemocomponente.doador }}</p>
+                <p><strong>N° do Sangue:</strong> {{ hemocomponente.numero_sangue }}</p>
+            </div>
+            <div>
+                <p><strong>N° da Bolsa:</strong> {{ hemocomponente.numero_bolsa }}</p>
+                <p><strong>Sexo:</strong> {{ hemocomponente.sexo }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="prodHemo-section">
+    <!-- Tabela de Hemocomponentes -->
+    <div class="hemocomponents-section">
+        <h3>Hemocomponentes</h3>
+        <br>
+        <div class="hemocomponents-table">
+            <table id="hemocomponents-table">
+                <thead>
+                    <tr>
+                        <th>Sequência</th>
+                        <th>Hemocomponente</th>
+                        <th>Data de Produção</th>
+                        <th>Data de Vencimento</th>
+                        <th>Volume (ml)</th>
+                        <th>Filtrado</th>
+                        <th>Irradiado</th>
+                        <th>Aliquotado</th>
+                        <th>Lavado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in hemocomponente_data %}
+                    <tr>
+                        <td>{{ item.sequencia }}</td>
+                        <td>{{ item.hemocomponente }}</td>
+                        <td>{{ item.dt_producao|date:"d/m/Y" }}</td>
+                        <td>{{ item.dt_vencimento|date:"d/m/Y" }}</td>
+                        {% if item.volume %}
+                            <td>{{ item.volume }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        <td>
+                            {% if item.filtrado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.irradiado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.aliquotado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.lavado == 'S' %}
+                                <i class="fas fa-check-circle" style="color: green;"></i>
+                            {% else %}
+                                <i class="fas fa-times-circle" style="color: red;"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9">Nenhum hemocomponente encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabela de Exames -->
+    <div class="sorology-section">
+        <h3>Exames Realizados</h3>
+        <br>
+        <div class="sorology-tables">
+            <!-- Primeira Coluna -->
+            <table id="sorology-table-left">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Exame</th>
+                        <th>Data de Realização</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exame in exames_ordenados|slice:":10" %} <!-- Primeiros 10 exames -->
+                    <tr>
+                        <td>
+                            {% if exame.resultado %}
+                                <i class="fas fa-check-circle" style="color: green;" title="Pronto"></i>
+                            {% else %}
+                                <i class="fas fa-exclamation-circle" style="color: orange;" title="Não Liberado"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ exame.nome }}</td>
+                        <td>
+                            {% if exame.dt_realizado %}
+                                {{ exame.dt_realizado|date:"d/m/Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">Nenhum exame encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    
+            <!-- Segunda Coluna -->
+            <table id="sorology-table-right">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Exame</th>
+                        <th>Data de Realização</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for exame in exames_ordenados|slice:"10:" %} <!-- Exames a partir do 11 -->
+                    <tr>
+                        <td>
+                            {% if exame.resultado %}
+                                <i class="fas fa-check-circle" style="color: green;" title="Pronto"></i>
+                            {% else %}
+                                <i class="fas fa-exclamation-circle" style="color: orange;" title="Não Liberado"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ exame.nome }}</td>
+                        <td>
+                            {% if exame.dt_realizado %}
+                                {{ exame.dt_realizado|date:"d/m/Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">Nenhum exame encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

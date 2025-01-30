@@ -1,9 +1,13 @@
 {% extends "logged.html" %}
+{% block title %}
+    Fracionamento
+{% endblock %}
 {% load static %}
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/fractionation.css' %}"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
 
+<br>
 <div class="tabs-container">
     <button class="tab-btn active" onclick="showSection('production-section')">
         <i class="fas fa-hand-holding-medical"></i> Produção
@@ -15,10 +19,118 @@
 
 <div class="production-section">
     <h1>Produção</h1>
+    <br>
+    <table id="soro-table">
+        <thead>
+            <tr>
+                <th>Doador</th>
+                <th>N° de Doadores/Doações</th>
+                <th>Tipo de Doação</th>
+                <th>Data da Doação</th>
+                <th>N° do Sangue</th>
+                <th>N° da Bolsa</th>
+                <th>Lote</th>
+                <th>Tipo de Bolsa</th>
+                <th>Teste de Ácido Nucleico</th>
+                <th>Anticoagulante/Solução</th>
+                <th>Tipo Coleta</th>
+                <th>Volume(ml)</th>
+                <th>Sexo</th>
+                <th>Apto</th>
+                <th>Descarte</th>
+                <th>Produzido</th>
+                <th>Tempo de Coleta</th>
+                <th>Coletor</th>
+                <th>Conector</th>
+                <th>Fracionar Bolsa</th>
+                <th>Usuário Recebimento</th>
+                <th>Data de Recebimento</th>
+                <th>Sequência</th>
+                <th>Trali</th>
+                <th>Multigesta</th>
+                <th>ISBT</th>
+                <th>Código</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producao in producoes %}
+            <tr data-url="{% url 'prodHemo' producao.numero_sangue %}" class="clickable-row">
+                    <td>{{ producao.doador }}</td>
+                    <td>{{ producao.doacoes }}</td>
+                    <td>{{ producao.tipo_doacoes }}</td>
+                    <td>{{ producao.data }}</td>
+                    <td>{{ producao.numero_sangue }}</td>
+                    <td>{{ producao.numero_bolsa }}</td>
+                    <td>{{ producao.lote_bolsa }}</td>
+                    <td>{{ producao.tipo_bolsa }}</td>
+                    <td>{{ producao.teste_acido_nucleico }}</td>
+                    <td>{{ producao.anticoagulante }}</td>
+                    <td>{{ producao.tipo_coleta }}</td>
+                    <td>{{ producao.volume }}</td>
+                    <td>{{ producao.sexo }}</td>
+                    <td>{{ producao.apto }}</td>
+                    <td>{{ producao.descarte }}</td>
+                    <td>{{ producao.produzido }}</td>
+                    <td>{{ producao.tempo_coleta }}</td>
+                    <td>{{ producao.coletor }}</td>
+                    <td>{{ producao.conector }}</td>
+                    <td>{{ producao.fracionar_bolsa }}</td>
+                    <td>{{ producao.usuario_recebimento }}</td>
+                    <td>{{ producao.data_recebimento }}</td>
+                    <td>{{ producao.sequencia }}</td>
+                    <td>{{ producao.trali }}</td>
+                    <td>{{ producao.multigesta }}</td>
+                    <td>{{ producao.isbt }}</td>
+                    <td>{{ producao.codigo }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <div class="batch-section hidden">
-    <h1>Lote</h1>
+    <h1>Lote da Hemoterapia</h1>
+    <br>
+    <table id="batch-table">
+        <thead>
+            <tr>
+                <th>Sequência</th>
+                <th>Quantidade de Amostras</th>
+                <th>Data Inicial</th>
+                <th>Data Final</th>
+                <th>Data Geração</th>
+                <th>Data Saída</th>
+                <th>Temperatura Saída</th>
+                <th>Responsável Saída</th>
+                <th>Data Chegada</th>
+                <th>Temperatura Chegada</th>
+                <th>Responsável Chegada</th>
+                <th>Responsável Transporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lote in lotes %}
+            <tr data-url="{% url 'batch' lote.sequencia %}" class="clickable-row">
+                    <td>{{ lote.sequencia }}</td>
+                    <td>{{ lote.qt_amostras }}</td>
+                    <td>{{ lote.inicio }}</td>
+                    <td>{{ lote.fim }}</td>
+                    <td>{{ lote.geracao }}</td>
+                    <td>{{ lote.dt_saida }}</td>
+                    <td>
+                        {{ lote.temp_saida }}{% if lote.temp_saida != "N/A" %}°C{% endif %}
+                    </td>
+                    <td>{{ lote.resp_saida }}</td>
+                    <td>{{ lote.dt_chegada }}</td>
+                    <td>
+                        {{ lote.temp_chegada }}{% if lote.temp_chegada != "N/A" %}°C{% endif %}
+                    </td>
+                    <td>{{ lote.resp_chegada }}</td>
+                    <td>{{ lote.resp_transporte }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <script>
@@ -37,5 +149,16 @@
         // Adiciona a classe 'active' ao botão clicado
         document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
     }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function () {
+                const url = this.getAttribute("data-url");
+                window.location.href = url;
+            });
+        });
+    });
 </script>
 {% endblock %}

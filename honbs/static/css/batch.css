@@ -1,0 +1,121 @@
+nav ul li:nth-child(3) {
+    background-color: #fafafa;
+}
+
+nav ul li:nth-child(3) a i {
+    color: #235db3;
+}
+
+.back-button-container {
+    margin-bottom: 1.5rem;
+}
+
+.back-button {
+    display: inline-flex; /* Certifica que o conteúdo interno é flexível */
+    align-items: center; /* Alinha o ícone e o texto verticalmente */
+    gap: 0.5rem; /* Espaço entre o ícone e o texto */
+    padding: 0.5rem 1rem;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+}
+
+.back-button i {
+    font-size: 1.2rem; /* Ajusta o tamanho do ícone, se necessário */
+}
+
+.back-button:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+.exam-section {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.table-container {
+    overflow-x: auto; /* Adiciona rolagem horizontal se necessário */
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: #fff; /* Fundo branco para destaque */
+    border: 1px solid #ddd; /* Borda para separar a tabela */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para aparência elegante */
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaços entre células */
+    font-size: 14px;
+    text-align: center; /* Centraliza texto em todas as células */
+}
+
+table th, table td {
+    padding: 8px; /* Reduz o espaçamento interno para alinhamento mais compacto */
+    border: 1px solid #ddd; /* Linha divisória entre células */
+    white-space: nowrap; /* Evita quebra de texto em células */
+}
+
+table th {
+    background-color: #f2f2f2; /* Fundo claro para o cabeçalho */
+    font-weight: bold;
+    text-transform: uppercase; /* Letras maiúsculas para o cabeçalho */
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Fundo alternado para linhas pares */
+}
+
+table tr:nth-child(odd) {
+    background-color: #ffffff; /* Fundo branco para linhas ímpares */
+}
+
+tbody tr {
+    transition: background-color 0.3s;
+}
+
+tbody tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
+}
+
+table tbody td {
+    cursor: default; /* Padrão: não permitir clique */
+}
+
+table tbody td.clickable {
+    cursor: pointer; /* Permitir clique apenas na primeira coluna */
+    color: blue; /* Destacar como clicável */
+    text-decoration: underline; /* Opcional, para destacar o link */
+}
+
+/* Estilo para as linhas com número de sangue */
+.has-sangue {
+    background-color: #d4f8d4; /* Verde claro */
+    cursor: pointer; /* Indicador de clique */
+    transition: background-color 0.3s ease; /* Suaviza o efeito de hover */
+}
+
+.has-sangue:hover {
+    background-color: #c3f2c3; /* Hover para as linhas clicáveis */
+}
+
+/* Estilo para as linhas sem número de sangue */
+.no-sangue {
+    background-color: #f9f9f9; /* Cinza claro */
+    cursor: not-allowed; /* Cursor bloqueado */
+    color: #a9a9a9; /* Texto em cinza para indicar inatividade */
+}
+
+.no-sangue:hover {
+    background-color: #f9f9f9; /* Sem mudança ao passar o mouse */
+}

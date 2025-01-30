@@ -1,0 +1,85 @@
+{% extends "logged.html" %}
+{% block title %}
+    Exames do Lote
+{% endblock %}
+{% load static %}
+{% block contents %}
+
+<link rel="stylesheet" href="{% static 'css/batch.css' %}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+<br>
+<div class="back-button-container">
+    <a href="{% url 'fractionation' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+<br>
+<div class="exam-section">
+    <h1>Exames do Lote {{ grouped_data.0.NR_SEQ_LOTE }}</h1>
+    <br>
+    <div class="table-container">
+        <form method="get" id="filter-form">
+            <label>
+                <input type="checkbox" name="mostrar_inativos" 
+                    onchange="document.getElementById('filter-form').submit();" 
+                    {% if mostrar_inativos %}checked{% endif %}>
+                Mostrar não liberados
+            </label>
+        </form>
+        <br>
+        <table id="batch-table">
+            <thead>
+                <tr>
+                    <th>N° do Exame</th>
+                    <th>Sequência</th>
+                    <th>Tipo de Exame</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in grouped_data %}
+                <tr>
+                    <td rowspan="{{ group.exames|length }}" class="clickable">
+                        {% if group.numeroSangue != "N/A" %}
+                            <a href="{% url 'prodHemo' group.numeroSangue %}" title="Ver Hemocomponentes">
+                                {{ group.NR_SEQ_EXAME_LOTE }}
+                                <i class="fas fa-check-circle" style="color: lightgreen;" title="Número de Sangue Disponível"></i>
+                            </a>
+                        {% else %}
+                            {{ group.NR_SEQ_EXAME_LOTE }}
+                            <i class="fas fa-times-circle" style="color: red;" title="Número de Sangue Indisponível"></i>
+                        {% endif %}
+                    </td>
+                    {% for exame in group.exames %}
+                        {% if not forloop.first %}
+                        <tr>
+                        {% endif %}
+                            <td>{{ exame.NR_SEQUENCIA }}</td>
+                            <td>{{ exame.NR_SEQ_EXAME }}</td>
+                        </tr>
+                    {% endfor %}
+                {% empty %}
+                <tr>
+                    <td colspan="3">Nenhum dado encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll(".clickable-row");
+    rows.forEach(row => {
+        row.addEventListener("click", function () {
+            if (!this.classList.contains("no-sangue")) {
+                const url = this.getAttribute("data-url");
+                if (url) {
+                    window.location.href = url;
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "logged.html" %}
+{% block title %}
+    Detalhes do Estoque
+{% endblock %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/stock_list.css' %}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+
+<br>
+<div class="back-button-container">
+    <a href="{% url 'stock' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+<br>
+<div class="header">
+    <div class="header-blood">
+        <h2 class="blood-type">{{ fator_rh }}</h2>
+    </div>
+</div>
+<br>
+
+<div class="table-container">
+    <table id="donations-table">
+        <thead>
+            <tr>
+                <th>Ação</th>
+                <th>N° Sangue</th>
+                <th>Quantidade</th>
+                <th>N° Produção</th>
+                <th>Data Vencimento</th>
+                <th>Vencimento</th>
+                <th>Tipo</th>
+                <th>Tipagem</th>
+                <th>Resultado CDE</th>
+                <th>Volume(ml)</th>
+                <th>Filtrado</th>
+                <th>Irradiado</th>
+                <th>Lavado</th>
+                <th>Aliquotado</th>
+                <th>Local</th>
+                <th>Estoque Minimo</th>
+                <th>Estoque Máximo</th>
+                <th>Atendimento</th>
+                <th>Nome</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr class="{{ stock.row_class }}">
+                <td class="action-icons">
+                    <a href="#" class="delete-stock" title="Excluir">
+                        <i class="fas fa-trash-alt" style="color: red;"></i>
+                    </a>
+                </td>
+                <td>{{ stock.NR_SANGUE }}</td>
+                <td>{{ stock.QTD }}</td>
+                <td>{{ stock.NR_SEQ_PRODUCAO }}</td>
+                <td>{{ stock.DT_VENCIMENTO }}</td>
+                <td>{{ stock.EXPIRY_TEXT }}</td>
+                <td>{{ stock.DS_DERIVADO }}</td>
+                <td>{{ stock.SANGUE }}</td>
+                <td>{{ stock.RESULTADO_EXAME_CDE }}</td>
+                <td>{{ stock.QT_VOLUME }}ml</td>
+                <td>{{ stock.IE_FILTRADO|safe }}</td>
+                <td>{{ stock.IE_IRRADIADO|safe }}</td>
+                <td>{{ stock.IE_LAVADO|safe }}</td>
+                <td>{{ stock.IE_ALIQUOTADO|safe }}</td>
+                <td>{{ stock.LOCAL }}</td>
+                <td>{{ stock.QT_ESTOQUE_MINIMO }}</td>
+                <td>{{ stock.QT_ESTOQUE_MAXIMO }}</td>
+                <td>{{ stock.NR_ATENDIMENTO|safe }}</td>
+                <td>{{ stock.NM_PESSOA_FISICA|safe }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Seleciona todas as lixeiras
+        const deleteButtons = document.querySelectorAll(".delete-stock");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault(); // Evita que a página recarregue ao clicar no link
+
+                const row = this.closest("tr"); // Pega a linha da tabela onde a lixeira foi clicada
+                row.style.transition = "opacity 0.3s ease"; // Animação de desaparecimento
+                row.style.opacity = "0"; 
+
+                setTimeout(() => {
+                    row.remove(); // Remove a linha após a animação
+                }, 300);
+            });
+        });
+    });
+</script>
+{% endblock %}

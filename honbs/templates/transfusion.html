@@ -1,7 +1,94 @@
 {% extends "logged.html" %}
+{% block title %}
+    Transfusão
+{% endblock %}
 {% load static %}
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/transfusion.css' %}"/>
 
-Transfusão
+<div class="receiver-section">
+    <h1>Receptores</h1>
+    <br>
+    <table id="soro-table">
+        <thead>
+            <tr>
+                <th>Data de Transfusão</th>
+                <th>Receptor</th>
+                <th>Data de Nascimento</th>
+                <th>Idade</th>
+                <th>Convênio</th>
+                <th>Tipo de Sangue</th>
+                <th>Hospital</th>
+                <th>Fenótipo</th>
+                <th>Pendências</th>
+                <th>Reação</th>
+                <th>Médico Requisitante</th>
+                <th>Realizado por</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transfusao in transfusao_data %}
+            <tr data-url="{% url 'infoTransfusion' transfusao.CD_PESSOA_FISICA %}" class="clickable-row">
+                <td>
+                    {% if transfusao.IE_TRANSF_INICIADA|default:"N" == "S" and transfusao.DT_INF_INICIADA %}
+                        {{ transfusao.DT_INF_INICIADA }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>{{ transfusao.NM_RECEPTOR }}</td>
+                <td>
+                    {% if transfusao.DS_NASCIMENTO %}
+                        {{ transfusao.DS_NASCIMENTO|date:"d/m/Y" }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>{{ transfusao.DS_IDADE }} anos</td>
+                <td>{{ transfusao.DS_CONVENIO }}</td>
+                <td>{{ transfusao.DS_SANGUE }}</td>
+                <td>{{ transfusao.DS_SETOR_UNIDADE }}</td>
+                <td>{{ transfusao.DS_FENOTIPO }}</td>                
+                <td>
+                    {% if transfusao.IE_PEND_PACIENTE == "Sim" %}
+                        <i class="fas fa-check-circle" style="color: green;" title="Sim"></i>
+                    {% elif transfusao.IE_PEND_PACIENTE == "Não" %}
+                        <i class="fas fa-times-circle" style="color: red;" title="Não"></i>
+                    {% else %}
+                        <span title="Não informado">N/A</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if transfusao.DS_IE_REACAO == "Sim" %}
+                        <i class="fas fa-check-circle" style="color: green;" title="Sim"></i>
+                    {% elif transfusao.DS_IE_REACAO == "Não" %}
+                        <i class="fas fa-times-circle" style="color: red;" title="Não"></i>
+                    {% else %}
+                        <span title="Não informado">N/A</span>
+                    {% endif %}
+                </td>
+                <td>{{ transfusao.NM_MEDICO_REQUISITANTE }}</td>
+                <td>{{ transfusao.NM_PF_REALIZOU }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11">Nenhuma transfusão encontrada nos últimos 30 dias.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = document.querySelectorAll('.clickable-row');
+        rows.forEach(row => {
+            row.addEventListener('click', function () {
+                const url = this.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

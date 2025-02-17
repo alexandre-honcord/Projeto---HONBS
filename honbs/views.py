@@ -45,7 +45,7 @@ def main(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'home.html', context)
+    return render(request, 'inicio/home.html', context)
 
 
 @csrf_protect
@@ -90,7 +90,7 @@ def home(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'home.html', context)
+    return render(request, 'inicio/home.html', context)
 
 
 @login_required
@@ -100,7 +100,7 @@ def reports(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'reports.html', context)
+    return render(request, 'relatorios/reports.html', context)
 
 
 @login_required
@@ -155,7 +155,7 @@ def donator(request, codigo):
         'doador_data': doador_data,
         'historico_data': historico_data,
     }
-    return render(request, 'donator.html', context)
+    return render(request, 'doacao/donator.html', context)
 
 @login_required
 def donations(request):
@@ -215,7 +215,7 @@ def donations(request):
         'data_inicial': data_inicial.isoformat(),
         'data_final': data_final.isoformat(),
     }
-    return render(request, 'donations.html', context)
+    return render(request, 'doacao/donations.html', context)
 
 @login_required
 def stock(request):
@@ -277,7 +277,7 @@ def stock(request):
         'total_geral_bolsas': total_geral_bolsas,  # Total geral de bolsas
     }
 
-    return render(request, 'stock.html', context)
+    return render(request, 'estoque/stock.html', context)
 
 @login_required
 def stock_list(request):
@@ -329,7 +329,7 @@ def stock_list(request):
         'stocks': stock_data,
         'fator_rh': fator_rh,
     }
-    return render(request, 'stock_list.html', context)
+    return render(request, 'estoque/stock_list.html', context)
 
 @login_required
 def fractionation(request):
@@ -370,7 +370,7 @@ def fractionation(request):
         'data_inicial': thirty_days_ago.isoformat(),
         'data_final': today.isoformat(),
     }
-    return render(request, 'fractionation.html', context)
+    return render(request, 'fracionamento/fractionation.html', context)
 
 @login_required
 def prodHemocomponente(request, codigo):
@@ -462,7 +462,7 @@ def prodHemocomponente(request, codigo):
         'hemocomponente_data': list(hemocomponentes_unicos.values()),
         'exames_ordenados': exames_ordenados,
     }
-    return render(request, 'prodHemocomponente.html', context)
+    return render(request, 'fracionameto/prodHemocomponente.html', context)
 
 @login_required
 def batch(request, sequencia):
@@ -505,7 +505,7 @@ def batch(request, sequencia):
         'grouped_data': grouped_data,
         'mostrar_inativos': mostrar_inativos,
     }
-    return render(request, 'batch.html', context)
+    return render(request, 'fracionamento/batch.html', context)
 
 @login_required
 def alertas(request):
@@ -514,7 +514,7 @@ def alertas(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'alerts.html', context)
+    return render(request, 'alertas/alerts.html', context)
 
 @login_required
 def qualidade(request):
@@ -523,7 +523,7 @@ def qualidade(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'quality.html', context)
+    return render(request, 'qualidade/quality.html', context)
 
 @login_required
 def autoexclude(request):
@@ -532,7 +532,7 @@ def autoexclude(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'autoexclude.html', context)
+    return render(request, 'exclusao/autoexclude.html', context)
 
 @login_required
 def autoexclusion(request):
@@ -541,7 +541,7 @@ def autoexclusion(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'autoexclusion.html', context)
+    return render(request, 'exclusao/autoexclusion.html', context)
 
 @login_required
 def exclusionDados(request):
@@ -571,7 +571,7 @@ def capture(request):
         'foto': user.foto.url if user.foto else None,
         'captacao_data': captacao_data,
     }
-    return render(request, 'capture.html', context)
+    return render(request, 'captacao/capture.html', context)
 
 @login_required
 def transfusion(request):
@@ -600,7 +600,7 @@ def transfusion(request):
         'foto': user.foto.url if user.foto else None,  
         'transfusao_data': transfusao_data,
     }
-    return render(request, 'transfusion.html', context)
+    return render(request, 'transfusao/transfusion.html', context)
 
 @login_required
 def infoTransfusion(request, codigo):
@@ -633,37 +633,16 @@ def infoTransfusion(request, codigo):
         'transfusao_data': transfusao_data,
         'header': header,
     }
-    return render(request, 'infoTransfusion.html', context) 
+    return render(request, 'transfusao/infoTransfusion.html', context) 
 
 @login_required
 def liberation(request):
     user = request.user
-
-    # Calcular o intervalo dos últimos 30 dias
-    today = date.today()
-    thirty_days_ago = today - timedelta(days=30)
-
-    # Chamar a função para buscar os lotes dos últimos 30 dias
-    lotes_data = lista_lotes(data_inicial=thirty_days_ago.isoformat(), data_final=today.isoformat())
-
-    # Processar e formatar os dados
-    for lote in lotes_data:
-        for key in ["inicio", "fim", "geracao", "dt_saida", "dt_chegada"]:
-            if key in lote:
-                lote[key] = format_datetime(lote[key]) if lote[key] else "N/A"
-        for key in ["resp_transporte", "resp_chegada", "temp_chegada"]:
-            if key in lote and lote[key] is None:
-                lote[key] = "N/A"
-
-    # Contexto atualizado para o template
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,
-        'lotes': lotes_data,
-        'data_inicial': thirty_days_ago.isoformat(),
-        'data_final': today.isoformat(),
+        'foto': user.foto.url if user.foto else None
     }
-    return render(request, 'liberation.html', context)
+    return render(request, 'liberacao/liberation.html', context)
 
 @login_required
 def registrations(request):
@@ -724,7 +703,7 @@ def registrations(request):
         'stock_data': dict(stock_data),  # Passa os dados agrupados
     }
 
-    return render(request, 'registrations.html', context)
+    return render(request, 'cadastros/registrations.html', context)
 
 @login_required
 def edit_stock(request, hemocomponente_id):

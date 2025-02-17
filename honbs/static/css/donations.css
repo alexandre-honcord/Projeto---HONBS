@@ -213,8 +213,8 @@ table tr:hover {
     color: yellow;
 }
 
-.status-icon.red {
-    color: red;
+.status-icon.blue {
+    color: blue;
 }
 
 .status-icon.gray {

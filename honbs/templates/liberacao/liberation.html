@@ -1,0 +1,179 @@
+{% extends "logged.html" %}
+{% block title %}
+    Liberação
+{% endblock %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/liberation.css' %}"/>
+
+<br>
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="showSection('exam-section')">
+        <i class="fa-solid fa-dna"></i> Exames Pendentes
+    </button>
+    <button class="tab-btn" onclick="showSection('bag-section')">
+        <i class="fas fa-vials"></i> Bolsas Pendentes
+    </button>
+</div>
+
+<div class="exam-section">
+    <h1>Exames</h1>
+    <br>
+    <table id="soro-table" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>N° Exame</th> 
+                <th>Data de Realização</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><i class="fas fa-exclamation-circle text-warning"></i> Pendente</td>
+                <td>123456</td>
+                <td>25/01/2024</td>
+                <td>
+                    <button class="btn btn-success btn-sm" title="Liberar">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td><i class="fas fa-exclamation-circle text-warning"></i> Pendente</td>
+                <td>654321</td>
+                <td>27/01/2024</td>
+                <td>
+                    <button class="btn btn-success btn-sm" title="Liberar">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td><i class="fas fa-exclamation-circle text-warning"></i> Pendente</td>
+                <td>789012</td>
+                <td>28/01/2024</td>
+                <td>
+                    <button class="btn btn-success btn-sm" title="Liberar">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td><i class="fas fa-check-circle text-success"></i> Liberado</td>
+                <td>345678</td>
+                <td>29/01/2024</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="bag-section hidden">
+    <h1>Bolsas</h1>
+    <br>
+    <table id="soro-table">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>N° Bolsa</th> 
+                <th>Data de Realização</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><i class="fas fa-exclamation-circle text-warning"></i> Pendente</td>
+                <td>123456</td>
+                <td>25/01/2024</td>
+                <td>
+                    <button class="btn btn-success btn-sm" title="Liberar">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td><i class="fas fa-exclamation-circle text-warning"></i> Pendente</td>
+                <td>654321</td>
+                <td>27/01/2024</td>
+                <td>
+                    <button class="btn btn-success btn-sm" title="Liberar">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td><i class="fas fa-exclamation-circle text-warning"></i> Pendente</td>
+                <td>789012</td>
+                <td>28/01/2024</td>
+                <td>
+                    <button class="btn btn-success btn-sm" title="Liberar">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td><i class="fas fa-check-circle text-success"></i> Liberado</td>
+                <td>345678</td>
+                <td>29/01/2024</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function showSection(sectionClass) {
+        // Esconde todas as seções
+        const sections = document.querySelectorAll('.exam-section, .bag-section');
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Remove a classe 'active' de todos os botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Mostra a seção clicada
+        document.querySelector(`.${sectionClass}`).classList.remove('hidden');
+
+        // Adiciona a classe 'active' ao botão clicado
+        document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", function () {
+                const url = this.getAttribute("data-url");
+                window.location.href = url;
+            });
+        });
+    });
+</script>
+{% endblock %}

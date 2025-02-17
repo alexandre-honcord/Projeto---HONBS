@@ -28,7 +28,6 @@ def base_view(request):
     logout_view(request)
     return render(request, 'base.html')
 
-
 @login_required
 def logout_view(request):
     logout(request)  # Desloga o usuário
@@ -36,7 +35,6 @@ def logout_view(request):
     response.delete_cookie('sessionid')  # Exclui o cookie de sessão
     # Redireciona para a página inicial ou qualquer outra página desejada
     return redirect('base_view')
-
 
 @login_required
 def main(request):
@@ -46,7 +44,6 @@ def main(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'inicio/home.html', context)
-
 
 @csrf_protect
 def ldap_login(request):
@@ -82,7 +79,6 @@ def ldap_login(request):
             return JsonResponse({'success': False, 'message': 'Erro! Usuário ou senha incorretos.'})
     return JsonResponse({'success': False, 'message': 'Erro! Entre em contato com o suporte!'})
 
-
 @login_required
 def home(request):
     user = request.user
@@ -91,17 +87,6 @@ def home(request):
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
     return render(request, 'inicio/home.html', context)
-
-
-@login_required
-def reports(request):
-    user = request.user
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
-    }
-    return render(request, 'relatorios/reports.html', context)
-
 
 @login_required
 def donator(request, codigo):
@@ -216,120 +201,6 @@ def donations(request):
         'data_final': data_final.isoformat(),
     }
     return render(request, 'doacao/donations.html', context)
-
-@login_required
-def stock(request):
-    user = request.user
-    consulta_estoque = []
-    consulta_agrupada = {}
-    total_geral_bolsas = 0
-
-    # Estoque total personalizado para cada fator RH
-    estoque_total_por_fator = {
-        'A+': 500,
-        'A-': 100,
-        'B+': 200,
-        'B-': 50,
-        'AB+': 100,
-        'AB-': 30,
-        'O+': 600,
-        'O-': 100,
-    }
-
-    # Ordem desejada dos fatores RH
-    ordem_fator_rh = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-']
-
-    # Executa a consulta
-    consulta_estoque = estoque(request)  # Chama a função estoque
-
-    if consulta_estoque:
-        # Transformar em lista de dicionários
-        consulta_estoque = [
-            {'qtd': row[0], 'tipo_bolsa': row[1], 'fator_rh': row[2]}
-            for row in consulta_estoque
-        ]
-
-        # Agrupar por fator RH
-        for fator_rh, items in groupby(sorted(consulta_estoque, key=itemgetter('fator_rh')), key=itemgetter('fator_rh')):
-            bolsas = list(items)
-            soma_total = sum(bolsa['qtd'] for bolsa in bolsas)  # Soma total por fator RH
-            total_geral_bolsas += soma_total  # Adiciona ao total geral
-            total_fator_rh = estoque_total_por_fator.get(fator_rh, 500)  # Pega o total ou usa 500 como padrão
-            porcentagem = round((soma_total / total_fator_rh) * 100, 2)  # Calcula a porcentagem
-            consulta_agrupada[fator_rh] = {
-                'bolsas': bolsas,
-                'soma_total': soma_total,
-                'estoque_total': total_fator_rh,
-                'porcentagem': porcentagem
-            }
-
-    # Reorganizar os dados agrupados de acordo com a ordem desejada
-    consulta_agrupada_ordenada = {
-        fator_rh: consulta_agrupada[fator_rh]
-        for fator_rh in ordem_fator_rh
-        if fator_rh in consulta_agrupada
-    }
-
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,
-        'estoque': consulta_agrupada_ordenada,  # Dados agrupados ordenados
-        'total_geral_bolsas': total_geral_bolsas,  # Total geral de bolsas
-    }
-
-    return render(request, 'estoque/stock.html', context)
-
-@login_required
-def stock_list(request):
-    user = request.user
-    fator_rh = request.GET.get('fator_rh')
-
-    stock_data = lista_estoque(fator_rh=fator_rh)
-
-    # Processar e formatar os dados
-    for stock in stock_data:
-        # Garantir que today seja um objeto date
-        today = datetime.now().date()
-
-        # Garantir que vencimento seja um objeto date
-        if isinstance(stock["DT_VENCIMENTO"], datetime):
-            vencimento = stock["DT_VENCIMENTO"].date()
-        else:
-            vencimento = datetime.strptime(stock["DT_VENCIMENTO"], "%Y-%m-%d").date()
-
-        # Calcular os dias para o vencimento
-        days_to_expiry = (vencimento - today).days
-
-        # Determinar o texto e a classe da linha com base nos dias para o vencimento
-        if days_to_expiry < 7:
-            stock["row_class"] = "danger"
-            stock["EXPIRY_TEXT"] = "Menos que 7 dias"
-        elif days_to_expiry < 30:
-            stock["row_class"] = "light-red"
-            stock["EXPIRY_TEXT"] = "Menos que 30 dias"
-        elif days_to_expiry < 90:
-            stock["row_class"] = "light-yellow"
-            stock["EXPIRY_TEXT"] = "Menos que 90 dias"
-        else:
-            stock["row_class"] = "light-green"
-            stock["EXPIRY_TEXT"] = "Mais que 90 dias"
-
-        stock["DT_VENCIMENTO"] = format_datetime(stock["DT_VENCIMENTO"])
-        for key in ["IE_FILTRADO", "IE_IRRADIADO", "IE_LAVADO", "IE_ALIQUOTADO", "NR_ATENDIMENTO", "NM_PESSOA_FISICA", "RESULTADO_EXAME_CDE"]:
-            if stock[key] == "N":
-                stock[key] = '<i class="fas fa-times-circle" style="color: red;"></i>'
-            elif stock[key] == "S":
-                stock[key] = '<i class="fas fa-check-circle" style="color: green;"></i>'
-            elif stock[key] is None:
-                stock[key] = "N/A"
-
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,
-        'stocks': stock_data,
-        'fator_rh': fator_rh,
-    }
-    return render(request, 'estoque/stock_list.html', context)
 
 @login_required
 def fractionation(request):
@@ -508,70 +379,13 @@ def batch(request, sequencia):
     return render(request, 'fracionamento/batch.html', context)
 
 @login_required
-def alertas(request):
+def liberation(request):
     user = request.user
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+        'foto': user.foto.url if user.foto else None
     }
-    return render(request, 'alertas/alerts.html', context)
-
-@login_required
-def qualidade(request):
-    user = request.user
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
-    }
-    return render(request, 'qualidade/quality.html', context)
-
-@login_required
-def autoexclude(request):
-    user = request.user
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
-    }
-    return render(request, 'exclusao/autoexclude.html', context)
-
-@login_required
-def autoexclusion(request):
-    user = request.user
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
-    }
-    return render(request, 'exclusao/autoexclusion.html', context)
-
-@login_required
-def exclusionDados(request):
-    user = request.user
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
-    }
-    return render(request, 'exclusionDados.html', context)
-
-@login_required
-def capture(request):
-    user = request.user
-
-    # Obter os dados do doador
-    captacao_data = lista_captaçao()
-
-    # Formatar datas e tratar valores nulos
-    for doador in captacao_data:
-        if "dt_doacao" in doador:
-            doador["dt_doacao"] = format_date(doador["dt_doacao"])
-        if "tipo_sangue" not in doador or doador["tipo_sangue"] is None:
-            doador["tipo_sangue"] = "#"
-
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,
-        'captacao_data': captacao_data,
-    }
-    return render(request, 'captacao/capture.html', context)
+    return render(request, 'liberacao/liberation.html', context)
 
 @login_required
 def transfusion(request):
@@ -636,13 +450,166 @@ def infoTransfusion(request, codigo):
     return render(request, 'transfusao/infoTransfusion.html', context) 
 
 @login_required
-def liberation(request):
+def stock(request):
+    user = request.user
+    consulta_estoque = []
+    consulta_agrupada = {}
+    total_geral_bolsas = 0
+
+    # Estoque total personalizado para cada fator RH
+    estoque_total_por_fator = {
+        'A+': 500,
+        'A-': 100,
+        'B+': 200,
+        'B-': 50,
+        'AB+': 100,
+        'AB-': 30,
+        'O+': 600,
+        'O-': 100,
+    }
+
+    # Ordem desejada dos fatores RH
+    ordem_fator_rh = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-']
+
+    # Executa a consulta
+    consulta_estoque = estoque(request)  # Chama a função estoque
+
+    if consulta_estoque:
+        # Transformar em lista de dicionários
+        consulta_estoque = [
+            {'qtd': row[0], 'tipo_bolsa': row[1], 'fator_rh': row[2]}
+            for row in consulta_estoque
+        ]
+
+        # Agrupar por fator RH
+        for fator_rh, items in groupby(sorted(consulta_estoque, key=itemgetter('fator_rh')), key=itemgetter('fator_rh')):
+            bolsas = list(items)
+            soma_total = sum(bolsa['qtd'] for bolsa in bolsas)  # Soma total por fator RH
+            total_geral_bolsas += soma_total  # Adiciona ao total geral
+            total_fator_rh = estoque_total_por_fator.get(fator_rh, 500)  # Pega o total ou usa 500 como padrão
+            porcentagem = round((soma_total / total_fator_rh) * 100, 2)  # Calcula a porcentagem
+            consulta_agrupada[fator_rh] = {
+                'bolsas': bolsas,
+                'soma_total': soma_total,
+                'estoque_total': total_fator_rh,
+                'porcentagem': porcentagem
+            }
+
+    # Reorganizar os dados agrupados de acordo com a ordem desejada
+    consulta_agrupada_ordenada = {
+        fator_rh: consulta_agrupada[fator_rh]
+        for fator_rh in ordem_fator_rh
+        if fator_rh in consulta_agrupada
+    }
+
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'estoque': consulta_agrupada_ordenada,  # Dados agrupados ordenados
+        'total_geral_bolsas': total_geral_bolsas,  # Total geral de bolsas
+    }
+
+    return render(request, 'estoque/stock.html', context)
+
+@login_required
+def stock_list(request):
+    user = request.user
+    fator_rh = request.GET.get('fator_rh')
+
+    stock_data = lista_estoque(fator_rh=fator_rh)
+
+    # Processar e formatar os dados
+    for stock in stock_data:
+        # Garantir que today seja um objeto date
+        today = datetime.now().date()
+
+        # Garantir que vencimento seja um objeto date
+        if isinstance(stock["DT_VENCIMENTO"], datetime):
+            vencimento = stock["DT_VENCIMENTO"].date()
+        else:
+            vencimento = datetime.strptime(stock["DT_VENCIMENTO"], "%Y-%m-%d").date()
+
+        # Calcular os dias para o vencimento
+        days_to_expiry = (vencimento - today).days
+
+        # Determinar o texto e a classe da linha com base nos dias para o vencimento
+        if days_to_expiry < 7:
+            stock["row_class"] = "danger"
+            stock["EXPIRY_TEXT"] = "Menos que 7 dias"
+        elif days_to_expiry < 30:
+            stock["row_class"] = "light-red"
+            stock["EXPIRY_TEXT"] = "Menos que 30 dias"
+        elif days_to_expiry < 90:
+            stock["row_class"] = "light-yellow"
+            stock["EXPIRY_TEXT"] = "Menos que 90 dias"
+        else:
+            stock["row_class"] = "light-green"
+            stock["EXPIRY_TEXT"] = "Mais que 90 dias"
+
+        stock["DT_VENCIMENTO"] = format_datetime(stock["DT_VENCIMENTO"])
+        for key in ["IE_FILTRADO", "IE_IRRADIADO", "IE_LAVADO", "IE_ALIQUOTADO", "NR_ATENDIMENTO", "NM_PESSOA_FISICA", "RESULTADO_EXAME_CDE"]:
+            if stock[key] == "N":
+                stock[key] = '<i class="fas fa-times-circle" style="color: red;"></i>'
+            elif stock[key] == "S":
+                stock[key] = '<i class="fas fa-check-circle" style="color: green;"></i>'
+            elif stock[key] is None:
+                stock[key] = "N/A"
+
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'stocks': stock_data,
+        'fator_rh': fator_rh,
+    }
+    return render(request, 'estoque/stock_list.html', context)
+
+@login_required
+def capture(request):
+    user = request.user
+
+    # Obter os dados do doador
+    captacao_data = lista_captaçao()
+
+    # Formatar datas e tratar valores nulos
+    for doador in captacao_data:
+        if "dt_doacao" in doador:
+            doador["dt_doacao"] = format_date(doador["dt_doacao"])
+        if "tipo_sangue" not in doador or doador["tipo_sangue"] is None:
+            doador["tipo_sangue"] = "#"
+
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'captacao_data': captacao_data,
+    }
+    return render(request, 'captacao/capture.html', context)
+
+@login_required
+def qualidade(request):
     user = request.user
     context = {
         'username': user.username,
-        'foto': user.foto.url if user.foto else None
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'liberacao/liberation.html', context)
+    return render(request, 'qualidade/quality.html', context)
+
+@login_required
+def reports(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'relatorios/reports.html', context)
+
+@login_required
+def alertas(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'alertas/alerts.html', context)
 
 @login_required
 def registrations(request):
@@ -737,3 +704,34 @@ def delete_stock(request, hemocomponente_id):
 
     context = {"stocks": stocks}
     return render(request, "delete_stock.html", context)
+
+@login_required
+def autoexclude(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'exclusao/autoexclude.html', context)
+
+@login_required
+def autoexclusion(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'exclusao/autoexclusion.html', context)
+
+@login_required
+def exclusionDados(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'exclusionDados.html', context)
+
+
+
+

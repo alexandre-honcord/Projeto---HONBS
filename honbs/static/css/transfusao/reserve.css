@@ -6,8 +6,7 @@ nav ul li:nth-child(5) a i {
     color: #235db3;
 }
 
-.reserve-section,
-.receiver-section{
+.items-section {
     width: 100%;
     height: 100%;
     padding: 20px;
@@ -55,17 +54,6 @@ nav ul li:nth-child(5) a i {
     display: none;
 }
 
-.table-container {
-    overflow-x: auto; /* Adiciona rolagem horizontal se necessário */
-    width: 100%;
-    margin: 0 auto;
-    background-color: #fff; /* Fundo branco para destaque */
-    border: 1px solid #ddd; /* Borda para separar a tabela */
-    border-radius: 5px; /* Bordas arredondadas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para aparência elegante */
-    padding: 10px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse; /* Remove espaços entre células */
@@ -93,49 +81,10 @@ table tr:hover {
     background-color: #c9c9c9; /* Destaque ao passar o mouse */
 }
 
-.action-btn {
-    padding: 6px 12px;
-    background-color: #007bff; /* Azul vibrante */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none; /* Remove o sublinhado padrão do link */
-    display: inline-block;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+.section {
+    display: none;
 }
 
-.action-btn:hover {
-    background-color: #0056b3; /* Azul mais escuro no hover */
-    transform: scale(1.05); /* Leve aumento no hover */
-}
-
-/* Estilo para os ícones de Sorologia */
-.positive-icon {
-    color: #28a745; /* Verde para resultados positivos */
-    font-size: 18px;
-}
-
-.negative-icon {
-    color: #dc3545; /* Vermelho para resultados negativos */
-    font-size: 18px;
-}
-
-.indeterminate-icon {
-    color: #ffc107; /* Amarelo para resultados indeterminados */
-    font-size: 18px;
-}
-
-#soro-table tbody tr {
-    cursor: pointer;
-}
-
-.clickable-row {
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.clickable-row:hover {
-    background-color: #f0f0f0;
+.section.active {
+    display: block;
 }

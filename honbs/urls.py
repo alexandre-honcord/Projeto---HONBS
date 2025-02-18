@@ -19,6 +19,7 @@ urlpatterns = [
     path('alertas/', views.alertas, name='alerts'),
     path('qualidade/', views.qualidade, name='quality'),
     path('transfusao/', views.transfusion, name='transfusion'),
+    path('reservas/', views.reserve, name='reserve'),
     path('infotransfusao/<int:codigo>/', views.infoTransfusion, name='infoTransfusion'),
     path('estoque/', views.stock, name='stock'),
     path('detalhe-estoque/', views.stock_list, name='stock_list'),

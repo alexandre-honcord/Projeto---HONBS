@@ -6,7 +6,90 @@
 {% block contents %}
 <link rel="stylesheet" href="{% static 'css/transfusao/transfusion.css' %}"/>
 
-<div class="receiver-section">
+<br>
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="showSection('reserve-section')">
+        <i class="fa-solid fa-boxes-stacked"></i> Reservas
+    </button>
+    <button class="tab-btn" onclick="showSection('receiver-section')">
+        <i class="fa-solid fa-user-injured"></i> Receptores
+    </button>
+</div>
+
+<!-- Seção de Reservas -->
+<div class="reserve-section">
+    <h2>Lista de Reservas</h2>
+    <br>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Data</th>
+                <th>Data Prevista Transfusão</th>
+                <th>Paciente</th>
+                <th>Médico Requisitante</th>
+                <th>Convênio</th>
+                <th>Entidade</th>
+                <th>Realizado por</th>
+                <th>Classificação</th>
+                <th>Status</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-url="{% url 'reserve' %}" class="clickable-row">
+                <td>2024001</td>
+                <td>18/02/2025</td>
+                <td>20/02/2025</td>
+                <td>João Silva</td>
+                <td>Dr. Carlos Mendes</td>
+                <td>Unimed</td>
+                <td>Hospital Central</td>
+                <td>Enf. Ana Souza</td>
+                <td>O+</td>
+                <td>Aprovado</td>
+            </tr>
+            <tr data-url="{% url 'reserve' %}" class="clickable-row">
+                <td>2024002</td>
+                <td>17/02/2025</td>
+                <td>19/02/2025</td>
+                <td>Maria Oliveira</td>
+                <td>Dr. Júlio Ramos</td>
+                <td>SUS</td>
+                <td>Santa Casa</td>
+                <td>Enf. Pedro Lima</td>
+                <td>A-</td>
+                <td>Pendente</td>
+            </tr>
+            <tr data-url="{% url 'reserve' %}" class="clickable-row">
+                <td>2024003</td>
+                <td>16/02/2025</td>
+                <td>18/02/2025</td>
+                <td>Carlos Santos</td>
+                <td>Dr. Fernanda Costa</td>
+                <td>Bradesco Saúde</td>
+                <td>Hospital São Lucas</td>
+                <td>Enf. Laura Batista</td>
+                <td>B+</td>
+                <td>Aprovado</td>
+            </tr>
+            <tr data-url="{% url 'reserve' %}" class="clickable-row">
+                <td>2024004</td>
+                <td>15/02/2025</td>
+                <td>17/02/2025</td>
+                <td>Fernanda Lima</td>
+                <td>Dr. Ricardo Borges</td>
+                <td>Particular</td>
+                <td>Clínica Vida</td>
+                <td>Enf. Roberto Melo</td>
+                <td>AB-</td>
+                <td>Cancelado</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="receiver-section hidden">
     <h1>Receptores</h1>
     <br>
     <table id="soro-table">
@@ -78,6 +161,23 @@
         </tbody>
     </table>
 </div>
+<script>
+    function showSection(sectionClass) {
+        // Esconde todas as seções
+        const sections = document.querySelectorAll('.reserve-section, .receiver-section');
+        sections.forEach(section => section.classList.add('hidden'));
+
+        // Remove a classe 'active' de todos os botões
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Mostra a seção clicada
+        document.querySelector(`.${sectionClass}`).classList.remove('hidden');
+
+        // Adiciona a classe 'active' ao botão clicado
+        document.querySelector(`button[onclick="showSection('${sectionClass}')"]`).classList.add('active');
+    }
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const rows = document.querySelectorAll('.clickable-row');

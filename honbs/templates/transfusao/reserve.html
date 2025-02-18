@@ -1,0 +1,77 @@
+{% extends "logged.html" %}
+{% block title %}
+    Reservas
+{% endblock %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/transfusao/reserve.css' %}"/>
+
+<br>
+<div class="tabs-container">
+    <button class="tab-btn active" onclick="showSection('reserve-section')">
+        <i class="fa-solid fa-boxes-stacked"></i> Itens Solicitados
+    </button>
+    <button class="tab-btn" onclick="window.history.back()">
+        <i class="fa-solid fa-arrow-left"></i> Voltar
+    </button>
+</div>
+
+<div class="items-section">
+    <h2>Lista de Itens Solicitados</h2>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Hemocomponente</th>
+                <th>Quantidade</th>
+                <th>Lavado</th>
+                <th>Irradiado</th>
+                <th>Filtrado</th>
+                <th>Aliquotado</th>
+                <th>Aférese</th>
+                <th>Pool</th>
+                <th>Fenotipado</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Concentrado de Hemácias</td>
+                <td>2</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td><i class="fa-solid fa-check-circle"></i> <i class="fa-solid fa-times-circle"></i></td>
+            </tr>
+            <tr>
+                <td>Plaquetas</td>
+                <td>1</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td><i class="fa-solid fa-check-circle"></i> <i class="fa-solid fa-times-circle"></i></td>
+            </tr>
+            <tr>
+                <td>Plasma</td>
+                <td>3</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>✅</td>
+                <td>❌</td>
+                <td>❌</td>
+                <td><i class="fa-solid fa-check-circle"></i> <i class="fa-solid fa-times-circle"></i></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -466,7 +466,16 @@ def infoTransfusion(request, codigo):
         'transfusao_data': transfusao_data,
         'header': header,
     }
-    return render(request, 'transfusao/infoTransfusion.html', context) 
+    return render(request, 'transfusao/infoTransfusion.html', context)
+
+@login_required
+def reserve(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
+    }
+    return render(request, 'transfusao/reserve.html', context)
 
 @login_required
 def stock(request):

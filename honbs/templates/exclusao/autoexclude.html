@@ -1,18 +1,24 @@
-
 {% load static %}
 {% block contents %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="{% static 'css/base.css' %}"/>
 <link rel="stylesheet" href="{% static 'css/logged.css' %}"/>
-<link rel="stylesheet" href="{% static 'css/autoexclude.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/exclusao/autoexclude.css' %}"/>
 
 <div class="auto-exclusion-container">
-    <h1>Auto Exclusão</h1><br>
+    <h1>Autoexclusão</h1><br>
     <p class="instruction-text">
         O voto de autoexclusão é uma etapa importante para garantir a segurança de quem receberá a doação.<br> 
         Se você foi sincero na entrevista e acredita que seu sangue é seguro para doação, marque <strong>SIM</strong>.<br>
-        Se você não informou algo que pode colocar o paciente em risco, marque <strong>NÃO</strong>.
+        Caso tenha omitido alguma informação sobre as situações de risco listadas abaixo, que possam comprometer a segurança do paciente, marque <strong>NÃO</strong>.
     </p>
+    <br>
+    <ul>
+        <li>Uso de drogas ilícitas (crack, cocaína ou outras drogas injetáveis).</li>
+        <li>Contato sexual com profissionais do sexo no último ano.</li>
+        <li>Troca frequente de parceiros sexuais.</li>
+        <li>Relação sexual com portadores de HIV ou outras doenças sexualmente transmissíveis.</li>
+    </ul>
     <br>
     <div class="button-container">
         <button class="btn-exclude yes" onclick="confirmExclusion(true)">SIM <i class="fa-solid fa-thumbs-up"></i></button>
@@ -27,7 +33,7 @@
             alert("Você confirmou que seu sangue é seguro para doação.");
             window.location.href = "#";
         } else {
-            alert("Parabéns Pinóquio!");
+            alert("Atenção: sua resposta indica que há risco na sua doação.");
             window.location.href = "#";
         }
     }

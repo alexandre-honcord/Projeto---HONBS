@@ -1,25 +1,44 @@
-from django.shortcuts import get_object_or_404, redirect
-from django.shortcuts import render, redirect
+import base64
+import logging
+from collections import defaultdict
+from datetime import date, datetime, timedelta
+from itertools import groupby
+from operator import itemgetter
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from honbs.models import User
-from django.views.decorators.csrf import csrf_protect
-from django.db import IntegrityError
-from .backends import exists_ad, tasy_user_data
-from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-import logging
-from django.http import HttpResponseNotFound, JsonResponse
-import base64
 from django.core.files.base import ContentFile
-from .models import Fridge, HemocomponentStock
-from collections import defaultdict
+from django.db import IntegrityError
+from django.http import HttpResponseNotFound, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_protect
 
-from honbs.dbutils import cabecalho_transfusao, dados_cabecalho, dados_doador, estoque, exames_lote, hemocomponentes, hist_doacao, lista_captaçao, lista_estoque, lista_doacoes, lista_lotes, lista_producao, lista_transfusao
-from honbs.utils import format_date, format_datetime, formatar_data_oracle, separar_iniciais_por_ponto
-from itertools import groupby 
-from operator import itemgetter
-from datetime import date, datetime, timedelta
+from honbs.dbutils import (
+    cabecalho_transfusao,
+    dados_cabecalho,
+    dados_doador,
+    estoque,
+    exames_lote,
+    hemocomponentes,
+    hist_doacao,
+    lista_captaçao,
+    lista_estoque,
+    lista_doacoes,
+    lista_lotes,
+    lista_producao,
+    lista_transfusao,
+)
+from honbs.models import User
+from honbs.utils import (
+    format_date,
+    format_datetime,
+    formatar_data_oracle,
+    separar_iniciais_por_ponto,
+)
+from .backends import exists_ad, tasy_user_data
+from .models import Fridge, HemocomponentStock
 
 logger = logging.getLogger(__name__)
 
@@ -730,8 +749,7 @@ def exclusionDados(request):
         'username': user.username,
         'foto': user.foto.url if user.foto else None,  # Verifica se o usuário tem foto
     }
-    return render(request, 'exclusionDados.html', context)
-
+    return render(request, 'exclusao/exclusionDados.html', context)
 
 
 

@@ -38,7 +38,7 @@ from honbs.utils import (
     separar_iniciais_por_ponto,
 )
 from .backends import exists_ad, tasy_user_data
-from .models import Fridge, HemocomponentStock
+from .models import Drawer, Geladeira
 
 logger = logging.getLogger(__name__)
 
@@ -639,99 +639,99 @@ def alertas(request):
     }
     return render(request, 'alertas/alerts.html', context)
 
-@login_required
-def registrations(request):
-    user = request.user
+# @login_required
+# def registrations(request):
+#     user = request.user
 
-    if request.method == "POST":
-        try:
-            if 'add_fridge' in request.POST:
-                nome = request.POST.get('nome')
-                quantidade_prateleiras = int(request.POST.get('quantidade_prateleiras', 0))
-                if not nome or quantidade_prateleiras <= 0:
-                    messages.error(request, "Todos os campos da geladeira são obrigatórios.")
-                else:
-                    Fridge.objects.create(
-                        nome=nome,
-                        quantidade_prateleiras=quantidade_prateleiras
-                    )
-                    messages.success(request, "Geladeira cadastrada com sucesso.")
-                    return redirect('registrations')
+#     if request.method == "POST":
+#         try:
+#             if 'add_fridge' in request.POST:
+#                 nome = request.POST.get('nome')
+#                 quantidade_prateleiras = int(request.POST.get('quantidade_prateleiras', 0))
+#                 if not nome or quantidade_prateleiras <= 0:
+#                     messages.error(request, "Todos os campos da geladeira são obrigatórios.")
+#                 else:
+#                     Fridge.objects.create(
+#                         nome=nome,
+#                         quantidade_prateleiras=quantidade_prateleiras
+#                     )
+#                     messages.success(request, "Geladeira cadastrada com sucesso.")
+#                     return redirect('registrations')
 
-            elif 'add_stock' in request.POST:
-                fridge_id = request.POST.get('fridge_id')
-                prateleira_id = int(request.POST.get('prateleira_id', 0))
-                hemocomponente_id = request.POST.get('hemocomponente_id')
-                quantidade = int(request.POST.get('quantidade', 0))
+#             elif 'add_stock' in request.POST:
+#                 fridge_id = request.POST.get('fridge_id')
+#                 prateleira_id = int(request.POST.get('prateleira_id', 0))
+#                 hemocomponente_id = request.POST.get('hemocomponente_id')
+#                 quantidade = int(request.POST.get('quantidade', 0))
 
-                fridge = Fridge.objects.filter(id=fridge_id).first()
-                if not fridge:
-                    messages.error(request, "Geladeira selecionada não existe.")
-                elif prateleira_id <= 0 or not hemocomponente_id:
-                    messages.error(request, "Todos os campos de estoque são obrigatórios.")
-                else:
-                    HemocomponentStock.objects.create(
-                        fridge=fridge,
-                        prateleira_id=prateleira_id,
-                        hemocomponente_id=hemocomponente_id,
-                        quantidade=quantidade  
-                    )
-                    messages.success(request, "Estoque de hemocomponente cadastrado com sucesso.")
-                    return redirect('registrations')
-        except ValueError as e:
-            messages.error(request, f"Erro ao processar o formulário: {e}")
+#                 fridge = Fridge.objects.filter(id=fridge_id).first()
+#                 if not fridge:
+#                     messages.error(request, "Geladeira selecionada não existe.")
+#                 elif prateleira_id <= 0 or not hemocomponente_id:
+#                     messages.error(request, "Todos os campos de estoque são obrigatórios.")
+#                 else:
+#                     HemocomponentStock.objects.create(
+#                         fridge=fridge,
+#                         prateleira_id=prateleira_id,
+#                         hemocomponente_id=hemocomponente_id,
+#                         quantidade=quantidade  
+#                     )
+#                     messages.success(request, "Estoque de hemocomponente cadastrado com sucesso.")
+#                     return redirect('registrations')
+#         except ValueError as e:
+#             messages.error(request, f"Erro ao processar o formulário: {e}")
 
-    # Agrupar o estoque por geladeira
-    stock_data = defaultdict(list)
-    for stock in HemocomponentStock.objects.select_related('fridge').all():
-        stock_data[stock.fridge].append({
-            'prateleira_id': stock.prateleira_id,
-            'hemocomponente_id': stock.hemocomponente_id,
-            'quantidade': stock.quantidade,
-        })
+#     # Agrupar o estoque por geladeira
+#     stock_data = defaultdict(list)
+#     for stock in HemocomponentStock.objects.select_related('fridge').all():
+#         stock_data[stock.fridge].append({
+#             'prateleira_id': stock.prateleira_id,
+#             'hemocomponente_id': stock.hemocomponente_id,
+#             'quantidade': stock.quantidade,
+#         })
 
-    context = {
-        'username': user.username,
-        'foto': user.foto.url if user.foto else None,
-        'geladeiras': Fridge.objects.all(),
-        'hemocomponentes': HemocomponentStock.objects.all(),
-        'stock_data': dict(stock_data),  # Passa os dados agrupados
-    }
+#     context = {
+#         'username': user.username,
+#         'foto': user.foto.url if user.foto else None,
+#         'geladeiras': Fridge.objects.all(),
+#         'hemocomponentes': HemocomponentStock.objects.all(),
+#         'stock_data': dict(stock_data),  # Passa os dados agrupados
+#     }
 
-    return render(request, 'cadastros/registrations.html', context)
+#     return render(request, 'cadastros/registrations.html', context)
 
-@login_required
-def edit_stock(request, hemocomponente_id):
-    stock = get_object_or_404(HemocomponentStock, hemocomponente_id=hemocomponente_id)
+# @login_required
+# def edit_stock(request, hemocomponente_id):
+#     stock = get_object_or_404(HemocomponentStock, hemocomponente_id=hemocomponente_id)
 
-    if request.method == "POST":
-        fridge_id = request.POST.get("fridge_id")
-        prateleira_id = request.POST.get("prateleira_id")        
-        stock.fridge_id = fridge_id
-        stock.prateleira_id = prateleira_id
-        stock.save()
-        messages.success(request, "Estoque atualizado com sucesso!")
-        return redirect("registrations")
+#     if request.method == "POST":
+#         fridge_id = request.POST.get("fridge_id")
+#         prateleira_id = request.POST.get("prateleira_id")        
+#         stock.fridge_id = fridge_id
+#         stock.prateleira_id = prateleira_id
+#         stock.save()
+#         messages.success(request, "Estoque atualizado com sucesso!")
+#         return redirect("registrations")
 
-    geladeiras = Fridge.objects.all()  # Para preencher o dropdown
-    context = {
-        "stock": stock,
-        "geladeiras": geladeiras,
-    }
-    return render(request, "edit_stock.html", context)
+#     geladeiras = Fridge.objects.all()  # Para preencher o dropdown
+#     context = {
+#         "stock": stock,
+#         "geladeiras": geladeiras,
+#     }
+#     return render(request, "edit_stock.html", context)
 
-@login_required
-def delete_stock(request, hemocomponente_id):
-    stocks = HemocomponentStock.objects.filter(hemocomponente_id=hemocomponente_id)
+# @login_required
+# def delete_stock(request, hemocomponente_id):
+#     stocks = HemocomponentStock.objects.filter(hemocomponente_id=hemocomponente_id)
 
-    if request.method == "POST":
-        count = stocks.count()  # Conta quantos registros serão apagados
-        stocks.delete()
-        messages.success(request, f"{count} registro(s) de estoque apagado(s) com sucesso!")
-        return redirect("registrations")
+#     if request.method == "POST":
+#         count = stocks.count()  # Conta quantos registros serão apagados
+#         stocks.delete()
+#         messages.success(request, f"{count} registro(s) de estoque apagado(s) com sucesso!")
+#         return redirect("registrations")
 
-    context = {"stocks": stocks}
-    return render(request, "delete_stock.html", context)
+#     context = {"stocks": stocks}
+#     return render(request, "delete_stock.html", context)
 
 @login_required
 def autoexclude(request):
@@ -760,5 +760,27 @@ def exclusionDados(request):
     }
     return render(request, 'exclusao/exclusionDados.html', context)
 
+scanned_items = {}
+
+def inventory(request):
+    user = request.user
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'fridges': Geladeira.objects.all(),  # Lista as 5 geladeiras fixas
+    }
+    return render(request, "inventario/inventory.html", context)
+
+def fridge_detail(request, fridge_id):
+    user = request.user
+    fridge = get_object_or_404(Geladeira, id=fridge_id)
+    
+    context = {
+        'username': user.username,
+        'foto': user.foto.url if user.foto else None,
+        'fridge': fridge,
+        'drawers': fridge.drawers.all(),
+    }
+    return render(request, "inventario/fridge_detail.html", context)
 
 

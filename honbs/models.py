@@ -26,19 +26,32 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
-class Fridge(models.Model):
-    nome = models.CharField(max_length=255, verbose_name="Nome da Geladeira") 
-    quantidade_prateleiras = models.IntegerField(verbose_name="Quantidade de Prateleiras")
+# class Fridge(models.Model):
+#     nome = models.CharField(max_length=255, verbose_name="Nome da Geladeira") 
+#     quantidade_prateleiras = models.IntegerField(verbose_name="Quantidade de Prateleiras")
+
+#     def __str__(self):
+#         return self.nome
+
+
+# class HemocomponentStock(models.Model):
+#     fridge = models.ForeignKey(Fridge, on_delete=models.CASCADE, verbose_name="Geladeira")
+#     prateleira_id = models.IntegerField(verbose_name="ID da Prateleira")
+#     hemocomponente_id = models.IntegerField(verbose_name="ID do Hemocomponente")
+#     quantidade = models.IntegerField(verbose_name="Quantidade")
+
+#     def __str__(self):
+#         return f"Prateleira {self.prateleira_id} - Hemocomponente {self.hemocomponente_id}"
+
+class Geladeira(models.Model):
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return self.nome
+        return self.name
 
-
-class HemocomponentStock(models.Model):
-    fridge = models.ForeignKey(Fridge, on_delete=models.CASCADE, verbose_name="Geladeira")
-    prateleira_id = models.IntegerField(verbose_name="ID da Prateleira")
-    hemocomponente_id = models.IntegerField(verbose_name="ID do Hemocomponente")
-    quantidade = models.IntegerField(verbose_name="Quantidade")
+class Drawer(models.Model):
+    fridge = models.ForeignKey(Geladeira, on_delete=models.CASCADE, related_name="drawers")
+    number = models.IntegerField()
 
     def __str__(self):
-        return f"Prateleira {self.prateleira_id} - Hemocomponente {self.hemocomponente_id}"
+        return f"{self.fridge.name} - Gaveta {self.number}"

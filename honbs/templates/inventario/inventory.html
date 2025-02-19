@@ -1,0 +1,39 @@
+{% extends "logged.html" %}
+
+{% block title %}
+    Inventário de Estoque
+{% endblock %}
+
+{% load static %}
+
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/inventario/inventory.css' %}"/>
+
+<br>
+<h2>Inventário de Estoque</h2>
+<p>Selecione uma estação para organizar:</p>
+<br>
+<ul class="fridge-list">
+    {% for fridge in fridges %}
+        <li>
+            <a href="{% url 'fridge_detail' fridge.id %}">
+                <button class="fridge-btn">
+                    <img src="{% static 'geladeira.png' %}" alt="Geladeira">
+                    <span class="fridge-name">{{ fridge.name }}</span>
+                    <span class="fridge-temp" id="temp-{{ fridge.id }}">-°C</span>
+                </button>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+<br>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Simulando temperaturas aleatórias para cada geladeira (entre 2°C e 8°C)
+        document.querySelectorAll(".fridge-temp").forEach(tempElement => {
+            let randomTemp = (Math.random() * (8 - 2) + 2).toFixed(1);
+            tempElement.textContent = `${randomTemp}°C`;
+        });
+    });
+</script>
+{% endblock %}

@@ -28,8 +28,11 @@ urlpatterns = [
     path('exclusao/', views.autoexclusion, name='autoexclusion'),
     path('data-exclusao/', views.exclusionDados, name='exclusionDados'),
 
-    path('cadastros/', views.registrations, name='registrations'),
-    path('edit-stock/<int:hemocomponente_id>/', views.edit_stock, name='edit_stock'),
-    path('delete-stock/<int:hemocomponente_id>/', views.delete_stock, name='delete_stock'),
+    path('inventario/', views.inventory, name='inventory'),
+    path("fridge/<int:fridge_id>/", views.fridge_detail, name="fridge_detail"),
+
+    # path('cadastros/', views.registrations, name='registrations'),
+    # path('edit-stock/<int:hemocomponente_id>/', views.edit_stock, name='edit_stock'),
+    # path('delete-stock/<int:hemocomponente_id>/', views.delete_stock, name='delete_stock'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

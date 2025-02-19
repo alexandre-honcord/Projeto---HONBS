@@ -1,0 +1,171 @@
+nav ul li:nth-child(12) {
+    background-color: #fafafa;
+}
+
+nav ul li:nth-child(12) a i {
+    color: #235db3;
+}
+
+h2 {
+    color: #B32325;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* Botões das gavetas */
+.drawer-btn {
+    background-color: #B32325;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.drawer-btn:hover {
+    background-color: #ff9999;
+    transform: scale(1.05);
+}
+
+/* Quando a gaveta for selecionada */
+.drawer-btn.selected {
+    background-color: #28a745 !important;
+}
+
+/* Lista de gavetas */
+.drawer-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.drawer-list li {
+    display: inline-block;
+}
+
+/* Estilização da área de escaneamento */
+.scan-container {
+    margin-top: 30px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+    width: 250px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Lista de Itens Escaneados */
+#scanned-items-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#scanned-items-list li {
+    background: #ffffff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 5px auto;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#scanned-items-list button {
+    background-color: #dc3545;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+#scanned-items-list button:hover {
+    background-color: #c82333;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .drawer-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    input {
+        width: 200px;
+    }
+}
+
+/* Animação de piscar (blink) */
+@keyframes blink {
+    0% { border-color: red; }
+    50% { border-color: transparent; }
+    100% { border-color: red; }
+}
+
+.blink {
+    border: 2px solid red;
+    animation: blink 1s linear;
+}
+
+/* Contêiner do botão Salvar */
+.save-container {
+    position: relative; /* Mantém dentro do conteúdo */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* Botão Salvar */
+.save-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.save-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .save-btn {
+        width: 90%;
+        padding: 12px;
+        font-size: 16px;
+    }
+}

@@ -1,0 +1,121 @@
+{% extends "logged.html" %}
+
+{% block title %}
+    {{ fridge.name }} - Organização
+{% endblock %}
+
+{% load static %}
+
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/inventario/fridge_detail.css' %}"/>
+<br>
+<button class="back-btn" onclick="window.history.back()">
+    <i class="fa-solid fa-arrow-left"></i> Voltar
+</button>
+<br>
+<h2>{{ fridge.name }}</h2>
+<p>Escolha uma gaveta para organizar:</p>
+<br>
+<ul class="drawer-list">
+    {% for drawer in drawers %}
+        <li>
+            <button class="drawer-btn" data-drawer-id="{{ drawer.id }}">Gaveta {{ drawer.number }}</button>
+        </li>
+    {% endfor %}
+</ul>
+<br>
+<h3>Itens Escaneados:</h3>
+<ul id="scanned-items-list"></ul>
+<br>
+<div class="scan-container">
+    <input type="text" id="barcode-input" placeholder="Escaneie a bolsa de sangue..." required autofocus>
+    <button onclick="scanItem()">Adicionar Item</button>
+</div>
+<br>
+<!-- Botão Salvar centralizado dentro do conteúdo -->
+<div class="save-container">
+    <button class="save-btn" onclick="saveData()">Salvar</button>
+</div>
+
+<script>
+    let selectedDrawer = null;
+    let scannedBarcodes = new Map(); // Mapeia códigos para seus elementos na lista
+
+    document.addEventListener("DOMContentLoaded", function() {
+        let drawerButtons = document.querySelectorAll(".drawer-btn");
+        let barcodeInput = document.getElementById("barcode-input");
+
+        // Foco automático no campo de entrada ao carregar a página
+        barcodeInput.focus();
+
+        drawerButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                // Resetar todas as gavetas para a cor original
+                drawerButtons.forEach(btn => btn.classList.remove("selected"));
+
+                // Selecionar a gaveta e mudar a cor para verde
+                selectedDrawer = this.getAttribute("data-drawer-id");
+                this.classList.add("selected");
+
+                // Após selecionar uma gaveta, dar foco no campo de entrada
+                barcodeInput.focus();
+            });
+        });
+
+        // Adicionar funcionalidade para capturar "Enter" e adicionar item
+        barcodeInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();  // Evita o comportamento padrão do formulário
+                scanItem();
+            }
+        });
+    });
+
+    function scanItem() {
+        if (!selectedDrawer) {
+            alert("Selecione uma gaveta primeiro!");
+            return;
+        }
+
+        let barcodeInput = document.getElementById("barcode-input");
+        let barcode = barcodeInput.value.trim();
+
+        if (!barcode) {
+            return;
+        }
+
+        // Se a bolsa já foi escaneada, faz o item piscar e ignora a adição
+        if (scannedBarcodes.has(barcode)) {
+            let existingItem = scannedBarcodes.get(barcode);
+            existingItem.classList.add("blink");  // Adiciona a animação de piscar
+            setTimeout(() => existingItem.classList.remove("blink"), 1000); // Remove após 1s
+            barcodeInput.value = "";
+            barcodeInput.focus();
+            return;
+        }
+
+        // Criando o item e armazenando no mapa
+        let list = document.getElementById("scanned-items-list");
+        let li = document.createElement("li");
+        li.innerHTML = `Bolsa ${barcode} <button onclick="removeItem(this, '${barcode}')">❌</button>`;
+        list.appendChild(li);
+
+        scannedBarcodes.set(barcode, li); // Salva referência do item na lista
+
+        // Limpa o campo de entrada e retorna o foco para ele
+        barcodeInput.value = "";
+        barcodeInput.focus();
+    }
+
+    function removeItem(button, barcode) {
+        // Remove o item da lista e do mapa
+        scannedBarcodes.delete(barcode);
+        button.parentElement.remove();
+    }
+
+    function saveData() {
+        window.location.href = "{% url 'inventory' %}"; // Redireciona para o inventário
+    }
+</script>
+
+{% endblock %}
